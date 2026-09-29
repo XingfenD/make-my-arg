@@ -14,7 +14,7 @@ You are executing step 4 (Reachability chain analysis) of the make-my-arg skill.
    plus the reverse check, depth check, access check, keyword solvability, index scoping
    check, locked-entry check, and title check, each with a verdict.
    (Full definition: workflow/04-reachability.md.)
-4. Read first: workflow/04-reachability.md, references/guardrails.md (R7–R10),
+4. Read first: workflow/04-reachability.md, references/guardrails.md (R7–R13),
    references/common-mistakes.md §4, examples/reachability-excerpt.md.
 5. Realism priority: realism outranks any check (references/guardrails.md R12). If realism forces
    breaking a rule, record the conflict — page, rule, what realism requires — as an unresolved

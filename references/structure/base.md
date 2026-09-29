@@ -8,7 +8,7 @@
 
 ## 1. Directory Structure
 
-Module marks (M1…M13) come from `references/design-playbook.md` §2 and appear only when selected in
+Module marks (M1…M14) come from `references/design-playbook.md` §2 and appear only when selected in
 `docs/system-profile.md`; everything else belongs to the base.
 
 ```
@@ -24,7 +24,9 @@ Module marks (M1…M13) come from `references/design-playbook.md` §2 and appear
 │   ├── css/
 │   │   ├── base.css              # shared layout skeleton, document realism kit, x-cloak
 │   │   ├── surface.css           # public skin
-│   │   └── secret.css            # M5 layer-reskin module
+│   │   ├── secret.css            # M5 layer-reskin module
+│   │   ├── phone.css             # M14 device class: phone chrome (form-device.md §2)
+│   │   └── chrome.css            # M14 device class: fake browser chrome (form-device.md §2)
 │   ├── js/
 │   │   ├── components.js         # Alpine components (search / gate / access / staging / progress), registered on alpine:init
 │   │   └── vendor/
@@ -51,7 +53,7 @@ The tree is materialized by **`assets/starter/`**, the starting project every ga
 invariant files — the entry shell (carrying the link back to the skill repo), `base.css` + `surface.css`, the
 `components.js` kernel, the two ignore files above, and the project README — so a project starts from a real
 tree instead of an empty directory. Everything
-module-marked (`search.html`, `data/`, `secret.css`, the restricted area, the ending pages) and the assembled
+module-marked (`search.html`, `data/`, `secret.css`, `phone.css` / `chrome.css`, the restricted area, the ending pages) and the assembled
 infrastructure (`tools/`, `viewer/`) are added at scaffold time per `docs/system-profile.md`
 (`workflow/06-scaffold.md`). The starter therefore ships no `data/*.src.json`: its own `.gitignore` would ignore
 them, and a plaintext table is created at 6a only when the profile selects the module that needs it.
@@ -89,6 +91,7 @@ The tree above is the shared base; the form docs adapt the pages and the reach m
 
 - **Container A — fake official website**: `references/structure/form-website.md` — search hub, audience-scoped indexes, gates.
 - **Containers B/C/D — system fictions**: `references/structure/form-system.md` — account login, per-account access (RBAC-style), and the desktop / simulated-internet / archive shells. A system project's page root may be `apps/` instead of `pages/`; set `pagesDir` once in `tools/config.mjs` (tooling.md §2).
+- **Device, state, apparatus**: `references/structure/form-device.md` — shell components per device class, the R13 state contract (progress / world-response storage), the apparatus single-page carve-out.
 
 ## 2. Page Skeleton Template (uniform across pages)
 

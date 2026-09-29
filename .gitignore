@@ -18,3 +18,9 @@ review_comments.md
 
 # Worktrees
 .worktrees/
+
+# OpenClaw workspace files — injected persona/scratch, never repo content
+/SOUL.md
+/USER.md
+/IDENTITY.md
+/memory/

@@ -22,6 +22,7 @@ An edge counts only if it belongs to this list. Anything else is a planted clue 
 7. Related-document reference that the issuing body would really print — a contract citing its annex, a notice citing the regulation behind it. Same area only: a shallow page never links a deeper area's page under "related files / archives / pages".
 8. Hand-typed URL (container C only)
 9. Off-site or fourth-wall link, declared in the GDD
+10. Read-gated entry (M14, R13) — an `<a href data-after="pages/source.html">`: the edge exists in the DOM but fires only once that source page has been READ (`references/structure/form-device.md` §4). The row's 来源页面 column carries both the anchor page and the read page; the fourth column says why the entry appears at that moment of the story.
 
 ## Deliverable table
 
@@ -50,6 +51,7 @@ Planting a link in the body copy of an unrelated page is off the list. That is t
 - **Index scoping check (R8; M1).** The public table carries no restricted-area URL (default `internal/`, the `secretUrl` CONFIG knob), and every deep-table entry is fetched only from a deep page. A public search hit that opens a restricted page without a gate fails this check. (Website form; a system form keeps one index and resolves hits through the access matrix — `references/structure/form-system.md` §1.)
 - **Locked-entry check (R8).** Every result or list row the visitor may not open resolves to its gate or a plain locked notice; one that opens its document directly is a defect.
 - **Title check (R9).** Each keyword table title reads as a catalog entry (issuing body + document type + number/date). A title that summarizes the document leaks plot onto the search results page.
+- **Read-state check (M14; R13).** Every entry the GDD claims “appears only after page X was read” carries `data-after` naming X — a plain link making the same claim is the defect class R13 names; `check-solvable.mjs` fires the edge only after X joins the visited set.
 - **Post-implementation re-run.** After step 7, re-walk the graph with `node tools/check-links.mjs` plus the link-provenance item of the `workflow/08-self-check.md` checklist (cadence in `references/structure/tooling.md` §1). The graph drifts while pages are written.
 
 Baseline-test traps for this step: references/common-mistakes.md §4 — check them before returning the artifact.

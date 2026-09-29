@@ -18,6 +18,7 @@ Account strings carry their derivation rule; only the initial account may be pri
 | 06/36 | pages/news.html | 表层 | 导航栏（index 起第 1 跳） |
 | 14/36 | pages/login.html | 中层 | 页脚"员工入口" |
 | 21/36 | pages/internal/s21-ledger.html | 暗层 | 搜索"癸巳"命中（暗层索引） |
+| 17/36 | pages/mail/yuxia-inbox.html | 中层 | 读完 thread-fenglou 后出现（`data-after`，M14/R13） |
 
 ## 4. Access inventory (excerpt)
 
@@ -26,7 +27,8 @@ Account strings carry their derivation rule; only the initial account may be pri
 | pages/login.html | 员工名录（初始账号，唯一可印出） | 老帖《老蛇的本命年》2013 | 2013 癸巳 → 陈生于 1977 → 密码 `1977` | surface | 跳本门（不给文档） |
 
 System containers add the access matrix here: 页面 ↔ `data-access` 账号 ↔ 授予它的 `data-grant` 登录门 ↔
-该账号登录串的推理链（R10）。
+该账号登录串的推理链（R10）。Wildcard gates mark their input `data-expect-any`; read-gated entries carry
+`data-after` naming the source page (`references/structure/form-device.md` §4).
 
 ## 5. Puzzle allocation table (excerpt)
 

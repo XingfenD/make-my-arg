@@ -20,7 +20,7 @@ Name the source page and quote the exact span carrying the clue. Then write the 
 
 > 站内帖《老蛇的本命年》发布于 2013 年 → 2013 为癸巳蛇年 → 陈国栋生于 1977 → 密码 `1977`
 
-A chain longer than two hops gets redesigned. Knowledge from outside the site is allowed only for a puzzle the GDD declares as type I (knowledge-search tutorial). The chain must start from a life trace, never a random string (R3).
+A chain longer than two hops gets redesigned. Knowledge from outside the site is allowed only for a puzzle the GDD declares as type I (knowledge-search tutorial). The chain must start from a life trace, never a random string (R3). A **wildcard gate** (`data-expect-any`, `references/structure/form-device.md` §4) guards an emotional beat, not a secret: record what the act of typing means in the story instead of a credential chain; the audit confirms the wildcard is declared, never implied.
 
 ## Q3 Intuitiveness
 

@@ -80,14 +80,22 @@ export function candidates(text) {
 
 export function linksOf(root, frag, fromFile) {
   const out = new Set();
-  const re = /\s(?:href|action)\s*=\s*(["'])([^"']*)\1/gi;
+  const skip = (u) => !u || u.startsWith('#') || /^(https?:|mailto:|tel:|javascript:|data:)/i.test(u) || !u.endsWith('.html');
+  const push = (raw) => { const u = raw.split('?')[0].split('#')[0]; if (skip(u)) return; out.add(relOf(root, join(dirname(fromFile), u))); };
+  const AFTER_RE = new RegExp(`\\b${CONFIG.afterAttr}\\b`, 'i');
   let m;
-  while ((m = re.exec(frag))) {
-    const raw = m[2];
-    if (raw.startsWith('#')) continue;
-    const u = raw.split('?')[0].split('#')[0];
-    if (/^(https?:|mailto:|tel:|javascript:|data:)/i.test(u) || !u.endsWith('.html')) continue;
-    out.add(relOf(root, join(dirname(fromFile), u)));
+  // Anchors go tag by tag: an <a> carrying data-after is a CONDITIONAL route (route 10, R13) — it leaves
+  // the unconditional set and re-enters the walk through afterEdges once its source page is visited.
+  const are = /<a\b([^>]*)>/gi;
+  while ((m = are.exec(frag))) {
+    if (AFTER_RE.test(m[1])) continue;
+    const h = m[1].match(/\bhref\s*=\s*["']([^"']*)["']/i);
+    if (h) push(h[1]);
+  }
+  const fre = /<form\b([^>]*)>/gi;
+  while ((m = fre.exec(frag))) {
+    const a = m[1].match(/\baction\s*=\s*["']([^"']*)["']/i);
+    if (a) push(a[1]);
   }
   return [...out];
 }
@@ -122,21 +130,47 @@ export function nextOf(root, frag, fromFile) {
   return [...out];
 }
 
+/* Route 10 (R13): a read-gated entry — an <a href data-after="pages/source.html"> that exists in the DOM
+   but is shown only after the NAMED page has been read. The data-after value is ROOT-relative (the read
+   state is global); the walk fires the edge only when that source page joins the visited set. */
+export function afterEdges(root, frag, fromFile) {
+  const out = [];
+  const re = /<a\b([^>]*)>/gi;
+  let m;
+  while ((m = re.exec(frag))) {
+    const h = m[1].match(/\bhref\s*=\s*["']([^"']+)["']/i);
+    const a = m[1].match(new RegExp(`\\b${CONFIG.afterAttr}\\s*=\\s*["']([^"']+)["']`, 'i'));
+    if (!h || !a) continue;
+    const href = h[1].split('?')[0].split('#')[0];
+    const read = a[1].trim().replace(/^\.\//, '');
+    const bad = /^(https?:|mailto:|tel:|javascript:|data:)/i;
+    if (!href.endsWith('.html') || !read.endsWith('.html') || bad.test(href) || bad.test(read)) continue;
+    out.push({ to: relOf(root, join(dirname(fromFile), href)), read });
+  }
+  return out;
+}
+
 export function parsePages(root) {
   const pages = {};
   for (const f of walkFiles(root).filter((x) => x.endsWith('.html'))) {
     const key = relOf(root, f);
     const t = readFileSync(f, 'utf8');
     const { locked, unlocked } = splitLocked(t);
+    const afters = afterEdges(root, locked, f);
     pages[key] = {
       lockedText: visible(locked),
       allText: visible(t),
       blocked: visible(unlocked) !== '',
       open: linksOf(root, locked, f),
       gated: [...linksOf(root, unlocked, f), ...nextOf(root, locked, f)],
+      afters,   // route 10 conditional routes parsed by tag, not by target
       fields: gateFields(locked),
       grants: attrList(locked, CONFIG.grantAttr),
       access: attrList(locked, CONFIG.accessAttr),
+      gateMount: CONFIG.gateMount.test(t),
+      anyFields: (t.match(new RegExp(`${CONFIG.expectAnyAttr}\\s*=`, 'gi')) || []).length,
+      undeclaredInputs: [...t.matchAll(/<input\b[^>]*>/gi)]
+        .filter((m) => !new RegExp(`${CONFIG.gateHashAttr}|${CONFIG.expectAnyAttr}|type\\s*=\\s*["']search`, 'i').test(m[0])).length,
       isSearch: CONFIG.searchMount.test(t),
       indexes: declaredIndexes(t),
       hitsLocked: new Map(),
@@ -261,6 +295,8 @@ export function analyze(root) {
     for (const p of visited) {
       if (!accessOk(p)) continue;
       for (const l of pages[p].open) if (pages[l] && accessOk(l)) frontier.add(l);
+      // route 10: a read-gated entry fires only once the source page has been READ (visited).
+      for (const e of pages[p].afters) if (visited.has(e.read) && pages[e.to] && accessOk(e.to)) frontier.add(e.to);
       if (pageOpen(p)) for (const l of pages[p].gated) if (pages[l] && accessOk(l)) frontier.add(l);
     }
     for (const u of searchEdges()) frontier.add(u);
@@ -313,6 +349,7 @@ export function analyze(root) {
   };
 
   return { pages, names, gatePages, rounds, visited, unlocked, identities, gateSrc: provenance,
+    afterEdges: names.flatMap((n) => pages[n].afters.map((e) => ({ ...e, from: n }))),
     searchEdges: finalSearchEdges(), readableHits, kwHashToUrls, kwHashToTables, kwPlainByHash,
     kwTableUrls, kwPlain, tableNames };
 }

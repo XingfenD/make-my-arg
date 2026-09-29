@@ -21,7 +21,7 @@ make-my-arg 的起点项目：每个生成的项目都把这棵树复制为起�
 | `assets/css/base.css` | 共用骨架：常驻顶栏、页面栏宽、文档套件、门禁表单、`x-cloak`、M11 纹理 |
 | `assets/css/surface.css` | 公开层皮肤：色板与字体，唯一随虚构气质改动的地方 |
 | `assets/css/secret.css` | M5 深层皮肤；profile 未选 M5 时这个文件不存在 |
-| `assets/js/components.js` | 共用内核：`hash()` 与 session store；只注册 profile 选中的组件 |
+| `assets/js/components.js` | 共用内核：`hash()`、session store 与 `readState`（M14）；只注册 profile 选中的组件 |
 | `assets/js/vendor/alpine.min.js` | `node tools/vendor-alpine.mjs` 拉取并校验 sha256 后落下，永不改动、不走 CDN |
 | `.gitignore` | 随起点项目落到项目根：开发副产物不进 Git 历史 |
 | `.dockerignore` | 随起点项目落到项目根：明文表 / `docs/` / 机制文件不进部署镜像 |

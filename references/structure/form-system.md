@@ -126,11 +126,15 @@ authenticates the account first, then solves the gate.
   held only in JS, or per-tab vs cross-tab session storage, is invisible to the checkers — model it with
   `data-grant` / `data-access` or verify by hand (`tooling.md` §3 items 1 and 7).
 
-## 6. Session state
+## 6. Session state (login) — the other state families follow R13
 
-Access lives in a **session cookie** (cross-tab, cleared when the browser closes); nothing survives the session
-and no progress is saved. Never `localStorage`, never per-tab `sessionStorage` behind a `target="_blank"`
-result. An implementation requirement, not player-facing copy.
+**Login** state lives in a **session cookie** (cross-tab, cleared when the browser closes), never
+`localStorage`, never per-tab `sessionStorage` behind a `target="_blank"` result. An implementation
+requirement, not player-facing copy. Progress and world-response state are a separate contract: state
+follows device ownership (`references/guardrails.md` R13), detail and reference implementations in
+`references/structure/form-device.md` §3 — a player-owned device (container B) may persist what was read
+and ship an in-fiction save / continue / wipe; a remote system (A/C/D) stays session-only unless the
+profile records a fiction warrant.
 
 ## 7. Anti-patterns
 
@@ -139,7 +143,8 @@ result. An implementation requirement, not player-facing copy.
 | Numeric privilege ladder, or an admin account that opens everything (R10) | Not per-person access: private documents leak to the highest account and the login stops being a puzzle; workflow/04's access check calls it a defect |
 | A shallow page's "related archives / files" link into a deep area (R7) | Crosses depth with a link; reach must go through search, a gate, or an account |
 | `data-access` naming an account no gate grants | Dead private page; check-solvable reports it unreachable |
-| Access state in `localStorage`, or in per-tab `sessionStorage` behind a `target="_blank"` result | localStorage breaks the session fiction; per-tab sessionStorage reads as logged out in the new tab the result opens — use a session cookie |
+| Login state in `localStorage`, or in per-tab `sessionStorage` behind a `target="_blank"` result | a remote system that remembers you past the browser close breaks the session fiction (R13); per-tab sessionStorage reads as logged out in the new tab the result opens — use a session cookie |
+| Persistence copied from a reference implementation with no profile row behind it | the state contract (progress / world-response) is decided at step 2 by device ownership (R13); an unsanctioned `localStorage` hit fails the step-8 contract check |
 | Printing a derived account on a public page to make `check-solvable` green | check-solvable only matches verbatim strings; printing the credential leaks it to every visitor (no server auth) and collapses the puzzle. Prove it with `check-credentials.mjs` instead |
 | Splitting one login into two forms so each is "one identity" | Leaks the design intent in the second form's title and reads as game UI; one box + `data-grants` carries the matrix (§2) |
 | A public page prints a colleague's login (`账号：chen.gd` in the roster) | Only the initial account may be printed; every other login is inferred from clues (workflow/05 Q4 scans for it) |

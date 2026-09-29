@@ -34,6 +34,7 @@
 | M11 | World texture | atmosphere pages off the critical path, an epigraph at the deepest point, easter eggs | the world needs texture; no need to label pages as carrying no progress | — |
 | M12 | Interaction staging | countdown blackout, typewriter, scroll reveal, fake interactions; sensory puzzles with declared hardware | the system's reactions should carry weight | `references/structure/components.md` §4 |
 | M13 | Telemetry | search terms + page-view counts | difficulty iteration on real friction data is wanted | — |
+| M14 | Read-state entries | an entry appears only after its source page was read (`data-after`; the walk fires the edge, check-solvable proves the order) | the fiction reacts to being read — mail arrives, badges change, sanctions land | `references/structure/form-device.md` §3 |
 
 ## 3. Puzzle types (choose 5–10 as a set)
 
@@ -81,3 +82,4 @@ product (R4).
     - After: 每一个密码都出自站内某个人留下的生活痕迹：生肖、工号、纪念日。
     - Before: 春水楼不会消失，它只是深吸一口气。
     - After: 2020 年春季恢复营业，具体时间另行公告。
+15. **The medium argues**: the container says something by being this container — a script-fiction shop that hosts a real case file, one fabricated browser tab, a site frozen the year its author died. `workflow/02-container.md` closes axis 1 with one recorded sentence for it; when the chosen form says nothing beyond the plot, the form is a costume.

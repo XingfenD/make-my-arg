@@ -17,6 +17,9 @@ follow the workflow steps; rule IDs `(Rn)` cite the canonical table in `referenc
 |---|---|
 | An account/login system stuffed into a story that has no system fiction | Reach follows the container: a public website differentiates by search and gates, a system fiction by accounts (`workflow/02-container.md`) |
 | Every optional module turned on "to be safe", or the reskin impact chosen without asking | Modules are selected with the user at step 2 and recorded in `docs/system-profile.md`; the built site matches the selection exactly |
+| A form axis decided by taste when the fiction forces it (or the reverse: axes left blank because the story "picked itself") | All five axes are answered together with the user; an unanswered row becomes an explicit question — a later change re-runs step 2 before scaffolding (`workflow/02-container.md`) |
+| A device class declared (phone / browser-chrome) with a pure-web shell shipped | The class is a promise step 6a keeps with shell components (`references/structure/form-device.md` §2); step 8 checks it |
+| Persistence copied from a reference site with no fiction warrant, or a save surface on a `progress: none` profile | State follows device ownership (R13): the profile's state contract is the only source of storage decisions |
 
 ## Step 3 — Write the GDD
 
@@ -55,7 +58,7 @@ follow the workflow steps; rule IDs `(Rn)` cite the canonical table in `referenc
 
 | Mistake | Correct approach |
 |---|---|
-| Building a SPA adventure engine (canvas scenes, generic puzzle framework) | Multi-page fake system; each page is an independently openable "document" (R1) |
+| Building a SPA adventure engine (canvas scenes, generic puzzle framework) | Multi-page fake system; each page is an independently openable "document" (R1). The apparatus exception requires the five recorded conditions up front (`references/structure/form-device.md` §5) — never discovered mid-implementation |
 | A module drift: the framework ships machinery the profile did not select, or misses one it did | Build exactly the selected modules — no unused skins, search tables, gate components, or account furniture (`workflow/06-scaffold.md`) |
 | Keywords stored in plaintext JSON | Build script hashes them into a table, preventing "read the source to win" (R3) |
 | Rewriting a checker to fit a renamed project | The shared `tools/config.mjs` absorbs renamed dirs, layer names, markers, and the search mount for both checkers; `references/structure/tooling.md` §2 lists the knobs and §3 the steps no static check replaces |
@@ -75,6 +78,7 @@ follow the workflow steps; rule IDs `(Rn)` cite the canonical table in `referenc
 | A declared image / seal / scan / photo never landed (no `<img>` written, so no checker complains) | Step 7 phase 4 owns the GDD asset manifest; step 8 reconciles every declared asset against files + references |
 | One login split into two forms to give the checker "one form = one identity" | One box + `data-grants` (account→identity map); two forms leak the design intent in the title and read as game UI (`references/structure/form-system.md` §2) |
 | Access state in per-tab `sessionStorage` behind a `target="_blank"` result | Session cookie (cross-tab); the new tab the result opens else reads as logged out (`references/structure/components.md` §2–§3) |
+| A read-state entry planted as a plain link while the copy claims "appears after you read X" | `data-after="…/X.html"` is the mechanical claim; the walk proves it (`references/structure/form-device.md` §4, R13) |
 | Credential printed in plaintext to satisfy a static checker | Zero-plaintext: `check-credentials.mjs` asserts no account appears whole; client-side masking is not privacy on a static site |
 
 ## Step 8 — Self-Check
@@ -85,4 +89,5 @@ follow the workflow steps; rule IDs `(Rn)` cite the canonical table in `referenc
 | Cross-tab unlock left untested because `check-solvable` is green | It models identities as one global set and cannot see per-tab isolation; run the manual new-tab test (log in → open a `target="_blank"` result → the protected doc must be unlocked there) |
 | Asset manifest unreconciled | Every GDD-declared asset exists under `assets/` and is referenced by ≥1 page; an `<img>` never written has no `src` for check-links to resolve |
 | Shared entities drift between pages | Reconcile names / IDs / accounts / page titles / dates against `docs/registry.md`; a roster missing a duty-schedule person, or a page under two titles, fails here |
+| Read-state edges invisible to the graph because marking lives only in JS | The anchor carries `data-after`; a runtime-only `readState.has()` check leaves the edge out of the walk — re-run `check-solvable.mjs` and compare the `after-read` set with the reachability table |
 | Shipping without a solvability check | Copy `assets/tools/check-solvable.mjs` in at scaffold time. It proves every gate stays solvable and every page reachable after content edits, and turns red when a leak fix removes a clue. For derived credentials add `check-credentials.mjs` + `check-reachability.mjs` |

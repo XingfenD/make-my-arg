@@ -14,9 +14,12 @@ const CONFIG = {
   grantAttr: 'data-grant',                                        // Shape C: identities a login gate authenticates
   accessAttr: 'data-access',                                      // Shape C: identities allowed to read a block
   nextAttr: 'data-next',                                          // gate target, followed after unlock
+  afterAttr: 'data-after',                                        // route 10: anchor whose target fires only after the NAMED page (root-relative value) has been READ (references/structure/form-device.md §4)
+  expectAnyAttr: 'data-expect-any',                               // narrative-gate input: accepts any non-empty value; no hash to prove (form-device.md §4) — parsed by the component, not by the walk
   unlockMarkers: [/x-show\s*=\s*["']unlocked["']/, /<template\s+x-if\s*=\s*["']unlocked["']/], // start of the post-gate block
   unlockEnd: '</main>',                                           // end boundary of the post-gate block
   searchMount: /x-data\s*=\s*["']search["']/,                     // page(s) mounting the search component
+  gateMount: /x-data\s*=\s*["']gate["']/,                         // page(s) mounting the gate component — undeclared-input scan (check-solvable)
   maxTokenLen: 8,                                                 // character-window cap (CJK / compact tokens)
   maxPhraseWords: 4,                                              // word n-gram width (multi-word credentials)
   maxPhraseLen: 48,                                               // character cap for one candidate

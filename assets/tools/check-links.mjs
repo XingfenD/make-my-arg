@@ -49,6 +49,17 @@ for (const f of html) {
   const re = /\s(?:href|src|action|data-next)\s*=\s*(["'])([^"']*)\1/gi;
   let m;
   while ((m = re.exec(text))) checkLink(f, m[2]);
+  // data-after values are ROOT-relative by convention (form-device.md §4): resolve them against the tree
+  // root, not the anchor's directory, so a renamed page cannot silently strand a read-state edge.
+  const afterRe = new RegExp(`\\s${CONFIG.afterAttr}\\s*=\\s*(["'])([^"']*)\\1`, 'gi');
+  while ((m = afterRe.exec(text))) {
+    const rel = m[2].replace(/^\.\//, '');
+    const key = `after:${rel}`;
+    if (!checked.has(key)) {
+      checked.add(key);
+      if (!existsSync(resolve(ROOT, rel))) { dead++; console.log(`DEAD  ${relative(ROOT, f)}  data-after →  ${m[2]}`); }
+    }
+  }
 }
 
 // Keyword tables: urls are relative to pages/

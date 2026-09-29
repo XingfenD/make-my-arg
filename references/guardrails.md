@@ -32,9 +32,11 @@ Four constraints (violating any one departs from this paradigm):
 scene switching (a generic adventure engine) or canvas scene rendering; an inventory / evidence tray / player
 notebook rendered as chrome around the site; a `register(type, panel)`-style puzzle registry engine; a build
 step that bundles the site back into a single-file dist; Alpine driving a single-page shell or a puzzle engine
-(in-page component lifecycle only).
+(in-page component lifecycle only). The single carve-out: the chrome-as-apparatus form (`references/structure/form-device.md`
+§5) — one document whose *drawn* chrome is the fiction — permitted only with all five conditions recorded in
+the system profile; never for convenience.
 
-## Canonical rules (R1–R12)
+## Canonical rules (R1–R13)
 
 Every rule that more than one file states has exactly one canonical home: this table. Other files cite the
 rule by ID — a one-line restatement plus `(Rn)` — and where a citation and this table disagree, this table
@@ -42,9 +44,9 @@ wins. `scripts/check-docs.mjs` verifies that every cited ID exists here.
 
 | ID | Rule (canonical statement) | Elaborated in |
 |---|---|---|
-| R1 | The deliverable is a multi-page tree of independently openable HTML documents; single-file shells, canvas scenes, puzzle-registry engines, and bundle-to-dist steps are prohibited; game-UI carriers live inside the fiction, never around it | this file: Constraint 1 + Prohibited forms; `references/structure/base.md` §1 |
+| R1 | The deliverable is a multi-page tree of independently openable HTML documents; single-file shells, canvas scenes, puzzle-registry engines, and bundle-to-dist steps are prohibited; game-UI carriers live inside the fiction, never around it. The one exception is the chrome-as-apparatus single page — a single document whose drawn chrome is the fiction — permitted only with the five conditions recorded in the system profile (R12 exercised, never tacit) | this file: Constraint 1 + Prohibited forms; `references/structure/base.md` §1; `references/structure/form-device.md` §5 |
 | R2 | Two-layer narrative is story logic: surface + secret layers, revealed in stages; any reskin or visual switch is a selected module, never a requirement | Constraint 2; `references/design-playbook.md` §2 |
-| R3 | Every credential and keyword derives from a character's life traces; random strings are prohibited; keyword tables and gate hashes ship hashed and the plaintext `.src.json` never reaches the deployed tree | Constraint 3; `references/structure/components.md` §1 |
+| R3 | Every credential and keyword derives from a character's life traces; random strings are prohibited; keyword tables and gate hashes ship hashed and the plaintext `.src.json` never reaches the deployed tree. Where the fiction needs privacy the hash tier cannot give (a private message that must survive a grep of the deployed tree), the selected encrypted-content tier applies: WebCrypto AES-GCM with the key assembled from life traces | Constraint 3; `references/structure/components.md` §1; `workflow/02-container.md` §3 |
 | R4 | Input UI names the field only (`placeholder` / label / help text / empty state); failure hints point at the source obliquely and stop there; a gate page may post the account format, never the password derivation | Constraint 3; `references/design-playbook.md` §4; `references/structure/components.md` §3 |
 | R5 | Public pages publish what that organization publishes; no public page mentions the plot; no in-world page addresses the player | Constraint 4; `references/design-playbook.md` §4 |
 | R6 | Formal documents carry real-world format: issuing body, document number, date, addressee, body, signature and seal, distribution list | Constraint 4; `references/design-playbook.md` §4 |
@@ -54,12 +56,14 @@ wins. `scripts/check-docs.mjs` verifies that every cited ID exists here.
 | R10 | System containers use per-account access: a page opens only to the accounts it names (`data-access`), granted only by a login gate (`data-grant`); no numeric ladder, no admin-opens-all; only the initial account may be printed, every other login is inferred from clues | `references/structure/form-system.md` §1 |
 | R11 | Copy is plain and declarative: contrast frames (是…不是… / 是…而是… / 不能…只能… / 并非…而是…), metaphor, personification, and adjectives piled for effect stay out of site and guidance copy | `references/design-playbook.md` §4 |
 | R12 | Realism outranks any check; a conflict is recorded — page, rule, what realism requires — and routed to the user through the orchestrator, never resolved silently | this file: Priority |
+| R13 | State follows device ownership: login state always lives in a session cookie (cleared when the browser closes, never `localStorage`); progress and world-response state persist only on a player-owned device or where the fiction really saves; every read-gated entry declares its source page with `data-after` so the walk proves the order; the site never explains its storage to the player | `references/structure/form-device.md` §3; `workflow/04-reachability.md` route 10 |
 
 ## Rationalizations (observed in baseline tests; rationalization → counter)
 
 | Rationalization | Counter |
 |---|---|
-| "We're short on time — one HTML file is enough." | Cut content volume (fewer pages and puzzles); structure stays. A single file falls outside the paradigm (R1). |
+| "We're short on time — one HTML file is enough." | Cut content volume (fewer pages and puzzles); structure stays. A single file falls outside the paradigm unless the drawn chrome is the fiction and all five conditions of `references/structure/form-device.md` §5 are recorded (R1). |
+| "The reference site ships a save, so we save too." | State follows device ownership (R13): a remote system that never saves matches its fiction; copying persistence onto a system that would not keep it is a realism break in the other direction. |
 | "Don't start over; the engine layer is frozen." | A generic game framework scaffold is not a fake system. Migrate the content layer as-is and replace the engine with multi-page plus reach modules (R1). |
 | "Generate passwords randomly now; fix them later." | Password-as-character-inference is the puzzle quality itself; there is no "later" (R3). |
 | "Every story needs an account system." | Reach follows the container: a public website differentiates by search and gates, a system fiction by accounts. Add accounts only where the fiction really has identities and logins (`workflow/02-container.md`). |
@@ -71,7 +75,7 @@ wins. `scripts/check-docs.mjs` verifies that every cited ID exists here.
 
 ## Red Flags — stop and revise the system profile or GDD
 
-- Only one HTML file exists in the project (R1)
+- Only one HTML file exists in the project, apparatus conditions unrecorded (R1)
 - Canvas scene rendering or a puzzle registry engine appears (R1)
 - Passwords are random strings with no derivable source in page copy (R3)
 - A public page mentions the plot (R5); a page carries a link absent from the reachability table (R7)
@@ -80,6 +84,8 @@ wins. `scripts/check-docs.mjs` verifies that every cited ID exists here.
 - An announcement or contract reads as game copy (R6)
 - Guidance or site copy uses metaphor, personification, piled adjectives, or contrast frames (R11)
 - A module selected in `docs/system-profile.md` is missing from the built site, or an unselected one appears
+- An entry the copy claims appears only after a read carries no `data-after` — the claim must be mechanical (R13)
+- A device class or state contract declared in the profile that the built shell and storage do not honor
 - A check is broken, or realism bent, without the conflict going to the user (R12)
 - "Let's get a demo running first"
 

@@ -16,7 +16,7 @@ Lane A runs the checkers first and quotes their output verbatim. Lanes B and C g
 
 ## Structure
 
-- [ ] `find . -name "*.html" | wc -l` returns 10 or more. The deliverable is a multi-HTML file tree (R1).
+- [ ] `find . -name "*.html" | wc -l` returns 10 or more. The deliverable is a multi-HTML file tree (R1). An apparatus single page (profile's technical-form line records the five conditions) replaces this item with: the five conditions are on file, the location inventory equals the page map, and every location survives reload.
 - [ ] `node tools/build-keywords.mjs` runs cleanly before the checkers — a stale hash table hides link and solvability drift (R3).
 - [ ] `node tools/check-links.mjs` reports zero dead links (and zero layer leaks).
 - [ ] `node tools/check-solvable.mjs` reports every gate unlocked and every page reachable, and exits 0.
@@ -39,6 +39,7 @@ Lane A runs the checkers first and quotes their output verbatim. Lanes B and C g
 - [ ] The public keyword table carries no restricted-area URL (default `internal/`; the `secretUrl` CONFIG knob).
 - [ ] Every result or list row the visitor may not open resolves to its gate or a plain locked notice; nothing opens its document directly.
 - [ ] System containers (M3): every `data-access` account is granted by some login gate (`data-grant`); no page is reachable through a privilege ladder or a shallow-page "related archives" link; and a search hit to a protected document stays unreachable until the named account is authenticated.
+- [ ] Read-state entries (M14): every entry the reachability table lists as a route-10 edge carries `data-after` naming its source page; `check-solvable.mjs` fires it only after that page is visited; no entry making the same claim in copy ships as a plain link (R13).
 
 ## Puzzle integrity (re-run workflow/05 Q4)
 
@@ -48,6 +49,7 @@ Lane A runs the checkers first and quotes their output verbatim. Lanes B and C g
 - [ ] `node tools/check-solvable.mjs` resolves every **verbatim** credential to prior page copy, naming the source page. This replaces the manual provenance pass; still replay the walkthrough yourself once, judging tone and pacing.
 - [ ] `node tools/check-credentials.mjs` resolves every **derived/composite** credential to its public-page components and asserts zero plaintext: no account string appears whole on any page (client-side masking — `x-show`, a CSS class, an element-level `data-access` — is not privacy on a static site with no server auth; the HTML reaches every visitor).
 - [ ] No single page co-locates two components of one credential (a "zero-jump" solve): if the 工号 and the year print on the same page, the player copies both without inferring. Split them per the GDD puzzle allocation table.
+- [ ] Wildcard gates are declared: every gate-mounted page's inputs carry `data-expect-hash` or `data-expect-any` — the `check-solvable.mjs` NOTE must be empty (a narrative gate that accepts anything says so in the markup; R4).
 - [ ] Result titles in both keyword tables are catalog entries; none summarizes the document's content.
 
 ## Consistency (`docs/registry.md` vs. the built tree)
@@ -74,8 +76,9 @@ Lane A runs the checkers first and quotes their output verbatim. Lanes B and C g
 - [ ] Core interactions work at phone width.
 - [ ] Chrome sweep: load **every** page (plus each search state: hit / miss / forbidden) at desktop and phone width. Collect console errors, `requestfailed` (including every `<img>`), horizontal overflow (`scrollWidth > innerWidth`), and whether each `[x-data]` element actually initialized. Partial passes miss defects — a CSS specificity bug once silently disabled two declared puzzle types on the secret layer only.
 - [ ] **Cross-tab session (M3).** Log in, then open a search/result link (`target="_blank"`): the protected document must be unlocked in the new tab too. Close the browser, reopen: signed out. Per-tab `sessionStorage` fails the first half; a session cookie passes. `check-solvable.mjs` models identities as one global set and cannot see this — it reports green either way, so this manual test is the only catch (`references/structure/tooling.md` §3 item 7).
-- [ ] No page persists unlock state or reading progress across sessions, and no page explains its storage to the player. `grep -rn "localStorage\|sessionStorage" --include=*.js --include=*.html .` and confirm nothing but the documented session helper touches it.
+- [ ] **State contract honored (R13).** `grep -rn "localStorage\|sessionStorage" --include=*.js --include=*.html .` — every hit is either the session-cookie helper's private-mode fallback or storage the profile sanctioned (`persistent` / world-response rows). Login state never persists across sessions: close the browser, reopen → signed out. `progress: none` sites ship zero progress storage. No page explains its storage to the player.
 - [ ] Sensory puzzle hardware requirements are declared on the entry page, and nothing is declared that the site does not actually implement.
 - [ ] When M5 is selected: entering the deep area restyles the whole page — background, title, logo, footer — and no theme shift fires in a project that did not select it.
+- [ ] Device class honored: a `phone` profile renders its chrome on every page (status bar present, tap targets sane at 390px, the shell CSS the profile selected actually loaded); `browser-chrome` keeps its drawn address bar fixed. A declared class the shell does not show is module drift (R12).
 
 Baseline-test traps for this step: references/common-mistakes.md §8 — check them before returning the artifact.

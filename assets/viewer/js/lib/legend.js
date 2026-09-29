@@ -14,6 +14,7 @@ const KIND_STYLE = {
   'gate-next':  { c: '#8c2f24', w: 1.7, label: 'gate-next' },
   'post-unlock':{ c: '#a86a10', w: 1.5, dash: '6 3', label: 'post-unlock' },
   search:       { c: '#1f5c8b', w: 1.4, dash: '2 3', label: 'search' },
+  'after-read': { c: '#4a3f78', w: 1.4, dash: '7 3', label: 'after-read' },
 };
-const KIND_LABEL = { start:'入口', nav:'主导航', footer:'页脚', breadcrumb:'面包屑', list:'列表', body:'正文', form:'表单', 'gate-next':'门禁后继', 'post-unlock':'解锁后', search:'搜索命中的' };
+const KIND_LABEL = { start:'入口', nav:'主导航', footer:'页脚', breadcrumb:'面包屑', list:'列表', body:'正文', form:'表单', 'gate-next':'门禁后继', 'post-unlock':'解锁后', search:'搜索命中的', 'after-read':'读后出现' };
 const kindList = () => Object.entries(KIND_STYLE).map(([id, s]) => ({ id, c: s.c, label: KIND_LABEL[id] ?? id }));

@@ -89,7 +89,9 @@ function extractAnchors(root, file, html, rg) {
   };
   let m;
   const re = /<a\b([^>]*)>([\s\S]*?)<\/a>/gi;
+  const AFTER_RE = new RegExp(`\\b${CONFIG.afterAttr}\\b`, 'i');
   while ((m = re.exec(html))) {
+    if (AFTER_RE.test(m[1])) continue;   // a data-after anchor is a conditional route, added via pages[].afters
     const h = m[1].match(/\bhref\s*=\s*["']([^"']*)["']/i);
     if (!h) continue;
     const u = target(h[1]);
@@ -152,6 +154,10 @@ function buildGraph(root) {
     for (const u of nextOf(root, pages[id].rawLocked, join(root, id))) {
       add({ from: id, to: u, kind: 'gate-next', chrome: false, evidence: 'data-next', route: 5, routeClaim: 'structural' });
     }
+    // route 10 (R13): read-gated entry — the source page named by data-after is the guard, not a credential.
+    for (const e of pages[id].afters) {
+      add({ from: id, to: e.to, kind: 'after-read', chrome: false, evidence: `data-after:${e.read}`, route: 10, routeClaim: 'structural', _read: e.read });
+    }
   }
   for (const [from, anchors] of groupBy(bodyAnchors, 'from')) {
     for (const [, group] of groupBy(anchors, (x) => dirname(x.to))) {
@@ -193,16 +199,19 @@ function buildGraph(root) {
       const s = d._search;
       guard = { type: 'keyword', keyword: s.keyword, hash: s.hash,
         sources: s.readOn.map((q) => ({ page: q, afterGate: pages[q].blocked })), requires, grantedBy };
+    } else if (d.kind === 'after-read') {
+      guard = { type: 'read-state', readOn: d._read, requires, grantedBy };
     } else if (requires.length) {
       guard = { type: 'account', requires, grantedBy };
     }
-    return { from: d.from, to: d.to, kind: d.kind, chrome: d.chrome, evidence: d.evidence, guard, route: d.route, routeClaim: d.routeClaim };
+    return { from: d.from, to: d.to, kind: d.kind, chrome: d.chrome, evidence: d.evidence, guard, route: d.route, routeClaim: d.routeClaim, ...(d._read ? { _read: d._read } : {}) };
   });
 
   /* ── hops: BFS from the entry over the edges the final walk state activates ── */
   const adj = new Map();
   for (const e of edges) {
     if (BLOCKED_KINDS.has(e.kind) && !gateSrc.has(e.from)) continue;
+    if (e.kind === 'after-read' && !visited.has(e._read)) continue;   // the entry exists only once its source was READ
     if (!visited.has(e.from) || !visited.has(e.to)) continue;
     if (!adj.has(e.from)) adj.set(e.from, []);
     adj.get(e.from).push(e.to);
@@ -291,14 +300,14 @@ function selfTest() {
   const g = buildGraph(FIXTURE);
 
   ok(g.schema === SCHEMA, 'schema id');
-  ok(g.stats.pages === 14, `14 pages (got ${g.stats.pages})`);
-  ok(g.stats.reachable === 13, `13 reachable (got ${g.stats.reachable})`);
+  ok(g.stats.pages === 16, `16 pages (got ${g.stats.pages})`);
+  ok(g.stats.reachable === 15, `15 reachable (got ${g.stats.reachable})`);
   ok(g.stats.unreachable === 1, `1 unreachable (got ${g.stats.unreachable})`);
   ok(g.stats.gates === 2 && g.stats.gatesUnlocked === 1, `gates 2, unlocked 1 (got ${g.stats.gates}/${g.stats.gatesUnlocked})`);
-  ok(g.stats.progressCoverage === '12/14', `progress coverage 12/14 (got ${g.stats.progressCoverage})`);
+  ok(g.stats.progressCoverage === '12/16', `progress coverage 12/16 (got ${g.stats.progressCoverage})`);
 
   const kinds = new Set(g.edges.map((e) => e.kind));
-  for (const k of ['start', 'nav', 'footer', 'breadcrumb', 'list', 'body', 'form', 'gate-next', 'post-unlock', 'search']) ok(kinds.has(k), `kind present: ${k}`);
+  for (const k of ['start', 'nav', 'footer', 'breadcrumb', 'list', 'body', 'form', 'gate-next', 'post-unlock', 'search', 'after-read']) ok(kinds.has(k), `kind present: ${k}`);
 
   // A page reachable only through a <form action> must be a vertex with an inbound edge: the walk follows
   // action= (site-model linksOf), so a graph built from anchors alone would disagree with it.
@@ -312,7 +321,7 @@ function selfTest() {
   // CONFIG.skipDirs: viewer/ (renderer template) and docs/ (artifacts) are never site pages. Without the
   // skip, the fixture would report one extra vertex here and another on every re-run after an emit.
   ok(!g.nodes.some((n) => n.id.startsWith('viewer/') || n.id.startsWith('docs/')), 'viewer/ and docs/ never become vertices');
-  ok(g.nodes.length === 14, 'no dev-dir file inflated the vertex set');
+  ok(g.nodes.length === 16, 'no dev-dir file inflated the vertex set');
 
   const gateNext = g.edges.find((e) => e.kind === 'gate-next');
   ok(gateNext?.from === 'pages/login.html' && gateNext.to === 'pages/internal/s22-diary.html', 'gate-next edge login → s22');
@@ -323,6 +332,18 @@ function selfTest() {
   ok(JSON.stringify(gateNext.guard.requires) === JSON.stringify(['chen']), 'requires chen');
   ok(JSON.stringify(gateNext.guard.grantedBy) === JSON.stringify(['pages/login.html']), 'grantedBy login');
   ok(gateNext.route === 5 && gateNext.routeClaim === 'structural', 'route 5 structural');
+
+  // route 10 (R13): read-gated entries — conditional edges that fire only after the NAMED source page
+  // was read. news-04 hangs off staff-chen (gated by news-01); s19 off login (gated by news-02 + chen).
+  const afters = g.edges.filter((e) => e.kind === 'after-read');
+  ok(afters.length === 2, `two after-read edges (got ${afters.length})`);
+  const n04 = afters.find((e) => e.to === 'pages/news-04.html');
+  ok(n04?.from === 'pages/staff-chen.html' && n04._read === 'pages/news-01.html', 'news-04 gated by reading news-01');
+  ok(n04.route === 10 && n04.routeClaim === 'structural' && n04.guard?.type === 'read-state', 'after-read route 10 + read-state guard');
+  const s19 = afters.find((e) => e.to === 'pages/internal/s19-record.html');
+  ok(s19?.from === 'pages/login.html' && s19._read === 'pages/news-02.html', 's19 gated by reading news-02');
+  ok(JSON.stringify(s19.guard.requires) === JSON.stringify(['chen']), 's19 read-state guard keeps its data-access requires');
+  ok(g.nodes.find((n) => n.id === 'pages/news-04.html')?.reachable === true, 'news-04 reachable through the read gate');
 
   const post = g.edges.find((e) => e.kind === 'post-unlock');
   ok(post?.guard?.fields[0].via === 'derived', 'derived guard on the post-unlock edge');
@@ -368,7 +389,7 @@ function selfTest() {
     const { jsonPath, htmlPath } = emit(g, FIXTURE, join(tmp, 'g'));
     ok(existsSync(jsonPath) && existsSync(htmlPath), 'json + viewer index emitted');
     const back2 = JSON.parse(readFileSync(jsonPath, 'utf8'));
-    ok(back2.schema === SCHEMA && back2.nodes.length === 14, 'emitted JSON round-trips');
+    ok(back2.schema === SCHEMA && back2.nodes.length === 16, 'emitted JSON round-trips');
     const html = readFileSync(htmlPath, 'utf8');
     ok(html.includes('pages/login.html'), 'JSON injected into the viewer');
     // self-contained folder: every relative ref (css/, js/, js/vendor/) resolves inside the artifact

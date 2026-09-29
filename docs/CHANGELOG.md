@@ -6,6 +6,36 @@ All notable changes to this skill should be documented in this file.
 The format loosely follows Keep a Changelog and can be adapted to the team's habits.
 本文档参考了 Keep a Changelog 的思路，也可以根据团队习惯调整。
 
+## [0.3.0] - 2026-09-29
+
+### Added / 新增
+
+- Step 2 becomes a five-axis form decision: narrative container, device class (phone / desktop / browser-chrome / pure-web), technical form (multi-page / chrome-as-apparatus single page / encrypted-content tier), state contract (login cookie · progress persistent/session/none · world-response rows), era and texture family — one bundle answered together with the user, because each axis changes what steps 3–7 build.
+  第 2 步改为五轴形式决策束：叙事容器、设备类（手机 / 桌面 / 浏览器套壳 / 纯网站）、技术形态（多页 / chrome 即装置的单页 / 内容加密档）、状态契约（登录 cookie · 进度 persistent/session/none · 世界响应行）、时代与纹理家族——与用户一次定齐，因为每一轴都改变第 3–7 步的构建。
+
+- `references/structure/form-device.md`: device-class shell components (phone chrome, fake address bar), the R13 state contract with the read-state store reference implementation, the apparatus single-page carve-out with its five recorded conditions, and an anti-patterns table.
+  新增 `references/structure/form-device.md`：设备类外壳组件（手机 chrome、假地址栏）、R13 状态契约与 read-state 参考实现、chrome 即装置单页的五条留痕豁免、反模式表。
+
+- R13 (guardrails): state follows device ownership — login state always lives in a session cookie; progress and world-response state persist only on a player-owned device or where the fiction really saves; every read-gated entry declares its source page with `data-after` so the walk proves the order; the site never explains its storage to the player.
+  新增 R13：状态随终端归属——登录态永远在 session cookie；进度态与世界响应态仅在玩家自有设备或剧情确实存档时持久化；读后出现的入口须用 `data-after` 声明来源页，由走图证明顺序；站点从不向玩家解释存储。
+
+- M14 read-state entries in the module catalog, playbook `references/design-playbook.md` §4.15 "the medium argues" (step 2 axis 1 closes with one recorded sentence for what the container says by being it), and reachability route 10 — a conditional edge that fires only once its source page has been read.
+  模块目录新增 M14 读态入口，playbook 新增 `references/design-playbook.md` §4.15「主题-媒介同构」（第 2 步轴一须以一句留痕收尾：容器作为容器本身在说什么），触达链新增 route 10——来源页被读后才点亮的条件边。
+
+- Tooling for the form axes: `afterAttr` / `expectAnyAttr` / `gateMount` knobs in `tools/config.mjs`; the cold-start walk fires route-10 edges after their source page is visited and treats read-gated anchors as conditional routes; `check-solvable.mjs` notes gate-mounted pages with undeclared inputs; `check-links.mjs` resolves `data-after` targets root-relative; `site-graph.mjs` paints `after-read` edges with read-state guards, the fixture ships two, and the self-test asserts route 10; the starter kernel gains the `readState` store.
+  工具链配套：`tools/config.mjs` 新增 `afterAttr`/`expectAnyAttr`/`gateMount` 旋钮；冷启动走图在来源页被读后点亮 route-10 边、把读态锚点按条件边处理；`check-solvable.mjs` 提示未声明输入的门禁页；`check-links.mjs` 按根相对路径解析 `data-after` 目标；`site-graph.mjs` 绘制带 read-state 守卫的 `after-read` 边，fixture 内置两条并由 self-test 断言 route 10；starter 内核新增 `readState`。
+
+### Changed / 变更
+
+- `workflow/02-container.md` rewritten as the five axes; the `docs/system-profile.md` template gains the Medium-argument / Device class / Technical form / State contract / Era rows, and the reach model line now names read-state as a depth-crosser.
+  `workflow/02-container.md` 按五轴重写；`docs/system-profile.md` 模板新增主题-媒介句 / 设备类 / 技术形态 / 状态契约 / 时代五行，reach 一行把读态列为跨越深度的机制。
+
+- `references/structure/form-system.md` §6 is the login-state rule under R13 — the blanket "nothing survives the session, never localStorage" is retired; `references/structure/components.md` §6 progress storage follows the profile's contract; `references/structure/components.md` §3 adds the declared wildcard gate (`data-expect-any`: an emotional input-and-pass ritual that accepts any non-empty value — declared, never implied), and the starter gate body accepts it.
+  `references/structure/form-system.md` §6 收窄为 R13 之下的登录态规则——「关浏览器即全清、永不 localStorage」的整体教条退役；`references/structure/components.md` §6 进度存储跟随 profile 契约，`references/structure/components.md` §3 新增显式声明的通配门禁（`data-expect-any`：输入即过的情感门，接受任意非空值——声明而非暗示），starter 门组件同步接受。
+
+- R1 gains the apparatus carve-out (five conditions recorded, never tacit); R3 gains the encrypted-content tier; guardrails rationalizations and red flags extended; SKILL.md routes R1–R13 and the step-2 row; steps 3–8 carry the new rows (05 wildcard note, 06 form-device inputs plus the state bullet, 07 standing rules for `data-after` and storage, 08 state-contract / device-class / read-state / wildcard items); `examples/` anchors updated.
+  R1 增设装置豁免（五条留痕，绝不 tacit）；R3 增设内容加密档；guardrails 合理化借口与红旗清单扩充；SKILL.md 路由改 R1–R13 并更新第 2 步行；第 3–8 步各补相应行项（05 通配门注记、06 form-device 输入与状态条目、07 `data-after` 与存储守则、08 状态契约 / 设备类 / 读态 / 通配门检查项）；`examples/` 锚点样例同步。
+
 ## [0.2.0] - 2026-09-26
 
 ### Changed / 变更

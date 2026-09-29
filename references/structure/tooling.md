@@ -42,6 +42,7 @@ file instead of rewriting a checker (a rewrite throws away the defects these che
 | `entry` | `index.html` | check-solvable, check-reachability |
 | `gateHashAttr` / `indexAttr` | `data-expect-hash` / `data-index` | check-solvable, check-credentials |
 | `grantAttr` / `accessAttr` / `nextAttr` | `data-grant` / `data-access` / `data-next` | check-solvable (system-form accounts) |
+| `afterAttr` / `expectAnyAttr` / `gateMount` | `data-after` / `data-expect-any` / gate mount test | site-model route 10 · check-solvable undeclared-input NOTE |
 | `unlockMarkers` / `unlockEnd` | `x-show="unlocked"` … `</main>` | check-solvable, check-reachability |
 | `searchMount` | `x-data="search"` | check-solvable |
 | `maxTokenLen` / `maxPhraseWords` / `maxPhraseLen` | 8 / 4 / 48 | check-solvable matcher |
@@ -67,6 +68,8 @@ Ten things no static checker can see. Each has a manual method or a companion to
 8. **Element-level permission masking** — a checker reads page *text*, not computed visibility; a credential hidden only by `x-show` / a CSS class / an element-level `data-access` is still in the HTML sent to every visitor, and client-side masking is not privacy (R12). Treat it as public: the step-8 chrome scan and `check-credentials`' zero-plaintext assertion catch it.
 9. **GDD-declared assets that were never landed** — an emblem / seal / scan / photo / mock-doc the manifest lists but no page references has no `src` to resolve, so neither checker complains. Manual method: the step-8 asset-manifest reconciliation — every declared asset exists under `assets/` and is referenced by at least one page.
 10. **Route claims and progress back-jumps** — `site-graph.mjs` classifies every edge with a step-4 closed-list route (`structural` where the machine can decide, `heuristic` for a body link read as a related-document reference) and flags non-chrome edges whose progress delta is negative. Confirm every `heuristic` claim and every back-jump against `docs/reachability.md` — the tool cannot judge whether the organization would really print the link.
+11. **The apparatus single-page carve-out (R1 exception)** — when the profile records the chrome-as-apparatus form (`references/structure/form-device.md` §5), the walk sees one document: template pages have no file for check-links to resolve, and gate/keyword provenance needs a manual walkthrough. The five conditions are re-verified in `workflow/08-self-check.md` and recorded in `docs/self-check.md`.
+12. **The encrypted-content tier (R3)** — an AES-GCM key assembled from life traces is outside the verbatim/derived model: `check-credentials.mjs` proves the parts (public pages, zero plaintext); the decryption itself is proven by a rehearsal decrypt of the shipped `enc.json` at build time — never by printing the key into a page.
 
 The matcher reads *page text*, not the DOM, for the same reason the player does: it proves a string was
 readable before the gate. A clue hidden in a `placeholder`, `title`, or JS string is invisible to both player

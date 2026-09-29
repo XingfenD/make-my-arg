@@ -8,7 +8,7 @@ description: Use when generating a multi-page static web puzzle game (ARG-lite) 
 Build a multi-page static puzzle game disguised as a real website (ARG-lite) from any story source — a novel,
 a screenplay, setting material, or the user's own idea; success means the player feels they are infiltrating
 a real site. The guardrails — four constraints,
-canonical rules R1–R12, prohibited forms, baseline rationalizations, red flags, and exclusions — live in
+canonical rules R1–R13, prohibited forms, baseline rationalizations, red flags, and exclusions — live in
 `references/guardrails.md`: read it before step 1 and when reviewing any artifact.
 
 **Project-root convention.** The generated game lives in `<cwd>/<game-name>/` (kebab-case, named after the
@@ -26,7 +26,7 @@ anchor included in that step's dispatch prompt, when one exists.
 | Step | File | Deliverable | Example | Dispatch |
 |---|---|---|---|---|
 | 1 Story intake | workflow/01-story-intake.md | five tables | examples/story-canon-excerpt.md | long-form source: one subagent per chunk → 1 merge (past ~150k tokens), single subagent below; structured material / original idea: orchestrator; user checkpoint after the tables when any row is invented |
-| 2 Choose the container + assemble the system | workflow/02-container.md | `docs/system-profile.md` (modules selected with the user) | — | orchestrator (asks the user) |
+| 2 Choose the form + assemble the system | workflow/02-container.md | `docs/system-profile.md` (five form axes + modules selected with the user) | — | orchestrator (asks the user) |
 | 3 Write the GDD | workflow/03-gdd.md | `docs/gdd.md` (asset manifest + eight sections) + `docs/registry.md` (entity registry) | examples/gdd-excerpt.md | 3a gdd-plan → (3b gdd ∥ 3c registry) → 3d reconcile (subagents) → user review checkpoint |
 | 4 Reachability chain analysis 触达链分析 | workflow/04-reachability.md | `docs/reachability.md` | examples/reachability-excerpt.md | subagent — dispatched together with step 5 |
 | 5 Puzzle design audit 谜题设计分析 | workflow/05-puzzle-audit.md | `docs/puzzle-audit.md` with dispositions | examples/puzzle-audit-excerpt.md | subagent — dispatched together with step 4 |

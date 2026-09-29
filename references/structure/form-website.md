@@ -24,7 +24,7 @@ by keyword search (M1) or a gate (M2):
   one flat index turns the search box into a walkthrough.
 - A public keyword routes to a public page or to a gate — never straight into a restricted document. A hit the
   visitor may not open resolves to its gate or a plain locked notice (R8).
-- Gates are Shape A/B (`references/structure/components.md` §3); the credential triad applies (R3).
+- Gates are Shape A/B (`references/structure/components.md` §3); the credential triad applies (R3). A wildcard gate declares `data-expect-any` and a read-gated entry declares `data-after` exactly as in system forms (`references/structure/form-device.md` §4).
 
 ## 3. IA rules
 

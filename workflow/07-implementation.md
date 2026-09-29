@@ -20,8 +20,8 @@ Each phase subagent receives only the artifact sections and references its row n
 | Phase | Artifact sections | References |
 |---|---|---|
 | 1 Public pages and realistic documents | gdd sections 1, 2, 8; `docs/registry.md` | `references/guardrails.md` (R5, R6, R12), `references/design-playbook.md` §4, `references/structure/base.md`, form doc |
-| 2 Search engine and password gates | gdd sections 4, 5; reachability rows for owned pages | project `components.js` (search, gate), `references/guardrails.md` (R3, R4, R8, R9), form doc |
-| 3 Restricted-area pages (+ reskin when M5) | gdd section 4; reachability rows for owned pages | project `components.js` (access, reskin), form doc, `references/guardrails.md` (R10, R12) |
+| 2 Search engine and password gates | gdd sections 4, 5; reachability rows for owned pages | project `components.js` (search, gate), `references/guardrails.md` (R3, R4, R8, R9), form doc; `references/structure/form-device.md` §4 when wildcard gates or read-state entries are selected |
+| 3 Restricted-area pages (+ reskin when M5; + read-state entries when M14) | gdd section 4; reachability rows for owned pages | project `components.js` (access, reskin, read-state), form doc, `references/guardrails.md` (R10, R12), `references/structure/form-device.md` §3 |
 | 4a Generate assets | gdd front matter (asset manifest) | `references/structure/tooling.md` §3 item 9 (asset reconciliation) |
 | 4b Wire assets into pages | gdd front matter (asset manifest); the page set from phases 1–3 | `references/structure/tooling.md` §3 item 9 (asset reconciliation) |
 | 5 Staging modules (when M12) | gdd section 5 (sensory rows) | project `components.js` (staging) |
@@ -41,6 +41,8 @@ Each phase subagent receives only the artifact sections and references its row n
 - **Inputs name the field (R4).** `placeholder="工号"`, `placeholder="站内搜索…"`. The gate page may post the account format; the password derivation stays off it.
 - **Copy is declarative (R11).** See references/design-playbook.md §4.14 before writing any sentence.
 - **Keywords get hashed (R3).** Run `node tools/build-keywords.mjs` after any change to either `data/keywords.<layer>.src.json`.
+- **Read-gated entries carry `data-after` (M14, R13).** An entry that exists only after some page was read names that page in `data-after` — the checker-visible contract. Runtime `readState` alone makes the entry invisible to the graph. A wildcard gate marks its input `data-expect-any`; an undeclared input on a gate page raises the `check-solvable` NOTE (`references/structure/form-device.md` §4).
+- **Storage follows the state contract (R13).** Write `localStorage` only where the profile recorded persistence; login stays in the session cookie helper; no page ever explains its storage to the player.
 - **Shared entities stay identical.** A person name, ID, account, page title, or date that appears on more than one page is copied from `docs/registry.md` (written at step 3), never re-typed; the registry is the single source of truth.
 
 At the end of each phase, re-run the leak scan from workflow/05-puzzle-audit.md Q4 over the files that phase touched.

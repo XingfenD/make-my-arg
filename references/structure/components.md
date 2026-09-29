@@ -92,7 +92,9 @@ System containers replace this search hub with their own shells — desktop Spot
 
 ## 3. Password Gate (`gate` Component)
 
-One component, three shapes. `data-expect-hash` sits on **each `<input>`** (comma-separated values = synonyms
+One component, three shapes, plus one declared wildcard: `data-expect-any` marks a narrative gate whose
+answer is not verified by design — any non-empty value passes, so the walk never hunts a hash for it
+(`references/structure/form-device.md` §4). `data-expect-hash` sits on **each `<input>`** (comma-separated values = synonyms
 accepted for that field, so a Chinese name and its pinyin both open the same lock); the rest of the
 configuration sits on the **component root** (`<main>`), not on the `<form>`.
 
@@ -148,7 +150,7 @@ Alpine.data('gate', () => ({
   init() { this.successText = this.$el.dataset.successText || ''; },
   submit() {
     const el = this.$root;          // data-* live on the component root; the submit event's target is the <form>
-    const inputs = Array.from(el.querySelectorAll('input[data-expect-hash]'));
+    const inputs = Array.from(el.querySelectorAll('input[data-expect-hash],input[data-expect-any]'));
     // Single-box multi-identity (Shape C). data-grants is a JSON map on the root:
     //   { "<account-hash>": { "id": "intern", "pw": ["<pw-hash>", …], "reskin": "secret" }, … }
     // It resolves WHICH identity the typed account grants and validates the password against that identity,
@@ -163,8 +165,10 @@ Alpine.data('gate', () => ({
       ok = !!entry && (!pw || (entry.pw || []).includes(hash(pw.value || '')));   // account+password are paired
       if (ok) { grantIds = entry.id ? [entry.id] : []; session.reskin(entry.reskin); }
     } else {
-      // Legacy / multi-field gates: every data-expect-hash input must match; data-grant is unconditional.
+      // Legacy / multi-field gates: every data-expect-hash input must match; data-expect-any accepts any
+      // non-empty value (a declared wildcard, form-device.md §4); data-grant is unconditional.
       ok = inputs.length > 0 && inputs.every((inp) => {
+        if (inp.dataset.expectAny) return (inp.value || '').trim() !== '';
         const expects = (inp.dataset.expectHash || '').split(',').map((s) => s.trim()).filter(Boolean);
         return expects.includes(hash(inp.value || ''));
       });
@@ -196,7 +200,8 @@ Gate design rules:
 - **Failure hints point at the source obliquely and stop (R4).** `密码错误 🎂` passes; naming a page, restating the derivation, or spelling the field's content fails; a bare "error" is prohibited.
 - **Inputs name the field only (R4).** `placeholder="Employee ID"` / `工号` pass; `placeholder="e.g. 1977"` leaks. The derivation rule stays off the gate page; the *account format* may be posted there.
 - **Multi-field gates** are several `data-expect-hash` inputs; all must match. A gate page's own body is unreadable until the gate passes — a clue parked in its own `x-show="unlocked"` block is not counted before unlock, exactly the boundary the check models.
-- **Session state is technical, not copy.** Accounts live in a **session cookie** (cross-tab, cleared on browser close; never per-tab `sessionStorage` behind `target="_blank"` results), and the site does not explain its storage to the player (`references/structure/form-system.md` §6).
+- **A wildcard gate is declared, never implied.** A gate that asks for no verifiable secret (an emotional input-and-pass ritual) marks its input `data-expect-any`; an unmarked input on a gate-mounted page raises the `check-solvable.mjs` NOTE and stays a leak class (workflow/05 Q4).
+- **Session state is technical, not copy.** Accounts live in a **session cookie** (cross-tab, cleared on browser close; never per-tab `sessionStorage` behind `target="_blank"` results), and the site does not explain its storage to the player (`references/structure/form-system.md` §6). Progress and read-state storage follow the profile's state contract (R13; `references/structure/form-device.md` §3).
 
 ## 4. Staging Components (Lifecycle-Managed)
 
@@ -273,10 +278,12 @@ body.secret { background:#1a1a1c; color:#9e9e9e; } body.secret h2 { color:#db140
 ## 6. Optional: Collection Progress (`progress` Component)
 
 ```js
-// This paradigm has no save by default (progress lives in the player's head). If added: record only visited
-// page numbers; gates stay one-way and untracked, and a system container's authenticated accounts live in a
-// session cookie, never localStorage (references/structure/form-system.md §6). Mount on the shared footer so
-// it runs on every page.
+// The storage question follows the profile's state contract (references/guardrails.md R13, detail
+// references/structure/form-device.md §3): progress persists ONLY when the profile records `persistent`
+// (a player-owned device or a fiction that really saves). With `progress: session`, swap localStorage
+// for sessionStorage; with `progress: none`, the module itself is out of the game. Login state is never
+// here — it lives in the session cookie (§3), never localStorage. Mount on the shared footer so it runs
+// on every page.
 Alpine.data('progress', () => ({
   seen: [],
   init() {
@@ -288,3 +295,7 @@ Alpine.data('progress', () => ({
 }));
 // <footer x-data="progress"><small>© ... <span x-text="seen.length"></span>/36</small></footer>
 ```
+
+World-response state (M14: an entry appears only after a page was read) is the sibling component —
+`readState` plus the `data-after` attribute on the anchor, both in `references/structure/form-device.md` §3–§4;
+the attribute is what the checkers walk, the JS is what the player sees.

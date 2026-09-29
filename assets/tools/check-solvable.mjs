@@ -8,12 +8,15 @@
 //                   before the gate is reached.
 //   3. Search is earned — a keyword only opens the pages it routes to once that keyword has been READ
 //                   in some page's body copy ("keywords are copied out of the body" is the game's rule).
+//   4. Read-gated entries (route 10, R13) — an <a href data-after="pages/source.html"> fires only after the
+//                   named source page joins the visited set (references/structure/form-device.md §4).
 //
 // The parsing + walk core lives in the shared site-model.mjs (also consumed by site-graph.mjs, so the
 // graph can never disagree with this walk). Known ceilings (static href only; un-skippability; derived
 // credentials read as STUCK — prove them with check-credentials.mjs + check-reachability.mjs; per-tab
 // session isolation) are documented in references/structure/tooling.md §3.
 import { analyze, candidates, visible } from './site-model.mjs';
+import CONFIG from './config.mjs';   // marker names for the undeclared-input note
 
 // Self-check for the matcher: node tools/check-solvable.mjs --self-test
 if (process.argv.includes('--self-test')) {
@@ -35,6 +38,10 @@ if (unmatchable.length) {
 
 console.log(`fixpoint in ${rounds} round(s) · gates ${unlocked.size}/${gatePages.length} unlocked · pages ${visited.size}/${names.length} reachable${identities.size ? ` · accounts ${[...identities].join(',')}` : ''}\n`);
 
+const undeclared = names.filter((n) => pages[n].gateMount && pages[n].undeclaredInputs > 0);
+if (undeclared.length) {
+  console.log(`NOTE  gate-mounted pages whose inputs declare neither ${CONFIG.gateHashAttr} nor ${CONFIG.expectAnyAttr} (${undeclared.join(', ')}): a narrative gate must mark its input ${CONFIG.expectAnyAttr} explicitly — an undeclared input is a leak path (references/structure/form-device.md §4, workflow/05 Q4)\n`);
+}
 let fail = 0;
 for (const g of gatePages) {
   if (unlocked.has(g)) {

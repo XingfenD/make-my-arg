@@ -83,6 +83,23 @@ const session = {
   skin() { return this._read(SKIN_KEY); },
 };
 
+/* ── Read-state store (M14) ─────────────────────────────────────────────────
+   World-response state (references/guardrails.md R13): an entry appears once its source page was
+   read. Persist ONLY when docs/system-profile.md records the persistent/world-response contract
+   (references/structure/form-device.md §3); on a remote system swap localStorage for sessionStorage.
+   The checker-visible contract is the data-after attribute on the anchor — this store is what the
+   DOM render reads. Storage is technical, never explained to the player. */
+const READ_KEY = 'read';                        // rename per project
+const readState = {
+  mark(page) {
+    try { const s = new Set(JSON.parse(localStorage.getItem(READ_KEY) || '[]')); s.add(page);
+          localStorage.setItem(READ_KEY, JSON.stringify([...s])); } catch (e) { /* private mode */ }
+  },
+  has(page) {
+    try { return JSON.parse(localStorage.getItem(READ_KEY) || '[]').includes(page); } catch (e) { return false; }
+  },
+};
+
 /* ── Component registration ─────────────────────────────────────────────────────
    The vendored runtime auto-starts right after its own script tag, so registrations queue on the
    alpine:init event it dispatches before the DOM walk. Register ONLY what the profile selected;
@@ -92,6 +109,7 @@ const session = {
      §4 staging (M12)    · blackout / typewriter / reveal — timers released in destroy()
      §5 reskin (M5)      · deep pages link secret.css directly; session.reskin() carries the token
      §6 progress (M7)    · footer span, data-page / data-total on <body>
+     §7 read-state (M14) · data-after anchors + readState.has() (references/structure/form-device.md §3–§4)
    Container B/C/D account access (M3) lives in references/structure/form-system.md (data-grant /
    data-access). Example, once the body is copied in:
      Alpine.data('gate', () => ({ ... }));

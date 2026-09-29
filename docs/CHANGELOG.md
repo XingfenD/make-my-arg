@@ -27,6 +27,9 @@ The format loosely follows Keep a Changelog and can be adapted to the team's hab
 
 ### Changed / 变更
 
+- Front-end code templates for the game forms ship as **real files under `assets/templates/`** (`js/modules/` component bodies · `html/` mount shapes · `css/` skins and shells · index: `assets/templates/README.md`) instead of inline code blocks in the reference markdown. Step 6a copies the profile-selected files into the project (`components.js` listener, mount markup, skin CSS); `references/structure/components.md`, `form-device.md`, `form-system.md` and `base.md` keep the rules and point at the canonical files. The inline `gate` / `search` / `access` / `staging` / `progress` / `read-state` / `phone` code left the docs; `read-state.js` ships as the `markRead` mount over the kernel's `readState` store.
+  不同游戏形式的前端代码模板改为**真文件**下发到 `assets/templates/`（`js/modules/` 组件体 · `html/` 挂载形状 · `css/` 皮肤与外壳 · 索引见 `assets/templates/README.md`），不再内联在参考 md 里。step 6a 按 profile 选中的文件拷入项目（`components.js` 监听器、挂载标记、皮肤 CSS）；`components.md`、`form-device.md`、`form-system.md`、`base.md` 只留规则并指向规范文件；内联的 gate / search / access / staging / progress / read-state / phone 代码全部移出文档；`read-state.js` 改为内核 `readState` 之上的 `markRead` 挂载组件。
+
 - `workflow/02-container.md` rewritten as the five axes; the `docs/system-profile.md` template gains the Medium-argument / Device class / Technical form / State contract / Era rows, and the reach model line now names read-state as a depth-crosser.
   `workflow/02-container.md` 按五轴重写；`docs/system-profile.md` 模板新增主题-媒介句 / 设备类 / 技术形态 / 状态契约 / 时代五行，reach 一行把读态列为跨越深度的机制。
 

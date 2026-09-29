@@ -1,0 +1,10 @@
+<!-- read-entry.html — M14 the conditional entry (references/structure/form-device.md §3–§4; R13).
+     href is the target; data-after names the page whose READING makes this exist — that attribute is the
+     checker-visible contract: check-solvable fires the edge only after the source page is visited, and the
+     cold-start walk proves the same order the player must live through. Until the source was read the block
+     renders NOTHING — a missing row, not a locked row. The runtime readState store lives in the starter
+     kernel (assets/starter/assets/js/components.js — a top-level binding shared with every page script);
+     the source page marks itself with markRead — assets/templates/js/modules/read-state.js.
+     An entry making the same claim in copy while shipping as a plain link loses its story reason (common-mistakes.md §8). -->
+<a href="apps/mailbox/pm-yuxia.html" data-after="pages/forum/thread-fenglou.html"
+   x-show="readState.has('pages/forum/thread-fenglou.html')" x-cloak>于夏文 · 1 封私信</a>

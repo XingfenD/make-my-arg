@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<!-- search.html — M1 search hub mount (references/structure/components.md §2; behavior:
+     assets/templates/js/modules/search.js). The asset paths below assume the hub at site root, like
+     the starter's convention; if the fiction places its search elsewhere, keep data-index relative to
+     the mounting page. A deep-page search carries data-index="data/keywords.secret.json" instead (R8).
+     .hidden-text / .visible-text come from base.css: black-on-black revealed by selection (M11/M6). -->
+<!-- at site root: base.css/surface.css/components.js/alpine.min.js paths lose the ../.. depth -->
+<main id="results" x-data="search" data-index="data/keywords.surface.json" x-cloak>
+  <template x-if="state === 'forbidden'">
+    <span :class="forbidden.hidden ? 'hidden-text' : 'visible-text'" x-text="forbidden.text"></span>
+    <!-- .hidden-text{color:#000;background:#000} ::selection{color:#f00} → visible only when selected -->
+  </template>
+  <template x-if="state === 'hit'">
+    <div>
+      <p><b x-text="results.length"></b> results found:</p>
+      <template x-for="r in results" :key="r.url">
+        <a :href="r.url" target="_blank" x-text="r.title"></a><!-- new tab preserves the "normal world"; session state must then ride the cookie store (components.md §3) -->
+      </template>
+    </div>
+  </template>
+  <template x-if="state === 'miss'"><p>Sorry, no results for "<b x-text="q"></b>".</p></template>
+  <template x-if="state === 'empty'"><p>Enter a search keyword.</p></template>
+</main>

@@ -1,0 +1,9 @@
+<!-- access-protected.html — M3 protected page mount (references/structure/form-system.md §3;
+     behavior: assets/templates/js/modules/access.js). It still opens with x-show="unlocked" so
+     check-solvable.mjs can model the boundary. A page opens ONLY to the accounts it names — an admin
+     account never inherits a colleague's private file (R10). A page may be protected AND gated (a vault):
+     the gate form sits inside the locked part, so the walk authenticates first, then solves the gate. -->
+<main x-data="access" data-access="chen">
+  <div x-show="!unlocked">请先登录。</div>
+  <div x-show="unlocked" x-cloak>…chen 的私人文件与后续链接…</div>
+</main>

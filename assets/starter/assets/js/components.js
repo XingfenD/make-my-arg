@@ -1,11 +1,12 @@
 // components.js — the shared kernel every page of a make-my-arg project loads.
 //
 // Loaded by every page BEFORE the vendored Alpine runtime (script order: base.md §2). It carries
-// only what never changes between projects: the md5 primitive, the hash helper, and the session
-// store. The module components themselves are registered on alpine:init from the reference
-// implementations in references/structure/components.md — copy in ONLY the components
+// only what never changes between projects: the md5 primitive, the hash helper, the session store,
+// and the readState store. The module components themselves are registered on alpine:init from the
+// template files in the skill repo (assets/templates/js/modules/) — copy in ONLY the components
 // docs/system-profile.md selected and delete the rest: shipping machinery the profile did not
-// select is a module drift (references/common-mistakes.md §6).
+// select is a module drift (references/common-mistakes.md §6). Never redefine hash / session /
+// readState inside a copied body — this file is their single home.
 //
 // Hash contract (four sides, byte-identical — references/structure/tooling.md §3 item 4):
 //   this helper  ·  tools/hash.mjs  ·  tools/build-keywords.mjs  ·  tools/check-credentials.mjs
@@ -103,17 +104,21 @@ const readState = {
 /* ── Component registration ─────────────────────────────────────────────────────
    The vendored runtime auto-starts right after its own script tag, so registrations queue on the
    alpine:init event it dispatches before the DOM walk. Register ONLY what the profile selected;
-   the reference bodies live in references/structure/components.md:
-     §2 search (M1)      · x-data="search", data-index="data/keywords.surface.json"
-     §3 gate (M2)        · x-data="gate", data-expect-hash on each input, data-next / x-show="unlocked"
-     §4 staging (M12)    · blackout / typewriter / reveal — timers released in destroy()
-     §5 reskin (M5)      · deep pages link secret.css directly; session.reskin() carries the token
-     §6 progress (M7)    · footer span, data-page / data-total on <body>
-     §7 read-state (M14) · data-after anchors + readState.has() (references/structure/form-device.md §3–§4)
-   Container B/C/D account access (M3) lives in references/structure/form-system.md (data-grant /
-   data-access). Example, once the body is copied in:
-     Alpine.data('gate', () => ({ ... }));
-   No component may route or switch scenes: Alpine owns in-page lifecycle only (R1). */
+   each component body ships as a real file in the skill repo under assets/templates/js/modules/
+   (step 6a copies the selected bodies into this listener; mount markup: assets/templates/html/, rules:
+   references/structure/components.md):
+     search.js     (M1)  · x-data="search", data-index="data/keywords.surface.json"
+     gate.js       (M2)  · x-data="gate", data-expect-hash on each input, data-next / x-show="unlocked"
+     access.js     (M3)  · x-data="access", data-access on the protected page (references/structure/form-system.md)
+     staging.js    (M12) · blackout / typewriter / reveal — timers released in destroy()
+     progress.js   (M7)  · footer span, data-page / data-total on <body>
+     read-state.js (M14) · x-data="markRead(page)" on the source page; anchors carry data-after
+                           (references/structure/form-device.md §3–§4)
+     phone.js      (device class phone) · x-data="phone" on the shell
+   M5 reskin needs no component here: deep pages link secret.css directly and session.reskin() above
+   carries the token. The stores above (hash / session / readState) are THIS file — copied bodies
+   depend on them; never redefine one inside a component. No component may route or switch scenes:
+   Alpine owns in-page lifecycle only (R1). */
 document.addEventListener('alpine:init', () => {
   // Alpine.data('search', () => ({ ... }));   // M1 — delete when the profile did not select it
   // Alpine.data('gate',   () => ({ ... }));   // M2 — delete when the profile did not select it

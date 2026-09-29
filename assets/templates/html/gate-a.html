@@ -1,0 +1,13 @@
+<!-- gate-a.html — M2 Shape A: navigate away on success (references/structure/components.md §3;
+     behavior: assets/templates/js/modules/gate.js). data-* live on the component ROOT, not the form.
+     R4: placeholders name the field only; fail-hint points at the source obliquely and stops. -->
+<main x-data="gate" data-next="../internal/s22.html" data-fail-hint="Login failed 🎂">
+  <form class="gate" @submit.prevent="submit">
+    <label for="u">Account</label>
+    <input id="u" type="text" placeholder="Employee ID" data-expect-hash="…">
+    <label for="p">Password</label>
+    <input id="p" type="password" placeholder="Password" data-expect-hash="…">
+    <p class="gate-error" x-show="error" x-text="error" x-cloak></p>
+    <button class="btn" type="submit">Sign in</button>
+  </form>
+</main>

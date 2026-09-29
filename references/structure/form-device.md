@@ -3,7 +3,7 @@
 > Required reading when `docs/system-profile.md` carries a non-pure-web device class, a persistent or
 > world-response state contract, or the apparatus single-page form (`workflow/02-container.md`). Canonical
 > rule texts live in `references/guardrails.md` (R1, R3, R12, R13); this file is the detail and the
-> reference implementations. The desktop (B) shell and the RBAC matrix stay in
+> code templates ship as files under `assets/templates/` (index: `assets/templates/README.md`). The desktop (B) shell and the RBAC matrix stay in
 > `references/structure/form-system.md`.
 
 ## 1. What the device class decides
@@ -20,8 +20,9 @@ the class is presentation plus state, not a new reach model.
 
 ## 2. Shell reference components
 
-Alpine `x-data` blocks with the same script order as every page (`references/structure/base.md` §2); no
-component routes or switches scenes (R1).
+Canonical shells ship as files under `assets/templates/` (index: `assets/templates/README.md`); the
+subsections name their own files. Same script order as every page (`references/structure/base.md` §2);
+no component routes or switches scenes (R1).
 
 ### Phone (`phone.css` + `x-data="phone"`)
 
@@ -35,20 +36,14 @@ component routes or switches scenes (R1).
 - **lock screen as gate**: a passcode keypad shaped like the OS lock; `data-expect-hash` sits on the code
   input. The unlock transition is M12 staging (a swipe, a shake) — not a page navigation.
 
-```html
-<div class="phone-frame" x-data="phone" x-init="init">
-  <div class="status-bar"><span x-text="clock"></span><span>联通 4G ▮▮▮</span></div>
-  <div class="app-title">和&nbsp;<span class="who">下雨天</span>&nbsp;的对话</div>
-  <main class="chat-log"><!-- bubbles; grey system lines for absence --></main>
-  <div class="grey-line" x-show="contactOffline" x-cloak>对方手机已关机</div>
-</div>
-```
+Mount shape, clock affordances and the grey absence line: `assets/templates/html/phone-shell.html` +
+`assets/templates/js/modules/phone.js`; structure CSS: `assets/templates/css/phone.css`.
 
 ### Browser chrome (`chrome.css`)
 
 - The site draws its own address bar / tab strip; the player types into a **fake URL input**. A Wayback
   shape accepts one whitelisted origin (a credential-triad H-type gate: `data-expect-hash` on the URL field);
-  anything else answers a period-true error page.
+  anything else answers a period-true error page. Styles: `assets/templates/css/chrome.css`.
 - **The 604 pattern** (apparatus single page, §5): one document containing hand-drawn chrome plus hidden
   templates; the bar never leaves view because the fiction is one tab of one fabricated session.
 
@@ -60,31 +55,16 @@ Three families, one storage answer each:
 
 | Family | The question it answers | Storage | Rule |
 |---|---|---|---|
-| login | who am I | session cookie | `references/structure/components.md` §3 session helper; cross-tab; cleared on close; never localStorage |
+| login | who am I | session cookie | the `session` store in the starter kernel (`assets/starter/assets/js/components.js`); cross-tab; cleared on close; never localStorage — rules: `references/structure/components.md` §3 |
 | progress | what have I read / visited | localStorage **only when** the profile records `persistent`; else session-only or none | a player-owned device keeps state (R13); `NN/total` footers and unread badges read it |
 | world-response | the site changed because a page was read | LS read-keys **plus the `data-after` attribute**, which is the checker-visible contract | route 10 in `workflow/04-reachability.md`; an entry without `data-after` is an unconditional link and loses its story reason |
 
-```js
-// read-state — the LS side of world-response (drop into components.js when selected; the data-after
-// attribute on the anchor is what the checkers walk; keep the two in sync by construction).
-const READ_KEY = 'read';                       // rename per project
-const readState = {
-  mark(page) {
-    try { const s = new Set(JSON.parse(localStorage.getItem(READ_KEY) || '[]')); s.add(page);
-          localStorage.setItem(READ_KEY, JSON.stringify([...s])); } catch (e) { /* private mode */ }
-  },
-  has(page) {
-    try { return JSON.parse(localStorage.getItem(READ_KEY) || '[]').includes(page); } catch (e) { return false; }
-  },
-};
-```
-
-```html
-<!-- The conditional entry: href is the target, data-after names the page whose READING makes this exist.
-     Until then the block renders nothing — a missing row, not a locked row. -->
-<a href="apps/mailbox/pm-yuxia.html" data-after="pages/forum/thread-fenglou.html"
-   x-show="readState.has('pages/forum/thread-fenglou.html')" x-cloak>于夏文 · 1 封私信</a>
-```
+The code ships as files, not prose: the `readState` store lives in the starter kernel
+(`assets/starter/assets/js/components.js`); the source-page mount is `assets/templates/js/modules/read-state.js`
+(`x-data="markRead('<page>')`); the conditional entry markup is `assets/templates/html/read-entry.html` —
+`href` is the target, `data-after` names the page whose READING makes this exist. Until then the block
+renders nothing: a missing row, not a locked row. Keep the two page paths (`data-after` and `markRead`) in
+sync by construction — the attribute is what the checkers walk, the JS is what the player sees.
 
 **Save / continue / wipe, in-fiction**: one boot surface lists the three (a boot menu, a "继续上次调查"
 notice, a registry reset). Wipe deletes exactly the keys the boot surface reads. The player never sees the

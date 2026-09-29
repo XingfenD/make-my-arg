@@ -53,19 +53,8 @@ identity, its own password hash(es), and an optional reskin token; the runtime p
 entry, so `intern + handler-pw` is rejected. **Do not split one login into two forms to give the checker
 "one form = one identity"** — the second form's title leaks the design intent and reads as game UI.
 
-```html
-<!-- Single box, two roles. data-grant = static list for the walk; data-grants = runtime account→identity map. -->
-<main x-data="gate" data-grant="intern,handler" data-next="query.html" data-fail-hint="账号或密码有误"
-      data-grants='{"<hash:hz-sy-0042>":{"id":"intern","pw":["<hash:1998>"]},
-                    "<hash:lly0219>":{"id":"handler","pw":["<hash:2003>"],"reskin":"secret"}}'>
-  <form class="gate" @submit.prevent="submit">
-    <label for="u">账号</label><input id="u" type="text" placeholder="工号" data-expect-hash="<hash:hz-sy-0042>,<hash:lly0219>">
-    <label for="p">密码</label><input id="p" type="password" placeholder="密码" data-expect-hash="<hash:1998>,<hash:2003>">
-    <p class="gate-error" x-show="error" x-text="error" x-cloak></p>
-    <button type="submit">登录</button>
-  </form>
-</main>
-```
+Canonical file: **`assets/templates/html/login-multi.html`** (component body:
+`assets/templates/js/modules/gate.js`).
 
 The `gate` component reads `data-grants` first and falls back to `data-grant` (`references/structure/components.md` §3).
 The credential triad still applies (account clue on page A, password clue on page B, gate on page C). The account
@@ -73,28 +62,11 @@ string is the identity other pages match against; it is printed nowhere except t
 
 ## 3. Protected page (`access` component)
 
-```html
-<main x-data="access" data-access="chen">
-  <div x-show="!unlocked">请先登录。</div>
-  <div x-show="unlocked" x-cloak>…chen 的私人文件与后续链接…</div>
-</main>
-```
-
-```js
-// Reads the cross-tab session cookie set by the gate (components.md §3 `session` helper), falling back to
-// sessionStorage in private mode. A protected document opened in a new tab (target="_blank") must still
-// unlock — per-tab sessionStorage would not, which is exactly the defect this avoids.
-Alpine.data('access', () => ({
-  unlocked: false,
-  init() {
-    const held = session.access();          // components.md §3 helper: cookie-first, sessionStorage fallback
-    const need = (this.$el.dataset.access || '').split(',').map((s) => s.trim()).filter(Boolean);
-    this.unlocked = need.some((r) => (r === '*' ? held.length > 0 : held.includes(r)));
-    const skin = session.skin();            // optional reskin token granted at login (M5)
-    if (skin) document.body.classList.add(skin);
-  },
-}));
-```
+Canonical files: **`assets/templates/html/access-protected.html`** (mount: `<main x-data="access"
+data-access="chen">` with the locked notice on `x-show="!unlocked"` and the document inside
+`x-show="unlocked"`) and **`assets/templates/js/modules/access.js`** (component body — reads the
+cross-tab session cookie the gate set, falls back to sessionStorage in private mode; a document opened
+in a new tab still unlocks, which per-tab storage would not).
 
 A page may be protected *and* gated (a vault): the gate form sits inside the locked part, so the walk
 authenticates the account first, then solves the gate.
@@ -131,7 +103,7 @@ authenticates the account first, then solves the gate.
 **Login** state lives in a **session cookie** (cross-tab, cleared when the browser closes), never
 `localStorage`, never per-tab `sessionStorage` behind a `target="_blank"` result. An implementation
 requirement, not player-facing copy. Progress and world-response state are a separate contract: state
-follows device ownership (`references/guardrails.md` R13), detail and reference implementations in
+follows device ownership (`references/guardrails.md` R13), detail in
 `references/structure/form-device.md` §3 — a player-owned device (container B) may persist what was read
 and ship an in-fiction save / continue / wipe; a remote system (A/C/D) stays session-only unless the
 profile records a fiction warrant.

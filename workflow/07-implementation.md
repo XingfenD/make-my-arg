@@ -15,7 +15,7 @@
 
 Phase 7 lands last because its copy has to describe the game that now exists. Asset work is its own phase, not a detail of phases 1–3: a declared emblem / seal / scan / photo that no phase owns is exactly what gets dropped, and neither checker catches it (an `<img>` that was never written has no `src` to resolve — references/structure/tooling.md §3 item 9). 4a dispatches with phase 1, and 4b wires them once the referencing pages exist. Phase 5 may run beside phase 3.
 
-Each phase subagent receives only the artifact sections and references its row names — never a whole file where sections are listed — plus the list of pages it owns. It returns the changed file list plus unresolved questions. Component behavior comes from the project's own `components.js` (written by 6a); `references/structure/components.md` is step-6a reading, not step-7 reading.
+Each phase subagent receives only the artifact sections and references its row names — never a whole file where sections are listed — plus the list of pages it owns. It returns the changed file list plus unresolved questions. Component behavior comes from the project's own `components.js` (written by 6a); `assets/templates/` and `references/structure/components.md` are step-6a reading, not step-7 reading.
 
 | Phase | Artifact sections | References |
 |---|---|---|

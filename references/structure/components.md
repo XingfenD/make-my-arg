@@ -1,8 +1,11 @@
-# Alpine Component Reference Implementations
+# Alpine Component Rules & Conventions
 
-> Companion to `references/structure/base.md` (tree + skeleton). Copy-adaptable implementations for the
-> selected modules: keyword hash build (§1), search M1 (§2), gates M2 (§3), staging M12 (§4), reskin M5 (§5),
-> progress M7 (§6). Required reading at steps 6 and 7. Rule IDs `(Rn)` cite references/guardrails.md.
+> Companion to `references/structure/base.md` (tree + skeleton). The canonical front-end code templates now
+> ship as **real files under `assets/templates/`** (js/css/html — index: `assets/templates/README.md`);
+> step 6a copies the profile-selected ones instead of transcribing code. This file keeps the *rules and
+> conventions* the templates implement: keyword hash build (§1), search M1 (§2), gates M2 (§3), staging
+> M12 (§4), reskin M5 (§5), progress M7 (§6). Required reading at steps 6 and 7. Rule IDs `(Rn)` cite
+> references/guardrails.md.
 
 ## 1. Keyword Hash Build (tools/build-keywords.mjs)
 
@@ -12,7 +15,7 @@ The canonical implementation ships as **`assets/tools/build-keywords.mjs`** (cop
 
 - Discovers every `data/keywords*.src.json` and writes the matching `data/keywords*.json` beside it, so both the per-layer convention (`keywords.surface.src.json` → `keywords.surface.json`) and a single-table project (`keywords.src.json` → `keywords.json`) work with no configuration.
 - Keys support `|`-separated synonym aliases. Values are `"url|title"`; the url is relative to `pages/`.
-- Normalizes with `String(w).trim().toLowerCase()` → md5 → base64. This **must be byte-identical** to `tools/hash.mjs` and to the in-page `hash()` helper from §2; if you ever switch to async WebCrypto SHA-256, change all three sides together.
+- Normalizes with `String(w).trim().toLowerCase()` → md5 → base64. This **must be byte-identical** to `tools/hash.mjs` and to the in-page `hash()` helper in the starter kernel; if you ever switch to async WebCrypto SHA-256, change all three sides together.
 - De-duplicates by url within a hash bucket, so two aliases that normalize to the same hash never list a page twice.
 
 Example source shape:
@@ -28,168 +31,38 @@ At deployment, **do not ship the `.src.json` files** (add `data/*.src.json` to .
 
 ## 2. Search Engine (`search` Component) — Three-State Feedback
 
-Registered in `components.js`; mounted by search.html as `<main x-data="search" data-index="data/keywords.surface.json">` (a deep-page search points `data-index` at the deep table).
+Canonical code: **`assets/templates/js/modules/search.js`** (component body, depends on the kernel's
+`hash()`) and **`assets/templates/html/search.html`** (mount markup). Registered in the project's
+`components.js`; mounted by search.html as `<main x-data="search" data-index="data/keywords.surface.json">`
+(a deep-page search points `data-index` at the deep table). The three states the mount renders: hit / miss /
+forbidden, plus the empty prompt; the forbidden branch reads `data/forbidden.json` (M6) and shifts the whole
+page (`body-forbidden`).
 
-```js
-// Shared hash helper — must mirror tools/build-keywords.mjs exactly (same trim/lowercase normalization,
-// same md5 + base64 output). md5 comes from an implementation inlined above this helper or from a vendored
-// vendor/md5.min.js loaded before components.js; switching both sides to async WebCrypto sha256 is also an option.
-const hash = w => btoa(String.fromCharCode(...window.md5(w.trim().toLowerCase()).match(/../g).map(h => parseInt(h, 16))));
-
-Alpine.data('search', () => ({
-  q: '',
-  state: 'empty',            // empty | forbidden | hit | miss
-  results: [],
-  forbidden: null,
-
-  async init() {             // Alpine lifecycle: runs before the component renders
-    this.q = new URLSearchParams(location.search).get('q')?.trim().toLowerCase() ?? '';
-    if (!this.q) return;
-    const enc = hash(this.q);
-
-    const forbiddenTable = await (await fetch('data/forbidden.json')).json();
-    const hit = Object.values(forbiddenTable).find(f => f.keywords.includes(enc));
-    if (hit) {               // State 3: forbidden — full-page reskin (background/title/logo/footer)
-      this.forbidden = hit;
-      this.state = 'forbidden';
-      document.body.classList.add('body-forbidden');
-      document.querySelector('.progress').textContent = 'ex/36';
-      return;
-    }
-
-    const map = await (await fetch(this.$el.dataset.index)).json();
-    this.results = map[enc] ?? [];
-    this.state = this.results.length ? 'hit' : 'miss';
-  },
-}));
-```
+**Shared hash contract.** The in-page `hash()` lives in the starter kernel
+(`assets/starter/assets/js/components.js`) and **must mirror `tools/build-keywords.mjs` exactly** (same
+trim/lowercase normalization, same md5 + base64 output). Never redefine it in a component template.
 
 **Layer scoping (required when the search module splits indexes, R8).** The component queries the index of the audience whose page mounts it: public pages carry `data-index="data/keywords.surface.json"`; deep pages carry `data-index="data/keywords.secret.json"`. A public keyword routes to a public page or to a gate — never straight into a restricted document. When the fiction lists entries the visitor may not open (container D's archive list), each one shows a plain locked notice or resolves to its gate; it never opens the document. Result titles are catalog entries, written the way the issuing body files the document (R9). System forms do not split indexes by audience; they keep one index and resolve each hit through the account matrix (`references/structure/form-system.md` §1, R10).
 
-```html
-<!-- search.html (a deep-page search carries data/keywords.secret.json instead) -->
-<main id="results" x-data="search" data-index="data/keywords.surface.json" x-cloak>
-  <template x-if="state === 'forbidden'">
-    <span :class="forbidden.hidden ? 'hidden-text' : 'visible-text'" x-text="forbidden.text"></span>
-    <!-- .hidden-text{color:#000;background:#000} ::selection{color:#f00} → visible only when selected -->
-  </template>
-  <template x-if="state === 'hit'">
-    <div>
-      <p><b x-text="results.length"></b> results found:</p>
-      <template x-for="r in results" :key="r.url">
-        <a :href="r.url" target="_blank" x-text="r.title"></a><!-- new tab preserves the "normal world" -->
-      </template>
-    </div>
-  </template>
-  <template x-if="state === 'miss'"><p>Sorry, no results for "<b x-text="q"></b>".</p></template>
-  <template x-if="state === 'empty'"><p>Enter a search keyword.</p></template>
-</main>
-```
-
 System containers replace this search hub with their own shells — desktop Spotlight `FILE_DATABASE`, the archive query form, cross-site links; see `references/structure/form-system.md` §4.
 
-**New tabs vs. session state (required reading for system containers).** `target="_blank"` opens each result in a fresh tab, and a fresh tab gets a fresh `sessionStorage` — so a `data-access`-protected document opened this way reads as locked even though the player is "logged in" on the original tab. Any container that crosses an account login with new-tab results (container D's `query → results → archive` chain) must hold session state in a **session cookie** (shared across tabs, cleared when the browser closes), not per-tab `sessionStorage`; see §3 and `references/structure/form-system.md` §6. `check-solvable.mjs` models identities as one global set and cannot see per-tab isolation, so it reports green while the real browser fails — the step-8 cross-tab manual test is the only thing that catches this (tooling.md §3 item 7).
+**New tabs vs. session state (required reading for system containers).** `target="_blank"` opens each result in a fresh tab, and a fresh tab gets a fresh `sessionStorage` — so a `data-access`-protected document opened this way reads as locked even though the player is "logged in" on the original tab. Any container that crosses an account login with new-tab results (container D's `query → results → archive` chain) must hold session state in a **session cookie** (shared across tabs, cleared when the browser closes), not per-tab `sessionStorage`; the kernel's `session` store is exactly that (§3). `check-solvable.mjs` models identities as one global set and cannot see per-tab isolation, so it reports green while the real browser fails — the step-8 cross-tab manual test is the only thing that catches this (tooling.md §3 item 7).
 
 ## 3. Password Gate (`gate` Component)
+
+Canonical code: **`assets/templates/js/modules/gate.js`** (component body, depends on the kernel's `hash()`
+and `session` store — never redefine `ACCESS_KEY` / `SKIN_KEY` / the cookie helper in the component; the
+starter kernel carries the session-cookie implementation) and three mount shapes:
+
+- **Shape A** — `assets/templates/html/gate-a.html`: navigate away on success (`data-next`, `data-fail-hint`).
+- **Shape B** — `assets/templates/html/gate-b.html`: unlock in place, no navigation. The post-gate block MUST open with `x-show="unlocked"` (or `<template x-if="unlocked">`): `tools/check-solvable.mjs` keys on that marker to know which text is readable before the gate and which only becomes readable after it.
+- **Shape C** — `assets/templates/html/login-multi.html`: session login + per-account access (system containers B/C/D): `data-grant` on the login gate, `data-access` on the protected page, no privilege ladder (R10). The full pattern lives in `references/structure/form-system.md` §2–§3; the body reads `data-grants` (account→identity JSON map) first and falls back to the flat `data-grant` list.
 
 One component, three shapes, plus one declared wildcard: `data-expect-any` marks a narrative gate whose
 answer is not verified by design — any non-empty value passes, so the walk never hunts a hash for it
 (`references/structure/form-device.md` §4). `data-expect-hash` sits on **each `<input>`** (comma-separated values = synonyms
 accepted for that field, so a Chinese name and its pinyin both open the same lock); the rest of the
 configuration sits on the **component root** (`<main>`), not on the `<form>`.
-
-```js
-// Shape A — navigate away on success:
-// <main x-data="gate" data-next="../internal/s22.html" data-fail-hint="Login failed 🎂">
-//   <form class="gate" @submit.prevent="submit">
-//     <label for="u">Account</label>
-//     <input id="u" type="text" placeholder="Employee ID" data-expect-hash="…">
-//     <label for="p">Password</label>
-//     <input id="p" type="password" placeholder="Password" data-expect-hash="…">
-//     <p class="gate-error" x-show="error" x-text="error" x-cloak></p>
-//     <button class="btn" type="submit">Sign in</button>
-//   </form>
-// </main>
-//
-// Shape B — unlock in place, no navigation. The post-gate block MUST open with x-show="unlocked"
-// (or <template x-if="unlocked">): tools/check-solvable.mjs keys on that marker to know which text
-// is readable before the gate and which only becomes readable after it.
-// <main x-data="gate" data-success-text="Decrypting…" data-success-hold="2400">
-//   <div class="blackout" x-show="busy" x-text="successText" x-cloak x-transition></div>
-//   <div class="sheet narrow" x-show="!unlocked"> …the form above… </div>
-//   <div x-show="unlocked" x-cloak> …the guarded document… </div>
-// </main>
-//
-// Shape C — session login + per-account access (system containers B/C/D): data-grant on the login gate,
-// data-access on the protected page, no privilege ladder (R10). The full pattern, the `access` component,
-// and the RBAC rules live in references/structure/form-system.md.
-//
-// Cross-tab session store. Access state MUST survive a result opened in a new tab (target="_blank", §2);
-// per-tab sessionStorage does not, so hold it in a session cookie (no max-age/expires → cleared when the
-// browser closes). sessionStorage is the fallback for private mode where cookies are blocked. Rename
-// ACCESS_KEY per project.
-const ACCESS_KEY = 'access', SKIN_KEY = 'skin';
-const session = {
-  _read(key) {
-    const m = document.cookie.match(new RegExp('(?:^|; )' + key + '=([^;]*)'));
-    if (m) { try { return JSON.parse(decodeURIComponent(m[1])); } catch (e) { /* fall through */ } }
-    try { return JSON.parse(sessionStorage.getItem(key) || 'null'); } catch (e) { return null; }
-  },
-  _write(key, val) {
-    const v = encodeURIComponent(JSON.stringify(val));
-    document.cookie = `${key}=${v}; path=/; SameSite=Lax`;            // session cookie: deliberately no expiry
-    try { sessionStorage.setItem(key, JSON.stringify(val)); } catch (e) { /* private mode */ }
-  },
-  access() { return this._read(ACCESS_KEY) || []; },
-  grant(ids) { this._write(ACCESS_KEY, [...new Set([...this.access(), ...ids])]); },
-  reskin(name) { if (name) this._write(SKIN_KEY, name); },            // optional: a skin token deep pages apply
-  skin() { return this._read(SKIN_KEY); },
-};
-Alpine.data('gate', () => ({
-  error: '', busy: false, unlocked: false, successText: '', _t: null,
-  init() { this.successText = this.$el.dataset.successText || ''; },
-  submit() {
-    const el = this.$root;          // data-* live on the component root; the submit event's target is the <form>
-    const inputs = Array.from(el.querySelectorAll('input[data-expect-hash],input[data-expect-any]'));
-    // Single-box multi-identity (Shape C). data-grants is a JSON map on the root:
-    //   { "<account-hash>": { "id": "intern", "pw": ["<pw-hash>", …], "reskin": "secret" }, … }
-    // It resolves WHICH identity the typed account grants and validates the password against that identity,
-    // so one login box can serve several roles without splitting into several forms on the page. data-grant
-    // stays on the root as the flat list of identities check-solvable walks; data-grants is the runtime truth.
-    let ok, grantIds = [];
-    if (el.dataset.grants) {
-      const map = JSON.parse(el.dataset.grants);
-      const acc = inputs.find((i) => i.type !== 'password');
-      const pw = inputs.find((i) => i.type === 'password');
-      const entry = acc ? map[hash(acc.value || '')] : null;
-      ok = !!entry && (!pw || (entry.pw || []).includes(hash(pw.value || '')));   // account+password are paired
-      if (ok) { grantIds = entry.id ? [entry.id] : []; session.reskin(entry.reskin); }
-    } else {
-      // Legacy / multi-field gates: every data-expect-hash input must match; data-expect-any accepts any
-      // non-empty value (a declared wildcard, form-device.md §4); data-grant is unconditional.
-      ok = inputs.length > 0 && inputs.every((inp) => {
-        if (inp.dataset.expectAny) return (inp.value || '').trim() !== '';
-        const expects = (inp.dataset.expectHash || '').split(',').map((s) => s.trim()).filter(Boolean);
-        return expects.includes(hash(inp.value || ''));
-      });
-      grantIds = (el.dataset.grant || '').split(',').map((s) => s.trim()).filter(Boolean);
-    }
-    if (ok) {
-      if (grantIds.length) session.grant(grantIds);
-      const next = el.dataset.next;
-      const hold = parseInt(el.dataset.successHold || '0', 10);
-      const staged = this.successText && hold > 0;
-      const finish = () => { if (next) location.href = next; else { this.busy = false; this.unlocked = true; } };
-      if (staged) { this.busy = true; this._t = setTimeout(finish, hold); } else finish();
-      return;
-    }
-    this.error = el.dataset.failHint || 'Verification failed.';   // inline red text; a bare alert breaks the facade
-    el.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-6px)' },
-                { transform: 'translateX(6px)' }, { transform: 'translateX(0)' }], 320);
-  },
-  destroy() { clearTimeout(this._t); },
-}));
-```
 
 `hash()` is the shared helper from §2. When designing a gate, enforce the **credential triad**: the account is hidden on page A, the password clue on page B (requiring inference: zodiac year → 1977, child-photo date → 20201125), and the gate on page C. Hashing keeps plaintext out of casual view in the source (R3).
 
@@ -205,97 +78,25 @@ Gate design rules:
 
 ## 4. Staging Components (Lifecycle-Managed)
 
-All timers and observers are registered in `init()` and released in `destroy()`, so staged effects survive or die with their component.
-
-```js
-// "The system has noticed you": delayed blackout after unlock; optional `next` navigates on 5s later
-Alpine.data('blackout', (delay = 3000, text = '', next = null) => ({
-  visible: false, text, showTimer: null, exitTimer: null,
-  init() {
-    this.showTimer = setTimeout(() => {
-      this.visible = true;
-      if (next) this.exitTimer = setTimeout(() => (location.href = next), 5000);
-    }, delay);
-  },
-  destroy() { clearTimeout(this.showTimer); clearTimeout(this.exitTimer); },
-}));
-// <div class="blackout" x-data="blackout(4000, 'The system has noticed you')" x-show="visible" x-transition x-cloak x-text="text"></div>
-
-// Delete the element's original text character by character, then retype newText — ceremonial effect
-Alpine.data('typewriter', (newText, speed = 60) => ({
-  output: '', timer: null,
-  init() {
-    const original = this.$el.textContent;
-    let i = original.length;
-    this.output = original;
-    this.timer = setInterval(() => {
-      this.output = original.slice(0, --i);
-      if (i > 0) return;
-      clearInterval(this.timer);
-      let j = 0;
-      this.timer = setInterval(() => {
-        this.output = newText.slice(0, ++j);
-        if (j >= newText.length) clearInterval(this.timer);
-      }, speed);
-    }, speed);
-  },
-  destroy() { clearInterval(this.timer); },
-}));
-// <p x-data="typewriter('Access granted. Do not look back.')" x-text="output"></p>
-
-// Scroll reveal: IntersectionObserver owned by the component, controlling reading pace
-Alpine.data('reveal', () => ({
-  shown: false, observer: null,
-  init() {
-    this.observer = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting) return;
-      this.shown = true;
-      this.observer.disconnect();
-    });
-    this.observer.observe(this.$el);
-  },
-  destroy() { this.observer?.disconnect(); },
-}));
-// <div class="reveal" :class="{ shown }" x-data="reveal">…</div>  .reveal{opacity:0;transition:opacity .6s}.reveal.shown{opacity:1}
-```
+Canonical code: **`assets/templates/js/modules/staging.js`** — `blackout` / `typewriter` / `reveal`, each
+with its mount shape in the file's tail comments. All timers and observers are registered in `init()` and
+released in `destroy()`, so staged effects survive or die with their component.
 
 ## 5. Optional: Layer Reskin (M5; base.css Conventions)
 
-```css
-/* Top bar: fixed to the viewport top, does not scroll with the page; background must be opaque so body text does not show through */
-header { position:sticky; top:0; z-index:10; background:inherit; }
-[x-cloak] { display:none !important; }                           /* hide Alpine components until they initialize */
-/* Surface */ body { background:#f9ebde; color:#555; }  a { color:#d15c20; }
-/* M5 deep skin: deep pages link secret.css directly */
-body.secret { background:#1a1a1c; color:#9e9e9e; } body.secret h2 { color:#db1400; }
-.handwrite { font-family:'Caveat',cursive; color:#d20a0a; }      /* hand-copied red text */
-.spacer { height:180px; }                                        /* whitespace as pacing */
-.hidden-text { background:#000; color:#000; user-select:text; }
-.hidden-text::selection { color:#f00; background:#333; }         /* black-on-black text revealed by selection */
-.blurred { filter:blur(6px); user-select:none; }                 /* redaction is itself a clue */
-```
+The shared layout and the document-realism classes live in **`assets/starter/assets/css/base.css`** (the
+invariant kernel CSS: sticky opaque header, `.sheet` document kit, gate form, entry shell). The deep-layer
+skin template is **`assets/templates/css/secret.css`** — it retunes the custom properties base.css reads
+(`--ink` / `--paper` / `--rule` / `--accent` / `--stamp` / `--bar` …) so the whole page shifts together when
+deep pages link it (or when `session.skin()` applies `body.secret`). Texture classes other docs cite:
+`.hidden-text` (black-on-black revealed by selection), `.blurred` (redaction as a clue), `.handwrite`,
+`.spacer`. Client-side masking is not privacy — anything hidden this way is public (R12).
 
 ## 6. Optional: Collection Progress (`progress` Component)
 
-```js
-// The storage question follows the profile's state contract (references/guardrails.md R13, detail
-// references/structure/form-device.md §3): progress persists ONLY when the profile records `persistent`
-// (a player-owned device or a fiction that really saves). With `progress: session`, swap localStorage
-// for sessionStorage; with `progress: none`, the module itself is out of the game. Login state is never
-// here — it lives in the session cookie (§3), never localStorage. Mount on the shared footer so it runs
-// on every page.
-Alpine.data('progress', () => ({
-  seen: [],
-  init() {
-    this.seen = JSON.parse(localStorage.getItem('seen') ?? '[]');
-    const n = document.body.dataset.page;
-    if (n && !this.seen.includes(n)) this.seen.push(n);
-    localStorage.setItem('seen', JSON.stringify(this.seen));
-  },
-}));
-// <footer x-data="progress"><small>© ... <span x-text="seen.length"></span>/36</small></footer>
-```
+Canonical code: **`assets/templates/js/modules/progress.js`**, mounted on the shared footer; `<body data-page data-total>` carries the numbering. The storage question follows the profile's state contract (references/guardrails.md R13, detail references/structure/form-device.md §3): progress persists ONLY when the profile records `persistent` (a player-owned device or a fiction that really saves). With `progress: session`, swap localStorage for sessionStorage; with `progress: none`, the module itself is out of the game. Login state is never here — it lives in the session cookie (§3), never localStorage.
 
-World-response state (M14: an entry appears only after a page was read) is the sibling component —
-`readState` plus the `data-after` attribute on the anchor, both in `references/structure/form-device.md` §3–§4;
-the attribute is what the checkers walk, the JS is what the player sees.
+World-response state (M14: an entry appears only after a page was read) is the sibling mechanism —
+`readState` store in the starter kernel, `assets/templates/js/modules/read-state.js` (`markRead` mount on
+the source page) plus the `data-after` attribute on the entry anchor (`assets/templates/html/read-entry.html`),
+rules in `references/structure/form-device.md` §3–§4; the attribute is what the checkers walk, the JS is what the player sees.

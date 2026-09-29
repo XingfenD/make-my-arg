@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<!-- login-multi.html — M3/M2 Shape C: one login box, several identities (references/structure/form-system.md §2;
+     behavior: assets/templates/js/modules/gate.js, which reads data-grants first and falls back to data-grant).
+     data-grant = flat list of identities the walk sees; data-grants = runtime account→identity map.
+     Do not split one login into two forms — the second form's title leaks the design intent (R10).
+     The credential triad still applies: account clue on page A, password clue on page B, gate here (R3). -->
+<main x-data="gate" data-grant="intern,handler" data-next="query.html" data-fail-hint="账号或密码有误"
+      data-grants='{"<hash:hz-sy-0042>":{"id":"intern","pw":["<hash:1998>"]},
+                    "<hash:lly0219>":{"id":"handler","pw":["<hash:2003>"],"reskin":"secret"}}'>
+  <form class="gate" @submit.prevent="submit">
+    <label for="u">账号</label><input id="u" type="text" placeholder="工号" data-expect-hash="<hash:hz-sy-0042>,<hash:lly0219>">
+    <label for="p">密码</label><input id="p" type="password" placeholder="密码" data-expect-hash="<hash:1998>,<hash:2003>">
+    <p class="gate-error" x-show="error" x-text="error" x-cloak></p>
+    <button type="submit">登录</button>
+  </form>
+</main>

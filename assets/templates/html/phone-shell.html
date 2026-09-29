@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<!-- phone-shell.html — device class: phone shell (references/structure/form-device.md §2;
+     behavior: assets/templates/js/modules/phone.js; styles: assets/templates/css/phone.css).
+     A B-variant on a phone is still container B — reach stays account logic, the class is skin + state.
+     The lock screen is a gate: a passcode keypad shaped like the OS lock, data-expect-hash on the code
+     input (gate templates apply); the unlock transition is M12 staging, not a page navigation.
+     Absence renders as a grey system line — design-playbook §4.7 made visible. -->
+<div class="phone-frame" x-data="phone" data-frozen-time="21:47" data-contact-offline="true">
+  <div class="status-bar"><span x-text="clock"></span><span>联通 4G ▮▮▮</span></div>
+  <div class="app-title"><a href="home.html" aria-label="返回">‹</a>和&nbsp;<span class="who">下雨天</span>&nbsp;的对话</div>
+  <main class="chat-log">
+    <div class="bubble">在吗</div>
+    <div class="bubble me">在</div>
+  </main>
+  <div class="grey-line" x-show="contactOffline" x-cloak>对方手机已关机</div>
+</div>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<!-- page-skeleton.html — the uniform skeleton for EVERY page (references/structure/base.md §2).
+     Copy per page; the ../../ depth assumes a page inside pages/<area>/ — adjust href depth to the
+     page's own location. Replace the <title> and the comments with the fiction's own words; leftover
+     template comments are leaks at step 8 (R4). -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>&lt;Page title&gt;</title>
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/surface.css"><!-- M5: deep pages link secret.css instead -->
+  <script defer src="../../assets/js/components.js"></script><!-- registers Alpine components on alpine:init; runs before the Alpine runtime -->
+  <script defer src="../../assets/js/vendor/alpine.min.js"></script><!-- vendored Alpine v3 core; auto-starts and fires alpine:init -->
+</head>
+<body><!-- M7: data-page="14" data-total="36" -->
+  <header><!-- site-wide persistent bar carrying this organization's own nav links (and the M1 search form when selected) -->
+  </header>
+  <main><!-- page body: one "document". Bury the next keyword in the copy (bold proper nouns / place them in tables) --></main>
+  <footer><small>© ...<!-- M7: <span class="progress">14/36</span> --></small></footer>
+  <!-- M11 world texture: invisible links, black-on-black selectable text, hand-copied red text (`references/design-playbook.md` §2) -->
+</body>
+</html>

@@ -3,7 +3,8 @@
 > The step-2 menu. Select the modules the story actually needs, then assemble them into
 > `docs/system-profile.md` (`workflow/02-container.md`). Default: the container's native reach model plus the
 > entry page; every further module must earn its place in the fiction. Rule IDs `(Rn)` cite
-> `references/guardrails.md`; section citations use the form `§N.M` = item M of section N. Component implementations:
+> `references/guardrails.md`; section citations use the form `§N.M` = item M of section N. Component code
+> templates: `assets/templates/` (index: `assets/templates/README.md`); conventions and rules:
 > `references/structure/components.md`.
 
 ## 1. Core loop (always on)

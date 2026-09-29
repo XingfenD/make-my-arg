@@ -1,0 +1,18 @@
+<!-- gate-b.html — M2 Shape B: unlock in place, no navigation (references/structure/components.md §3;
+     behavior: assets/templates/js/modules/gate.js). The post-gate block MUST open with
+     x-show="unlocked" (or <template x-if="unlocked">): tools/check-solvable.mjs keys on that marker to
+     know which text is readable before the gate and which only becomes readable after it. -->
+<main x-data="gate" data-success-text="Decrypting…" data-success-hold="2400">
+  <div class="blackout" x-show="busy" x-text="successText" x-cloak x-transition></div>
+  <div class="sheet narrow" x-show="!unlocked">
+    <form class="gate" @submit.prevent="submit">
+      <label for="k">密钥</label>
+      <input id="k" type="password" placeholder="密钥" data-expect-hash="…">
+      <p class="gate-error" x-show="error" x-text="error" x-cloak></p>
+      <button class="btn" type="submit">解锁</button>
+    </form>
+  </div>
+  <div x-show="unlocked" x-cloak><!-- the guarded document -->
+    <article class="sheet narrow"><h2>…</h2></article>
+  </div>
+</main>

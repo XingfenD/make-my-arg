@@ -1,0 +1,36 @@
+/* phone.css — device class: phone (references/structure/form-device.md §2).
+ * The fiction's own colors go into surface.css's variables; this file is chrome structure only. */
+
+.phone-frame {
+  max-width: 420px; margin: 0 auto; min-height: 100vh; background: var(--paper, #f9ebde);
+  display: flex; flex-direction: column; border-inline: 1px solid var(--rule, #d8c4b0);
+}
+
+/* Status bar: fixed strip inside the frame. The clock is fiction — a frozen timestamp for an
+   era-locked device, or ticked live; never a real-world date contradicting the story. */
+.phone-frame .status-bar {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; justify-content: space-between; padding: .35rem .9rem;
+  font-family: var(--sans, system-ui, sans-serif); font-size: .78rem;
+  background: var(--bar, #f3e2d0); border-bottom: 1px solid var(--rule, #d8c4b0);
+}
+
+/* App chrome: title bar with a back affordance (a real link to the parent document, never a route). */
+.phone-frame .app-title { font-weight: 600; padding: .5rem .9rem; border-bottom: 1px solid var(--rule, #d8c4b0); }
+.phone-frame .app-title a { text-decoration: none; margin-right: .4rem; }
+
+/* Chat bubbles — left/right by sender class; tap targets keep 44px-ish ergonomics. */
+.phone-frame .chat-log { flex: 1; padding: .9rem; display: flex; flex-direction: column; gap: .5rem; }
+.phone-frame .bubble { max-width: 78%; padding: .5rem .7rem; border-radius: .7rem; background: var(--paper-2, #fffdf9); border: 1px solid var(--rule, #d8c4b0); }
+.phone-frame .bubble.me { align-self: flex-end; background: var(--wash, #f7f1e8); }
+
+/* The grey system line — absence rendered diegetically (references/design-playbook.md §4.7). */
+.phone-frame .grey-line { text-align: center; color: var(--ink-2, #6b6b6b); font-size: .75rem; margin: .6rem 0; }
+
+/* Home screen: icon grid + dock; the grid holds apps, the apps are pages. */
+.home-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; padding: 1.2rem; }
+.home-grid a { text-decoration: none; text-align: center; font-size: .8rem; }
+.dock { position: sticky; bottom: 0; display: flex; justify-content: space-around; padding: .6rem; background: var(--bar, #f3e2d0); border-top: 1px solid var(--rule, #d8c4b0); }
+
+/* Unread badge: the phone idiom for progress (M7 counts screens, not pages). */
+.badge { display: inline-block; min-width: 1.1em; padding: 0 .25em; border-radius: .6em; background: var(--stamp, #a11212); color: var(--paper, #f9ebde); font-size: .7rem; text-align: center; }

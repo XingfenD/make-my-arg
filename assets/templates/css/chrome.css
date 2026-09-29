@@ -1,0 +1,17 @@
+/* chrome.css — device class: browser-chrome (references/structure/form-device.md §2).
+ * The site draws its own address bar / tab strip; the drawn bar never navigates for real — the
+ * fiction types into it (a Wayback-shape whitelist is a credential-triad gate, form-device.md §2).
+ * For the apparatus single page (§5), this bar stays fixed above the switched content. */
+
+.tab-strip { display: flex; gap: .2rem; padding: .3rem .4rem 0; background: var(--bar, #f3e2d0); border-bottom: 1px solid var(--rule, #d8c4b0); }
+.tab { padding: .3rem .8rem; border: 1px solid var(--rule, #d8c4b0); border-bottom: none; border-radius: .4rem .4rem 0 0; background: var(--wash, #f7f1e8); font-size: .8rem; max-width: 14rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tab.active { background: var(--paper-2, #fffdf9); }
+
+.address-bar { position: sticky; top: 0; z-index: 20; display: flex; gap: .5rem; align-items: center; padding: .4rem .6rem; background: var(--paper-2, #fffdf9); border-bottom: 1px solid var(--rule, #d8c4b0); font-family: var(--mono, monospace); }
+.address-bar input { flex: 1; padding: .3rem .6rem; font: inherit; border: 1px solid var(--rule, #d8c4b0); border-radius: .4rem; background: var(--paper, #f9ebde); color: var(--ink, #4a4a4a); }
+.address-bar .lock-ico { opacity: .6; }
+
+/* Apparatus form: content panes swap under the fixed bar. The bar never leaves view — the fiction is
+   one tab of one fabricated session (form-device.md §5); keep back-button and deep state working. */
+.apparatus .pane { display: none; }
+.apparatus .pane:target, .apparatus .pane.active { display: block; }

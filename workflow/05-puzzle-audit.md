@@ -1,60 +1,60 @@
-# Step 5 — Puzzle Design Audit (谜题设计分析)
+# 步骤 5 — 谜题设计分析
 
-A gate step. A GDD that fails here goes back to step 3 before any scaffolding starts.
+这是一个门禁步骤。在此未通过的 GDD 要退回步骤 3，之后才准开始任何脚手架工作。
 
-**Input:** `docs/gdd.md` sections 4 and 5. **Output:** `docs/puzzle-audit.md`. A sample of the expected artifact shape: examples/puzzle-audit-excerpt.md.
+**输入：**`docs/gdd.md` 第 4、5 节。**输出：**`docs/puzzle-audit.md`。期望产物形态的示例：examples/puzzle-audit-excerpt.md。
 
-**Dispatched together with step 4.** `docs/reachability.md` is not an input. The orchestrator cross-checks this audit's source-page column against the pages step 4 cuts — a chain depending on a cut page fails the gate.
+**与步骤 4 一同派发。**`docs/reachability.md` 不是输入。编排者要把本次分析的「答案来源页」列与步骤 4 裁掉的页面逐一对照——依赖被裁页面的推理链即为门禁不通过。
 
-Four questions per puzzle, one row per puzzle, a written verdict on each.
+每个谜题四个问题，每个谜题一行，每行给出书面判定。
 
-## Q1 Necessity
+## Q1 必要性
 
-Write one sentence naming what the guarded page gives the player. If the honest answer is atmosphere, the gate becomes a plain link or the page moves to the atmosphere list. Two adjacent gates sharing a puzzle type get merged or one gets cut; the loop needs variety more than it needs volume.
+用一句话写明被守护的页面给玩家什么。如果诚实的回答只是氛围，就把门禁改为普通链接，或把该页移入氛围清单。相邻两道门禁共用同一谜题类型的，合并或砍掉一道；循环需要的是多样性，不是数量。
 
-A blank cell here means 删除.
+此处留空即表示「删除」。
 
-## Q2 Obtainability
+## Q2 可获取性
 
-Name the source page and quote the exact span carrying the clue. Then write the inference chain on one line:
+写明答案来源页，并原样引用承载线索的那段文字。然后把推理链写成一行：
 
 > 站内帖《老蛇的本命年》发布于 2013 年 → 2013 为癸巳蛇年 → 陈国栋生于 1977 → 密码 `1977`
 
-A chain longer than two hops gets redesigned. Knowledge from outside the site is allowed only for a puzzle the GDD declares as type I (knowledge-search tutorial). The chain must start from a life trace, never a random string (R3). A **wildcard gate** (`data-expect-any`, `references/structure/form-device.md` §4) guards an emotional beat, not a secret: record what the act of typing means in the story instead of a credential chain; the audit confirms the wildcard is declared, never implied.
+超过两跳的推理链要重新设计。站外知识只有 GDD 声明为 type I（知识检索教学型）的谜题才允许使用。推理链必须起于一处生活痕迹，绝不能起于随机字符串 (R3)。**通配门禁**（`data-expect-any`、`references/structure/form-device.md` §4）守护的是一段情绪节拍，不是秘密：不要记录凭据链，而要记录输入这个动作在故事里意味着什么；本分析要确认通配是明文声明的，绝不能只是暗示。
 
-## Q3 Intuitiveness
+## Q3 直觉性
 
-Ask whether a reader's eye lands on that span while reading the page for its stated purpose. Body copy, tables, captions, dates, and signatures pass. `alt` attributes, CSS comments, HTML source, and text invisible until selected pass only when the GDD declares the puzzle as type F (visual concealment) or type M (meta easter egg).
+问一句：读者按该页声明的用途阅读时，视线会不会落到那段文字上。正文、表格、图注、日期、签名都算通过。`alt` 属性、CSS 注释、HTML 源码、选中前不可见的文字，只有当 GDD 声明该谜题为 type F（视觉隐藏）或 type M（元彩蛋）时才算通过。
 
-## Q4 Leak scan
+## Q4 泄漏扫描
 
-Search the gate page and every page in the inference chain for four things:
+在门禁页和推理链上的每一页里搜寻以下四类内容：
 
-| Leak | Example |
+| 泄漏 | 示例 |
 |---|---|
-| The answer itself | `1977` printed on the login page |
-| A restatement | `placeholder="例如 1977"`, help text spelling the credential |
-| The derivation rule | `初始密码为本人出生年份` posted under the form |
-| The answer's location | `答案在员工风采页`, `去老帖子里找本命年` |
-| A login string printed verbatim (system containers) (R10) | `账号：chen.gd` in the staff roster — only the initial account may appear |
+| 答案本身 | 登录页上印着 `1977` |
+| 换个说法复述 | `placeholder="例如 1977"`、把凭据逐字拼出来的帮助文字 |
+| 推导规则 | 表单下方贴着 `初始密码为本人出生年份` |
+| 答案的位置 | `答案在员工风采页`、`去老帖子里找本命年` |
+| 原样印出的登录串（系统容器）(R10) | 员工名册里的 `账号：chen.gd` ——只有初始账号可以出现 |
 
-Scope covers `placeholder`, `<label>`, help text, empty states, failure hints, the surrounding body copy, and HTML comments (R4). A failure hint points at the source obliquely and stops there — `密码错误 🎂` qualifies; `想想陈师傅的本命年` leaks the location.
+扫描范围覆盖 `placeholder`、`<label>`、帮助文字、空状态、失败提示、周围的正文，以及 HTML 注释 (R4)。失败提示只能含蓄地指向来源，到此为止——`密码错误 🎂` 合格；`想想陈师傅的本命年` 泄漏了位置。
 
-At implementation time this runs as a real grep over the page set, recorded in `docs/puzzle-audit.md`. A mental pass leaves the leaks in.
+实现阶段要对页面集合跑一次真正的 grep，并把结果记入 `docs/puzzle-audit.md`。凭脑子过一遍，泄漏就留在原地。
 
-## Deliverable table
+## 交付物表
 
-| 谜题 | 类型 | 守护内容 | 答案来源页 + 原文 | 推理链 | 跳数 | 必要性一句话 | 泄答扫描 | 处置 |
+| 谜题 | 类型 | 守护内容 | 答案来源页 + 原文 | 推理链 | 跳数 | 必要性一句话 | 泄漏扫描 | 处置 |
 |---|---|---|---|---|---|---|---|---|
 
-处置 values: 保留 / 改来源 / 合并 / 删除 / 降级为普通链接.
+处置取值：保留 / 改来源 / 合并 / 删除 / 降级为普通链接。
 
-## Difficulty ladder
+## 难度阶梯
 
-Sort the surviving puzzles by hop count. The first gate the player meets sits at 0 to 1 hops; the deepest may reach 2. A ladder that starts at 2 teaches the player to quit.
+把留下的谜题按跳数排序。玩家遇到的第一道门禁在 0 到 1 跳；最深的可以到 2 跳。从 2 跳起步的阶梯等于教玩家放弃。
 
-## Re-run
+## 重跑
 
-Copy changes while pages are written. Re-run Q4 against the built file tree at step 8 and record the diff against this table.
+页面写下去的同时，文案也在变。在步骤 8 对着建成的文件树重跑 Q4，并把与本表的差异记录下来。
 
-Baseline-test traps for this step: references/common-mistakes.md §5 — check them before returning the artifact.
+本步骤的基线测试陷阱：references/common-mistakes.md §5 ——交回产物前先对照检查。

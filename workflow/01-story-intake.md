@@ -1,67 +1,60 @@
-# Step 1 — Story Intake
+# 步骤 1 — 故事源接入
 
-**Input:** the story source — a long-form narrative (novel / screenplay / transcript), structured setting
-material (setting bible / outline / character profiles), or the user's own idea (one-line premise to a few
-paragraphs of synopsis). **Output:** `docs/story-canon.md`, five tables. A sample of the expected artifact
-shape: examples/story-canon-excerpt.md.
+**输入：**故事源——长篇叙事（小说 / 剧本 / 口述记录）、结构化设定材料（设定集 / 大纲 / 人物小传），
+或用户自己的想法（一句话前提到几段梗概）。**输出：**`docs/story-canon.md`，正典五表。期望产物
+形态的样例：examples/story-canon-excerpt.md。
 
-Route by source type: Adapters A and B extract and normalize, Adapter C expands. All three end at the same
-five-table contract — the canon every later step reads. **Gap rule (A/B):** a row the source does not carry
-is listed as an open question routed to the user through the orchestrator, never silently invented; the
-agent fills a gap by invention only when the user explicitly delegates it, and marks the row by appending
-`〔invented〕` to its first cell — the one marker convention across all five tables.
-From step 2 on the raw source material is never read again (SKILL.md dispatch contract item 1).
+按素材类型分流：适配器 A 与 B 提取并归一化，适配器 C 扩写。三者都收束于同一套五表契约——
+后续每一步都要读取的故事正典。**缺口规则（A/B）：**素材中没有的行列为未决问题，经编排者转给
+用户，绝不悄悄编造；只有用户明确委托时，代理才用虚构填补缺口，并在该行第一个单元格末尾追加
+`〔invented〕` 作为标记——这是全部五张表统一的唯一标记约定。
+从步骤 2 起，原始素材绝不再次读取（SKILL.md 派发契约第 1 条）。
 
-## Adapter A — Long-form narrative text
+## 适配器 A — 长篇叙事文本
 
-Extract, never invent. **Large sources.** When the source runs past roughly 150,000 tokens, split it at
-chapter or scene boundaries and dispatch one subagent per chunk — the chunk reads run in parallel. Each
-reads only its slice and writes provisional rows (all five tables' rows for that chunk, against the
-definitions below) to `docs/story-canon.chunk-N.md`. When the last chunk returns, one merge round
-consolidates the chunk files into `docs/story-canon.md`: merge the character network, order the timeline,
-de-duplicate the evidence inventory, fold in the contrast-matrix and twist-ordering rows. Chunk rows are
-provisional until the merge; the deliverable is still the five finished tables in one file, never per-chunk
-fragments. The threshold exists because the exhaustive extraction below is the point of this step, and it
-needs headroom in the same context that holds the source. Below the threshold a single subagent reads the
-source in one pass and writes `docs/story-canon.md` directly.
+只提取，绝不虚构。**大体量素材。**当素材超过约 150,000 token 时，按章节或场景边界切分，
+并为每个分块派发一个子代理——各分块的读取并行进行。每个子代理只读自己那一片，并把临时行
+（该分块在全部五张表中的行，按下文的定义）写入 `docs/story-canon.chunk-N.md`。最后一个分块
+返回后，用一轮合并把分块文件整合进 `docs/story-canon.md`：合并人物网络、为时间线排序、
+对证据文档清单去重、并入对照矩阵与反转次序的行。合并之前，分块行都是临时的；交付物始终是写在
+一个文件里的五张完成表，绝不是按分块切碎的片段。之所以设这个阈值，是因为下文的穷尽式提取
+才是本步的目的，它需要在容纳素材的同一上下文里留出余量。低于阈值时，单个子代理一次性通读
+素材，直接写出 `docs/story-canon.md`。
 
-## Adapter B — Structured setting material
+## 适配器 B — 结构化设定材料
 
-Normalize, do not invent. The orchestrator runs this adapter directly. Map the material's entries onto the
-five tables under the gap rule above. Material past the ~150,000-token threshold follows Adapter A's
-chunking convention.
+归一化，不要虚构。编排者直接运行本适配器。按照上文的缺口规则，把材料的条目映射到五张表上。
+超过约 150,000 token 阈值的材料沿用适配器 A 的切分约定。
 
-## Adapter C — The user's own idea
+## 适配器 C — 用户自己的想法
 
-The orchestrator runs this adapter directly. Expand the idea into a five-table draft: the agent invents
-whatever the premise does not fix — characters, life traces, documents, twists — and marks every invented
-row by appending `〔invented〕` to its first cell (the marker convention above); facts the premise itself
-carries stay unmarked. Expansion serves the same
-downstream needs as extraction: life traces exhaustive enough to build puzzles from (R3), and a surface
-layer and a secret layer that contrast (`references/guardrails.md` Constraint 2).
+编排者直接运行本适配器。把想法扩写成五表草稿：凡前提没有定死的内容——人物、生活痕迹、文档、
+反转——都由代理虚构，并按上文的标记约定，在每个虚构行的第一个单元格末尾追加 `〔invented〕`；
+前提本身自带的事实不加标记。扩写与提取服务于同样的下游需求：穷尽到足以据此设计谜题的生活
+痕迹（R3），以及彼此形成反差的表层与秘密层（`references/guardrails.md` 约束 2）。
 
-## The five tables (one contract for all adapters)
+## 五张表（所有适配器共用的契约）
 
-| Table | Contents |
+| 表 | 内容 |
 |---|---|
-| Character network | Per character: surface identity, secret identity, and life traces — every date, number, nickname, habit, license plate, employee ID, and document they appear in. |
-| Timeline | Two columns: story order and player discovery order. The two must differ. |
-| Evidence document inventory | Every document the story supports mocking: diary, medical record, contract, bank statement, chat log, court ruling, announcement, staff roster, notice. |
-| Surface/secret contrast matrix | Each surface entity, its secret-layer reversal, and the bridging prop that stitches the two (a contract, a photo, a transaction record). |
-| Twist ordering | Twists listed in player discovery order, with the central twist page marked. |
+| 人物网络 | 每个角色：表层身份、秘密身份、生活痕迹——每一个日期、数字、昵称、习惯、车牌、工号，以及他们出现于其中的每一份文档。 |
+| 时间线 | 两列：故事顺序与玩家发现顺序。两者必须不同。 |
+| 证据文档清单 | 故事支持伪造的每一份文档：日记、病历、合同、银行流水、聊天记录、判决书、公告、员工名册、通知。 |
+| 表层/秘密对照矩阵 | 每个表层实体、它在秘密层的反转，以及把两者缝合起来的桥接道具（一份合同、一张照片、一条交易记录）。 |
+| 反转次序 | 按玩家发现顺序列出的反转，并标出核心反转页。 |
 
-Life traces drive everything downstream. They are the raw material for the puzzle audit in step 5 and for
-the neutral public pages specified in step 3. Extract them exhaustively here (Adapter C: invent them
-exhaustively); a trace invented at implementation time reads as invented.
+生活痕迹驱动下游的一切。它们是步骤 5 谜题设计分析的原材料，也是步骤 3 所要求的中立公开页
+的原材料。在这里把它们穷尽提取（适配器 C：穷尽虚构）；在实现阶段才补出来的生活痕迹，
+一眼就能看出是编的。
 
-Mark which characters appear on public pages (roster, department list, news) and what that organization
-would legitimately publish about each. Step 3 needs this to keep public pages neutral.
+标出哪些角色出现在公开页（名册、部门列表、新闻）上，以及该组织会正当地公布关于每个人的
+哪些信息。步骤 3 需要这些来保持公开页中立。
 
-## User confirmation checkpoint
+## 用户确认检查点
 
-Whenever the tables carry any row marked `〔invented〕` — always in Adapter C, only on delegated gap-fills
-in A/B — the orchestrator presents the five tables to the user before step 2 starts; requested changes go
-back to this step. Approved `〔invented〕` rows become canon; the marker stays as a record of provenance.
-A pure extraction run (no marked rows) has no table-level checkpoint — the step-3 GDD review covers it.
+只要表中出现任何带 `〔invented〕` 标记的行——适配器 C 中必然如此，A/B 中仅出现在委托填补缺口
+时——编排者就要在步骤 2 开始前把五张表呈给用户；要求的修改退回本步。获准的 `〔invented〕`
+行成为正典；标记保留，作为来源记录。纯提取运行（没有带标记的行）不设表级检查点——步骤 3 的
+游戏设计文档（GDD）审阅覆盖了它。
 
-Baseline-test traps for this step: references/common-mistakes.md §1 — check them before returning the artifact.
+本步的基线测试陷阱：references/common-mistakes.md §1 — 交付产物前先检查它们。

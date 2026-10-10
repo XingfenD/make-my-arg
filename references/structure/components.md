@@ -1,24 +1,29 @@
-# Alpine Component Rules & Conventions
+# Alpine 组件规则与约定
 
-> Companion to `references/structure/base.md` (tree + skeleton). The canonical front-end code templates now
-> ship as **real files under `assets/templates/`** (js/css/html — index: `assets/templates/README.md`);
-> step 6a copies the profile-selected ones instead of transcribing code. This file keeps the *rules and
-> conventions* the templates implement: keyword hash build (§1), search M1 (§2), gates M2 (§3), staging
-> M12 (§4), reskin M5 (§5), progress M7 (§6). Required reading at steps 6 and 7. Rule IDs `(Rn)` cite
-> references/guardrails.md.
+> `references/structure/base.md`（树 + 骨架）的配套文档。规范的前端代码模板现在
+> 以**真实文件的形式放在 `assets/templates/`** 下（js/css/html——索引：
+> `assets/templates/README.md`）；步骤 6a 复制装配记录选中的那些，而不再誊抄代码。
+> 本文件保留模板所实现的*规则与约定*：关键词哈希构建（§1）、搜索 M1（§2）、门禁
+> M2（§3）、暂存 M12（§4）、换皮 M5（§5）、进度 M7（§6）。步骤 6 和 7 的必读材料。
+> 规则 ID `(Rn)` 引自 references/guardrails.md。
 
-## 1. Keyword Hash Build (tools/build-keywords.mjs)
+## 1. 关键词哈希构建（tools/build-keywords.mjs）
 
-One plaintext source per audience, hashed to one table per audience (R3). The public table is fetched by public pages and **must never contain a restricted-area URL** (default `internal/`; R8); the deep table is fetched only by deep pages. A `title` is the catalog entry the archive would print (issuing body + document type + number/date) — never a summary of the document's content (R9). This is the website form's convention (references/structure/form-website.md); a system form keeps a single index and lets the account matrix decide what a hit opens (references/structure/form-system.md §1) — access is never maintained in the JSON (R10).
+每个受众一个明文源，哈希成每个受众一张表（R3）。公开表由公开页面获取，**绝不能
+包含受限区 URL**（默认 `internal/`；R8）；深层表只由深层页面获取。`title` 是档案
+库会印出的编目条目（发文机构 + 文档类型 + 编号/日期）——绝不是文档内容的摘要
+（R9）。这是网站形态的约定（references/structure/form-website.md）；系统形态只保留
+一张索引，让权限矩阵决定一次命中打开什么（references/structure/form-system.md
+§1）——权限绝不在 JSON 里维护（R10）。
 
-The canonical implementation ships as **`assets/tools/build-keywords.mjs`** (copy it to `tools/`). Its contract:
+规范实现以 **`assets/tools/build-keywords.mjs`** 发布（复制到 `tools/`）。其契约：
 
-- Discovers every `data/keywords*.src.json` and writes the matching `data/keywords*.json` beside it, so both the per-layer convention (`keywords.surface.src.json` → `keywords.surface.json`) and a single-table project (`keywords.src.json` → `keywords.json`) work with no configuration.
-- Keys support `|`-separated synonym aliases. Values are `"url|title"`; the url is relative to `pages/`.
-- Normalizes with `String(w).trim().toLowerCase()` → md5 → base64. This **must be byte-identical** to `tools/hash.mjs` and to the in-page `hash()` helper in the starter kernel; if you ever switch to async WebCrypto SHA-256, change all three sides together.
-- De-duplicates by url within a hash bucket, so two aliases that normalize to the same hash never list a page twice.
+- 发现每一个 `data/keywords*.src.json`，并在其旁写出对应的 `data/keywords*.json`，因此分层约定（`keywords.surface.src.json` → `keywords.surface.json`）与单表项目（`keywords.src.json` → `keywords.json`）都能零配置工作。
+- 键支持 `|` 分隔的同义词别名。值为 `"url|title"`；url 相对 `pages/`。
+- 用 `String(w).trim().toLowerCase()` → md5 → base64 归一化。这**必须与** `tools/hash.mjs` 及起点内核中的页内 `hash()` 辅助函数**逐字节一致**；若要改用异步 WebCrypto SHA-256，三处必须一起改。
+- 在同一个哈希桶内按 url 去重，这样归一化为同一哈希的两个别名绝不会把同一页面列两次。
 
-Example source shape:
+源文件示例：
 
 ```json
 {
@@ -27,76 +32,110 @@ Example source shape:
 }
 ```
 
-At deployment, **do not ship the `.src.json` files** (add `data/*.src.json` to .gitignore or delete them after the build) (R3). `tools/check-links.mjs` also fails the deploy if a table whose name marks it as the public index (`data/keywords.surface*.json`) carries a restricted-area url (default `internal/`; R8).
+部署时**不要带上 `.src.json` 文件**（把 `data/*.src.json` 加进 .gitignore，或在
+构建后删除）（R3）。若一张名字表明它是公开索引的表（`data/keywords.surface*.json`）
+带有受限区 url（默认 `internal/`；R8），`tools/check-links.mjs` 也会判部署失败。
 
-## 2. Search Engine (`search` Component) — Three-State Feedback
+## 2. 搜索引擎（`search` 组件）——三态反馈
 
-Canonical code: **`assets/templates/js/modules/search.js`** (component body, depends on the kernel's
-`hash()`) and **`assets/templates/html/search.html`** (mount markup). Registered in the project's
-`components.js`; mounted by search.html as `<main x-data="search" data-index="data/keywords.surface.json">`
-(a deep-page search points `data-index` at the deep table). The three states the mount renders: hit / miss /
-forbidden, plus the empty prompt; the forbidden branch reads `data/forbidden.json` (M6) and shifts the whole
-page (`body-forbidden`).
+规范代码：**`assets/templates/js/modules/search.js`**（组件体，依赖内核的
+`hash()`）与 **`assets/templates/html/search.html`**（挂载标记）。注册在项目的
+`components.js` 中；search.html 以 `<main x-data="search" data-index="data/keywords.surface.json">`
+挂载（深层页的搜索把 `data-index` 指向深层表）。挂载渲染三种状态：命中 / 未命中 /
+禁止，外加空输入提示；禁止分支读取 `data/forbidden.json`（M6）并切换整页状态
+（`body-forbidden`）。
 
-**Shared hash contract.** The in-page `hash()` lives in the starter kernel
-(`assets/starter/assets/js/components.js`) and **must mirror `tools/build-keywords.mjs` exactly** (same
-trim/lowercase normalization, same md5 + base64 output). Never redefine it in a component template.
+**共享哈希契约。** 页内 `hash()` 位于起点内核
+（`assets/starter/assets/js/components.js`），**必须与 `tools/build-keywords.mjs`
+完全一致**（相同的 trim/lowercase 归一化、相同的 md5 + base64 输出）。绝不要在
+组件模板里重新定义它。
 
-**Layer scoping (required when the search module splits indexes, R8).** The component queries the index of the audience whose page mounts it: public pages carry `data-index="data/keywords.surface.json"`; deep pages carry `data-index="data/keywords.secret.json"`. A public keyword routes to a public page or to a gate — never straight into a restricted document. When the fiction lists entries the visitor may not open (container D's archive list), each one shows a plain locked notice or resolves to its gate; it never opens the document. Result titles are catalog entries, written the way the issuing body files the document (R9). System forms do not split indexes by audience; they keep one index and resolve each hit through the account matrix (`references/structure/form-system.md` §1, R10).
+**分层作用域（搜索模块按受众拆分索引时必需，R8）。** 组件查询挂载它的那个受众的
+索引：公开页携带 `data-index="data/keywords.surface.json"`；深层页携带
+`data-index="data/keywords.secret.json"`。公开关键词路由到公开页或门禁——绝不能
+直达受限文档。当虚构作品列出访客无权打开的条目时（容器 D 的档案列表），每条要么
+显示一条朴素的锁定提示，要么解析到它的门禁；绝不能直接打开文档。结果标题是编目
+条目，按发文机构归档该文档的写法书写（R9）。系统形态不按受众拆分索引；它们保留
+一张索引，通过权限矩阵解析每次命中（`references/structure/form-system.md` §1，R10）。
 
-System containers replace this search hub with their own shells — desktop Spotlight `FILE_DATABASE`, the archive query form, cross-site links; see `references/structure/form-system.md` §4.
+系统容器用自己的外壳取代这个搜索枢纽——桌面 Spotlight `FILE_DATABASE`、档案查询
+表单、跨站链接；见 `references/structure/form-system.md` §4。
 
-**New tabs vs. session state (required reading for system containers).** `target="_blank"` opens each result in a fresh tab, and a fresh tab gets a fresh `sessionStorage` — so a `data-access`-protected document opened this way reads as locked even though the player is "logged in" on the original tab. Any container that crosses an account login with new-tab results (container D's `query → results → archive` chain) must hold session state in a **session cookie** (shared across tabs, cleared when the browser closes), not per-tab `sessionStorage`; the kernel's `session` store is exactly that (§3). `check-solvable.mjs` models identities as one global set and cannot see per-tab isolation, so it reports green while the real browser fails — the step-8 cross-tab manual test is the only thing that catches this (tooling.md §3 item 7).
+**新标签页与会话状态（系统容器必读）。** `target="_blank"` 在全新标签页中打开每个
+结果，而新标签页拿到的是全新的 `sessionStorage`——因此以这种方式打开的
+`data-access` 保护文档会被读成锁定状态，尽管玩家在原标签页里已经"登录"。任何把
+账号登录与新标签页结果交叉在一起的容器（容器 D 的 `query → results → archive` 链）
+都必须把会话状态放在**会话 cookie**（跨标签页共享，浏览器关闭时清除）里，而不是
+每标签页一份的 `sessionStorage`；内核的 `session` store 正是这个（§3）。
+`check-solvable.mjs` 把身份建模为一个全局集合，看不见按标签页的隔离，所以真实
+浏览器已经失败时它仍报绿——只有步骤 8 的跨标签页人工测试能抓住这一点
+（tooling.md §3 item 7）。
 
-## 3. Password Gate (`gate` Component)
+## 3. 密码门禁（`gate` 组件）
 
-Canonical code: **`assets/templates/js/modules/gate.js`** (component body, depends on the kernel's `hash()`
-and `session` store — never redefine `ACCESS_KEY` / `SKIN_KEY` / the cookie helper in the component; the
-starter kernel carries the session-cookie implementation) and three mount shapes:
+规范代码：**`assets/templates/js/modules/gate.js`**（组件体，依赖内核的 `hash()`
+与 `session` store——绝不要在组件里重新定义 `ACCESS_KEY` / `SKIN_KEY` / cookie
+辅助函数；起点内核带有会话 cookie 实现）以及三种挂载形态：
 
-- **Shape A** — `assets/templates/html/gate-a.html`: navigate away on success (`data-next`, `data-fail-hint`).
-- **Shape B** — `assets/templates/html/gate-b.html`: unlock in place, no navigation. The post-gate block MUST open with `x-show="unlocked"` (or `<template x-if="unlocked">`): `tools/check-solvable.mjs` keys on that marker to know which text is readable before the gate and which only becomes readable after it.
-- **Shape C** — `assets/templates/html/login-multi.html`: session login + per-account access (system containers B/C/D): `data-grant` on the login gate, `data-access` on the protected page, no privilege ladder (R10). The full pattern lives in `references/structure/form-system.md` §2–§3; the body reads `data-grants` (account→identity JSON map) first and falls back to the flat `data-grant` list.
+- **形态 A** —— `assets/templates/html/gate-a.html`：成功后跳转离开（`data-next`、`data-fail-hint`）。
+- **形态 B** —— `assets/templates/html/gate-b.html`：就地解锁，不跳转。门禁后的区块必须以 `x-show="unlocked"`（或 `<template x-if="unlocked">`）开头：`tools/check-solvable.mjs` 依据这个标记区分哪些文字在门禁前可读、哪些只有通过门禁后才可读。
+- **形态 C** —— `assets/templates/html/login-multi.html`：会话登录 + 按账号访问（系统容器 B/C/D）：登录门禁上用 `data-grant`，受保护页面上用 `data-access`，没有权限阶梯（R10）。完整模式见 `references/structure/form-system.md` §2–§3；组件体先读 `data-grants`（账号→身份的 JSON 映射），再回退到扁平的 `data-grant` 列表。
 
-One component, three shapes, plus one declared wildcard: `data-expect-any` marks a narrative gate whose
-answer is not verified by design — any non-empty value passes, so the walk never hunts a hash for it
-(`references/structure/form-device.md` §4). `data-expect-hash` sits on **each `<input>`** (comma-separated values = synonyms
-accepted for that field, so a Chinese name and its pinyin both open the same lock); the rest of the
-configuration sits on the **component root** (`<main>`), not on the `<form>`.
+一个组件、三种形态，外加一种声明式通配：`data-expect-any` 标记一道按设计不校验
+答案的叙事门禁——任何非空值都能通过，因此走图绝不会为它寻找哈希
+（`references/structure/form-device.md` §4）。`data-expect-hash` 放在**每一个
+`<input>`** 上（逗号分隔的值 = 该字段接受的同义答案，这样一个中文名和它的拼音都
+能开同一把锁）；其余配置放在**组件根**（`<main>`）上，而不是 `<form>` 上。
 
-`hash()` is the shared helper from §2. When designing a gate, enforce the **credential triad**: the account is hidden on page A, the password clue on page B (requiring inference: zodiac year → 1977, child-photo date → 20201125), and the gate on page C. Hashing keeps plaintext out of casual view in the source (R3).
+`hash()` 是 §2 的共享辅助函数。设计门禁时，落实**凭据三件套**：账号藏在 A 页，
+密码线索放在 B 页（需要推理：生肖年份 → 1977，童年照片日期 → 20201125），门禁
+在 C 页。哈希让源码中不会随意看到明文（R3）。
 
-A credential may be **derived/composite** — an account assembled from parts (pinyin initials + license-year), never printed whole. `check-solvable.mjs` only matches a value that appears *verbatim* in a readable page, so it cannot prove a derived credential solvable and will report the gate STUCK. **Never print the credential to turn it green** — that leaks it to every visitor (a static site has no server auth; client-side masking is not privacy, R12) and collapses the puzzle. Declare the value, its composition rule, and its public-page components in `data/credentials.src.json` and prove it with `tools/check-credentials.mjs` (parts + rule + zero-plaintext); prove reachability-given-the-credential with `tools/check-reachability.mjs`. See tooling.md §1 and §3.
+凭据可以是**派生/组合**的——由若干部分拼出的账号（拼音首字母 + 执照年份），从不
+整体印出。`check-solvable.mjs` 只匹配在可读页面中*逐字*出现的值，因此它无法证明
+派生凭据可解，会把门禁报为 STUCK。**绝不要为了让它变绿而把凭据印出来**——那会把
+它泄露给每个访客（静态站点没有服务端鉴权；客户端遮蔽不是隐私，R12），并让谜题
+塌掉。在 `data/credentials.src.json` 中声明该值、其组成规则与它在公开页面上的组成
+部分，用 `tools/check-credentials.mjs` 证明它（组成部分 + 规则 + 零明文）；用
+`tools/check-reachability.mjs` 证明"已知凭据即可触达"。见 tooling.md §1 与 §3。
 
-Gate design rules:
+门禁设计规则：
 
-- **Failure hints point at the source obliquely and stop (R4).** `密码错误 🎂` passes; naming a page, restating the derivation, or spelling the field's content fails; a bare "error" is prohibited.
-- **Inputs name the field only (R4).** `placeholder="Employee ID"` / `工号` pass; `placeholder="e.g. 1977"` leaks. The derivation rule stays off the gate page; the *account format* may be posted there.
-- **Multi-field gates** are several `data-expect-hash` inputs; all must match. A gate page's own body is unreadable until the gate passes — a clue parked in its own `x-show="unlocked"` block is not counted before unlock, exactly the boundary the check models.
-- **A wildcard gate is declared, never implied.** A gate that asks for no verifiable secret (an emotional input-and-pass ritual) marks its input `data-expect-any`; an unmarked input on a gate-mounted page raises the `check-solvable.mjs` NOTE and stays a leak class (workflow/05 Q4).
-- **Session state is technical, not copy.** Accounts live in a **session cookie** (cross-tab, cleared on browser close; never per-tab `sessionStorage` behind `target="_blank"` results), and the site does not explain its storage to the player (`references/structure/form-system.md` §6). Progress and read-state storage follow the profile's state contract (R13; `references/structure/form-device.md` §3).
+- **失败提示要迂回地指向线索来源，且到此为止（R4）。** `密码错误 🎂` 合格；点名某个页面、复述推导过程、或拼出字段内容都不合格；光秃秃的"error"被禁止。
+- **输入框只标明字段名（R4）。** `placeholder="Employee ID"` / `工号` 合格；`placeholder="e.g. 1977"` 属于泄露。推导规则不放在门禁页上；*账号格式*可以贴在那里。
+- **多字段门禁**由多个 `data-expect-hash` 输入框组成；必须全部匹配。门禁页自身的正文在门禁通过前不可读——藏在它自己的 `x-show="unlocked"` 区块里的线索在解锁前不算数，这正是检查所建模的边界。
+- **通配门禁必须显式声明，绝不能隐含。** 不索要任何可验证秘密的门禁（一次情感性的"输入即通过"仪式）要把它的输入标记为 `data-expect-any`；门禁页上未标记的输入会触发 `check-solvable.mjs` 的 NOTE，并始终属于泄漏类问题（workflow/05 Q4）。
+- **会话状态是技术实现，不是文案。** 账号存放在**会话 cookie**（跨标签页，浏览器关闭时清除；绝不用 `target="_blank"` 结果背后那每标签页一份的 `sessionStorage`），站点也不向玩家解释自己的存储方式（`references/structure/form-system.md` §6）。进度与读态存储遵循装配记录的状态契约（R13；`references/structure/form-device.md` §3）。
 
-## 4. Staging Components (Lifecycle-Managed)
+## 4. 暂存组件（生命周期托管）
 
-Canonical code: **`assets/templates/js/modules/staging.js`** — `blackout` / `typewriter` / `reveal`, each
-with its mount shape in the file's tail comments. All timers and observers are registered in `init()` and
-released in `destroy()`, so staged effects survive or die with their component.
+规范代码：**`assets/templates/js/modules/staging.js`** —— `blackout` /
+`typewriter` / `reveal`，各自的挂载形态见文件尾部注释。所有定时器与观察者都在
+`init()` 中注册、在 `destroy()` 中释放，因此暂存效果与其组件同生共死。
 
-## 5. Optional: Layer Reskin (M5; base.css Conventions)
+## 5. 可选：分层换皮（M5；base.css 约定）
 
-The shared layout and the document-realism classes live in **`assets/starter/assets/css/base.css`** (the
-invariant kernel CSS: sticky opaque header, `.sheet` document kit, gate form, entry shell). The deep-layer
-skin template is **`assets/templates/css/secret.css`** — it retunes the custom properties base.css reads
-(`--ink` / `--paper` / `--rule` / `--accent` / `--stamp` / `--bar` …) so the whole page shifts together when
-deep pages link it (or when `session.skin()` applies `body.secret`). Texture classes other docs cite:
-`.hidden-text` (black-on-black revealed by selection), `.blurred` (redaction as a clue), `.handwrite`,
-`.spacer`. Client-side masking is not privacy — anything hidden this way is public (R12).
+共享布局与文档真实感类位于 **`assets/starter/assets/css/base.css`**（不变的内核
+CSS：sticky 不透明页头、`.sheet` 文档套件、门禁表单、入口外壳）。深层皮肤模板是
+**`assets/templates/css/secret.css`** ——它重新调校 base.css 读取的自定义属性
+（`--ink` / `--paper` / `--rule` / `--accent` / `--stamp` / `--bar` …），使深层页
+引入它时（或 `session.skin()` 应用 `body.secret` 时）整页一起变调。其他文档引用的
+质感类：`.hidden-text`（黑上黑，选中才显现）、`.blurred`（把涂黑作为线索）、
+`.handwrite`、`.spacer`。客户端遮蔽不是隐私——用这种方式藏起来的一切都是公开的（R12）。
 
-## 6. Optional: Collection Progress (`progress` Component)
+## 6. 可选：收集进度（`progress` 组件）
 
-Canonical code: **`assets/templates/js/modules/progress.js`**, mounted on the shared footer; `<body data-page data-total>` carries the numbering. The storage question follows the profile's state contract (references/guardrails.md R13, detail references/structure/form-device.md §3): progress persists ONLY when the profile records `persistent` (a player-owned device or a fiction that really saves). With `progress: session`, swap localStorage for sessionStorage; with `progress: none`, the module itself is out of the game. Login state is never here — it lives in the session cookie (§3), never localStorage.
+规范代码：**`assets/templates/js/modules/progress.js`**，挂载在共享页脚上；
+`<body data-page data-total>` 携带编号。存储问题遵循装配记录的状态契约
+（references/guardrails.md R13，细节见 references/structure/form-device.md §3）：
+只有当装配记录写明 `persistent` 时（玩家自有的设备，或确实会存档的虚构设定），
+进度才持久化。`progress: session` 时把 localStorage 换成 sessionStorage；
+`progress: none` 时该模块本身不进游戏。登录状态永远不在这里——它在会话 cookie 里
+（§3），绝不在 localStorage。
 
-World-response state (M14: an entry appears only after a page was read) is the sibling mechanism —
-`readState` store in the starter kernel, `assets/templates/js/modules/read-state.js` (`markRead` mount on
-the source page) plus the `data-after` attribute on the entry anchor (`assets/templates/html/read-entry.html`),
-rules in `references/structure/form-device.md` §3–§4; the attribute is what the checkers walk, the JS is what the player sees.
+世界回应状态（M14：某条目只有在读过某页后才出现）是并生机制——起点内核里的
+`readState` store、`assets/templates/js/modules/read-state.js`（源页面上的
+`markRead` 挂载）以及条目锚点上的 `data-after` 属性
+（`assets/templates/html/read-entry.html`），规则见
+`references/structure/form-device.md` §3–§4；属性是检查器走图的依据，JS 是玩家
+看到的东西。

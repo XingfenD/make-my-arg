@@ -1,134 +1,126 @@
-# Step 2 — Choose the Form and Assemble the System
+# 步骤 2 — 选定形态并装配系统
 
-Stays with the orchestrator: this step asks the user, then writes `docs/system-profile.md`. The form is one
-decision bundle — five axes answered together, because each axis changes what steps 3–7 build: the device class
-picks the shell components, the technical form picks the checker model, the state contract decides what may
-persist and how an unlock is proved, the era fixes the texture kit. Recommend per axis, ask once and wait for
-the decision; a change requested at a later step returns here before scaffolding (R12).
+由编排者直接执行：本步先询问用户，再写出 `docs/system-profile.md`。形态是一个决策包——
+形态五轴一起回答，因为每一轴都改变步骤 3–7 要构建的东西：设备类选定外壳组件，技术形态选定
+检查器模型，状态契约决定什么可以持久化以及如何证明一次解锁，时代固定质感套件。逐轴给出推荐，
+只问一次然后等待决定；后续步骤提出的改动要在脚手架搭建前退回本步（R12）。
 
-**Input:** `docs/story-canon.md`. **Output:** `docs/system-profile.md` — the assembly record every later
-step reads. It carries no plot.
+**输入：**`docs/story-canon.md`。**输出：**`docs/system-profile.md`——后续每一步都要读取的
+装配记录。它不含剧情。
 
-## 1. Axis 1 — the narrative container
+## 1. 轴 1 — 叙事容器
 
-Unless the user has already specified a format, guide them through the four containers below plus a
-recommendation based on the story's traits, listed first and marked "(recommended)".
+除非用户已经指定了形式，否则带他们过一遍下面四个容器，并根据故事特征给出一个推荐，
+推荐项排在最前并标注「（推荐）」。
 
-| Container | Player fantasy | Central interaction | Routing conditions (story traits) |
+| 容器 | 玩家幻想 | 核心交互 | 分流条件（故事特征） |
 |---|---|---|---|
-| **A Fake official website** | "I'm hacking into an organization's website." | The site's own IA plus the modules selected below | A single organization is the stage (restaurant / company / school / church); the secret hides in pages that should stay private; a missing-person or cover-up investigation |
-| **B Fake computer desktop** | "I've obtained someone else's device — a desktop or a phone." | Device shell + app pages (chat / email / cloud drive / calendar) | A viewpoint character can plausibly access someone's device; clues scatter across multiple "apps"; progression depends on dense password gates |
-| **C Simulated internet** | "I'm doing internet archaeology on a vanished person." | Multiple independent "websites" (forum / blog / Wayback Machine / intranet) cross-linked, with hand-typed URLs | A long time span (years of diaries / yearly blogs); clues spread across platforms; the fiction can break the fourth wall |
-| **D Archive system** | "I'm opening a sealed case file." | Query form (name / ID / date) → archive list → detail pages, each opening only to the account it names | The story is primarily document-driven (case files / medical records / interrogation transcripts / household registry); cold bureaucratic narration; the investigator is a police officer / journalist / lawyer |
+| **A 伪装官方网站** | 「我正在入侵某个组织的网站。」 | 网站自身的信息架构，加上下文选定的模块 | 单一组织作为舞台（餐厅 / 公司 / 学校 / 教堂）；秘密藏在本应保持私密的页面里；失踪调查或掩盖真相的调查 |
+| **B 伪装电脑桌面** | 「我拿到了别人的设备——台式机或手机。」 | 设备外壳 + 应用页面（聊天 / 邮箱 / 云盘 / 日历） | 视角人物能合理地接触某人的设备；线索散落在多个「应用」里；推进依赖密集的密码门 |
+| **C 模拟互联网** | 「我正在对一个消失的人做互联网考古。」 | 多个互相交叉链接的独立「网站」（论坛 / 博客 / Wayback Machine / 内网），靠手动输入 URL 访问 | 时间跨度长（多年的日记 / 逐年更新的博客）；线索散布在多个平台；虚构可以打破第四面墙 |
+| **D 档案系统** | 「我正在打开一份封存的案件卷宗。」 | 查询表单（姓名 / 证件号 / 日期）→ 档案列表 → 详情页，每页只对点名的账号开放 | 故事主要由文档驱动（案件卷宗 / 病历 / 讯问笔录 / 户籍）；冰冷的官僚口吻叙述；调查者是警察 / 记者 / 律师 |
 
-**Routing order.** Primary information carrier: chat logs and files → B; documents and archives → D; website
-pages → A; cross-platform fragments → C. The player's narrative role must plausibly access the container — if
-not, add an entry page explaining how it was obtained (borrowed / inherited / hacked / officially requested).
-Mixing is allowed: one secondary container may nest inside the primary; nesting depth is one level.
+**分流顺序。**主要信息载体：聊天记录与文件 → B；文档与档案 → D；网站页面 → A；跨平台碎片
+→ C。玩家的叙事角色必须能合理地接触该容器——否则，补一个入口页说明它是怎么被拿到的
+（借来的 / 继承来的 / 黑来的 / 正式申请得到的）。允许混用：一个次级容器可以嵌套在主容器内；
+嵌套深度为一层。
 
-**The medium argues the theme (axis 1 closes with one sentence, recorded in the profile).** Answer: what does
-this container say *by being this container*? A script-fiction venue that receives real case material; a
-fake browser whose every page the player "browses" was fabricated for them; a frozen 2007 site whose
-stillness is the disappearance. A container picked only to "fit the plot" is a costume — if no sentence
-emerges, reconsider the choice before the GDD inherits the mismatch.
+**媒介即论证（轴 1 用一句话收尾，记入装配记录）。**回答：这个容器*仅仅因为它是这个容器*，
+本身说了什么？一个接收真实案件材料的剧本式虚构场所；一个假浏览器，玩家「浏览」的每一页都是
+为他们伪造的；一个凝固在 2007 年的网站，它的静止就是那场失踪。只为「贴合剧情」而选的容器
+只是一件戏服——如果这句话冒不出来，就在游戏设计文档（GDD）继承这份错配之前重新考虑这个选择。
 
-## 2. Axis 2 — the device class
+## 2. 轴 2 — 设备类
 
-The container decides whose system this is; the device class decides what the player's eye sees. A system
-fiction rendered with no device class reads as a plain website wearing a label.
+容器决定这是谁的系统；设备类决定玩家的眼睛看到什么。没有设备类来渲染的系统虚构，读起来
+只是一个贴了标签的普通网站。
 
-| Device class | The look the player expects | Typical containers | Reference |
+| 设备类 | 玩家预期的观感 | 典型容器 | 参考 |
 |---|---|---|---|
-| **phone** | status bar, unread badges, chat bubbles, lock screen, "对方已关机" grey line | B mobile variant; C app-site | `references/structure/form-device.md` §2 |
-| **desktop** | window chrome, icon grid, dock, OS login | B desktop variant | `references/structure/form-system.md` §4 + `references/structure/form-device.md` §2 |
-| **browser-chrome** | an in-fiction address bar / tab strip / Wayback box; hand-typed URLs are the prop | A; C archaeology; D terminal | `references/structure/form-device.md` §2 |
-| **pure-web** | the site is what it looks like | A; D web query | `references/structure/base.md` + container form doc |
+| **phone** | 状态栏、未读角标、聊天气泡、锁屏、「对方已关机」灰色提示行 | B 的移动变体；C 的应用站点 | `references/structure/form-device.md` §2 |
+| **desktop** | 窗口边框、图标网格、dock、系统登录 | B 的桌面变体 | `references/structure/form-system.md` §4 + `references/structure/form-device.md` §2 |
+| **browser-chrome** | 剧内的地址栏 / 标签条 / Wayback 检索框；手动输入的 URL 就是道具 | A；C 的考古形态；D 的终端形态 | `references/structure/form-device.md` §2 |
+| **pure-web** | 网站就是它看上去的样子 | A；D 的网页查询形态 | `references/structure/base.md` + 容器形态文档 |
 
-The class fixes which shell components step 6a instantiates. Where axis 3 chooses the apparatus single-page,
-browser-chrome is the usual partner — the chrome *is* the fiction (`references/structure/form-device.md` §5).
+该设备类决定步骤 6a 实例化哪些外壳组件。当轴 3 选择装置单页时，通常搭配 browser-chrome
+——边框*就是*虚构本身（`references/structure/form-device.md` §5）。
 
-## 3. Axis 3 — the technical form
+## 3. 轴 3 — 技术形态
 
-- **multi-page tree (default, R1).** Every narrative location is an independently openable HTML document.
-- **chrome-as-apparatus single page (R1 exception via R12).** One HTML document whose drawn chrome is the
-  fiction — a fake browser window, a frozen kiosk app. Permitted only when axis 1's sentence depends on the
-  seamless single surface; the profile records what breaks and why the form serves the fiction. Convenience
-  never earns it: "one file is easier" stays prohibited. Checker consequences: `references/structure/form-device.md` §5,
-  `references/structure/tooling.md` §3 item 11.
-- **encrypted-content tier (optional, R3).** Where the fiction needs privacy beyond hashed lookups — a
-  private message that must not be greppable in the deployed tree — encrypt the payload (WebCrypto
-  AES-GCM, PBKDF2 for the derived key) and assemble the key from life traces across pages. The hash table
-  stays the baseline tier; this tier is selected, not assumed.
+- **多页树（默认，R1）。**每个叙事地点都是一个可独立打开的 HTML 文档。
+- **chrome-as-apparatus 单页（经 R12 的 R1 例外）。**单个 HTML 文档，其绘出的边框就是虚构
+  ——一个假浏览器窗口、一个凝固的 kiosk 应用。仅当轴 1 那句话依赖无缝的单一表面时才允许；
+  装配记录要记下破坏了什么、以及该形态为何服务于虚构。便利永远换不来这个资格：「一个文件更
+  省事」始终被禁止。检查器后果：`references/structure/form-device.md` §5、
+  `references/structure/tooling.md` §3 item 11。
+- **加密内容层（可选，R3）。**当虚构需要超出哈希查找的隐私——一条绝不能在部署目录树里被
+  grep 出来的私信——就加密载荷（WebCrypto AES-GCM，派生密钥用 PBKDF2），并用跨页面的生活
+  痕迹拼出密钥。哈希表仍是基线层；这一层是选出来的，不是默认假定的。
 
-## 4. Axis 4 — the state contract
+## 4. 轴 4 — 状态契约
 
-Three state families, each with its own storage answer (canonical: `references/guardrails.md` R13; detail:
-`references/structure/form-device.md` §3):
+三个状态族，各有自己的存储答案（规范规则：`references/guardrails.md` R13；细节：
+`references/structure/form-device.md` §3）：
 
-- **Login state** (who am I) — session cookie everywhere, cross-tab, cleared when the browser closes.
-  Never `localStorage`.
-- **Progress state** (what have I read) — follows device ownership: a player-owned device (container B)
-  persists visited pages and may carry an in-fiction save / continue / wipe; a remote system (A/C/D) clears
-  on close unless the fiction really saves. Record `progress: persistent | session | none` and cite the
-  container's ownership.
-- **World-response state** (the site changed because you read X) — only when selected. Mechanically: the
-  new entry carries `data-after="<source page>"` and `check-solvable.mjs` walks it as a conditional edge
-  (`workflow/04-reachability.md` route 10). An entry that appears because the story says so, unmodelled,
-  is the defect class R13 names.
+- **登录状态**（我是谁）——一律用会话 cookie，跨标签页，浏览器关闭即清除。绝不用
+  `localStorage`。
+- **进度状态**（我读过什么）——跟随设备归属：玩家自有的设备（容器 B）持久化已访问的页面，
+  可以带有剧内的存档 / 继续 / 清除；远程系统（A/C/D）关闭即清除，除非虚构设定真的会保存。
+  记录 `progress: persistent | session | none` 并注明容器的归属。
+- **世界回应状态**（因为你读了 X，网站变了）——仅在选中时启用。机制上：新条目携带
+  `data-after="<source page>"`，`check-solvable.mjs` 把它当作条件边走图
+  （`workflow/04-reachability.md` 路线 10）。仅仅因为剧情说它出现了、却没有建模的条目，
+  正是 R13 点名的缺陷类别。
 
-Persistence may be the ending's blade: a sanction that survives closing the browser is a different story
-than one that evaporates on refresh. The GDD decides, the profile records — the site never explains its
-storage to the player.
+持久化可能是结局的刀锋：一个熬过浏览器关闭的制裁，与一个刷新就蒸发的制裁，是不同的故事。
+GDD 来决定，装配记录来落笔——网站从不向玩家解释自己的存储机制。
 
-## 5. Axis 5 — era and texture family
+## 5. 轴 5 — 时代与质感族
 
-| Family | Decides |
+| 系列 | 决定什么 |
 |---|---|
-| 2000s BBS / Win98 | table layouts, system fonts, 备案 absence vs. presence, broken-image rot as texture, Win98 dialog styling |
-| Win10 desktop | taskbar, window drag, Explorer file lists |
-| modern mobile | status bar, rounded sheets, IM bubbles, dark mode |
-| institutional / bureaucratic | official-document typography, red headers, document numbers, seals |
+| 2000s BBS / Win98 | 表格布局、系统字体、备案的缺失与存在、坏图腐化作质感、Win98 对话框样式 |
+| Win10 桌面 | 任务栏、窗口拖动、资源管理器文件列表 |
+| 现代移动端 | 状态栏、圆角面板、IM 气泡、深色模式 |
+| 机构 / 官僚 | 公文排版、红色抬头、文号、印章 |
 
-The era decides whether ICP 备案 lines appear, whether links are http-only relics, which fonts are
-period-true, and which fake external destinations exist (友情链接, 百度快照, 微博). A 2007 forum written in
-2026 UI is a realism break at the shell level (R12).
+时代决定 ICP 备案行是否出现、链接是否是只用 http 的遗迹、哪些字体符合年代、以及存在哪些假的
+外部去处（友情链接、百度快照、微博）。一个用 2026 年 UI 写出来的 2007 年论坛，是外壳层面的
+真实感破坏（R12）。
 
-## 6. Select the design modules
+## 6. 选定设计模块
 
-The container fixes the native reach model (A: search + gates; B/C/D: account login + per-account access);
-every further mechanic is a module from `references/design-playbook.md` §2 — reskin, forbidden-word state,
-progress numbering, collection carrier, endings, staging, telemetry, world-response state (M14, paired with
-axis 4). Select with the user, recommendation first; do not enable a module the fiction does not use, and do
-not ship account furniture in a story without identities. Ask explicitly about the reskin (M5): does the
-story want a visible impact when the player crosses into the secret layer, or does the system never show a
-seam? Either answer is valid — record it, and only offer a dramatic access-level restyle if the fiction
-supports it. Sensory requirements (M12) are declared only when the site really implements them (headphones,
-mouse, light).
+容器固定原生的触达模型（A：搜索 + 门禁；B/C/D：账号登录 + 按账号访问）；其余每个机制都是
+`references/design-playbook.md` §2 里的模块——换皮、违禁词状态、进度编号、收集载体、结局、
+暂存、遥测、世界回应状态（M14，与轴 4 配对）。与用户一起选定，推荐优先；不要启用虚构用不到的
+模块，也不要在没有身份设定的故事里硬塞账号家具。就换皮（M5）明确发问：故事希望玩家跨入秘密层
+时有可见的冲击，还是系统永远不露接缝？两种答案都成立——记下来，且只有虚构支持时才提供戏剧化
+的权限层级换肤。感官要求（M12）只在网站真正实现时才声明（耳机、鼠标、光线）。
 
-## 7. Write `docs/system-profile.md`
+## 7. 写出 `docs/system-profile.md`
 
 ```text
-# System Profile
-- Container: A/B/C/D (+ nested secondary) and why
-- Medium-argument sentence: what this container says by being it
-- Device class: phone / desktop / browser-chrome / pure-web
-- Technical form: multi-page | apparatus-single-page (R12 record: what breaks, what it serves) | + encrypted-content tier
-- State contract: login cookie · progress persistent/session/none (ownership cited) · world-response rows (data-after) or none · save/continue/wipe yes/no
-- Era / texture family: one of the §5 rows (or the fiction's own words)
-- Fiction: system type, organization, era, language, register
-- Reach model: selected modules (M1…M14) and what crosses depth (search / gate / account / typed URL / read-state)
-- Presentation: reskin, forbidden state, numbering, collection carrier — each yes/no
-- Wrappers: entry page, endings, fourth-wall close, world texture — each yes/no
-- Interaction: staged effects, fake interactions, sensory, telemetry — each yes/no
-- Shell IA: top bar items, directory layout, page root, site roots (C); base pages every such system has
-- Index/access convention: per-audience tables (A) or one index + the account matrix (B/C/D)
-- Infrastructure: base.md sections, components.js, vendored Alpine, tools/, checker CONFIG knobs
-- Open questions for the user
+# 装配记录（System Profile）
+- 容器：A/B/C/D（+ 嵌套次级）以及理由
+- 媒介论点一句话：这个容器以「身为它」说出什么
+- 设备类：phone / desktop / browser-chrome / pure-web
+- 技术形态：multi-page | apparatus-single-page（R12 留痕：破坏了什么、服务了什么）| + encrypted-content tier
+- 状态契约：login cookie · 进度 persistent/session/none（注明归属依据）· 世界回应行（data-after）或无 · 存档/继续/清档 是/否
+- 时代 / 质感族：取 §5 各行之一（或剧情自己的说法）
+- 虚构：系统类型、组织、时代、语言、语域
+- 触达模型：选中的模块（M1…M14）以及什么能跨深度（search / gate / account / typed URL / read-state）
+- 呈现：换皮、禁用词状态、编号、收集载体——各自 是/否
+- 包装：入口页、结局、破墙收尾、世界质感——各自 是/否
+- 交互：暂存特效、假交互、感官、遥测——各自 是/否
+- 外壳 IA：顶栏条目、目录布局、页面根、站点根（C）；这类系统都有的基础页
+- 索引/权限约定：分受众表（A）或单一索引 + 权限矩阵（B/C/D）
+- 基础设施：base.md 各节、components.js、内置的 Alpine、tools/、检查器 CONFIG 旋钮
+- 留给用户的问题
 ```
 
-Whichever form is chosen, its docs are required reading for steps 3 and 6:
-`references/structure/form-website.md` (A) or `references/structure/form-system.md` (B/C/D). When the device
-class is not pure-web, the state contract selects persistence or world-response, or axis 3 chose the
-apparatus form, `references/structure/form-device.md` joins the set.
+无论选了哪种形态，它的文档都是步骤 3 与步骤 6 的必读材料：
+`references/structure/form-website.md`（A）或 `references/structure/form-system.md`（B/C/D）。
+当设备类不是 pure-web、状态契约选了持久化或世界回应、或轴 3 选择了装置形态时，
+`references/structure/form-device.md` 也加入必读集合。
 
-Baseline-test traps for this step: `references/common-mistakes.md` §2 — check them before returning the artifact.
+本步的基线测试陷阱：`references/common-mistakes.md` §2 — 交付产物前先检查它们。

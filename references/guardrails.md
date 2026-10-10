@@ -1,95 +1,89 @@
-# Guardrails — Story Source → Interactive Web Puzzle Game
+# 护栏 —— 故事源 → 互动网页解密游戏
 
-Build a multi-page static puzzle game disguised as a real system (ARG-lite) from any story source — a novel,
-a screenplay, setting material, or an original idea.
-Success criterion: the player feels they are inside a real site, uncovering material meant to stay private.
+从任意故事源——小说、剧本、设定资料或原创构想——构建一个伪装成真实系统的多页静态解密游戏（ARG-lite）。
+成功标准：玩家相信自己身处一个真实网站，正在挖出本该不对外的材料。
 
-**Priority — realism outranks the checks (R12).** The simulated system behaves the way the real one would, even
-where that breaks a check rule. The constraints below define the paradigm, not checks; the break is never
-silent: record the conflict — page, rule, what realism requires — and ask the user through the orchestrator.
+**优先级 —— 真实感高于检查规则（R12）。** 模拟系统的行为必须与真实系统一致，哪怕这会破坏某条检查规则。
+下面的约束定义的是范式，不是检查项；破坏绝不允许悄悄发生：记录冲突——页面、规则、真实感要求什么——
+并通过编排者询问用户。
 
-Four constraints (violating any one departs from this paradigm):
+四条约束（违反任意一条即背离本范式）：
 
-1. **The site is the world**: each narrative location is a standalone HTML page the player can open and select
-   text in independently; the URL bar is a narrative device. A notebook or evidence wall belongs to the fiction
-   as its own page or app; a game-UI layer wrapped around the site does not.
-2. **Two-layer narrative**: the surface layer (mundane) and the secret layer (the dark truth) are story logic,
-   revealed in escalating stages. A visual reskin on crossing over is a module choice
-   (`references/design-playbook.md` §2), not a requirement — some systems never show a seam.
-3. **Puzzles are character inference**: every password and keyword derives from a character's life traces
-   (birthday, initials, license plate, in-group slang); random strings are prohibited. The input UI names the
-   field and stops there, feedback stays oblique (`密码错误 🎂`), and a gate page may post the account format
-   (as real intranets do) but never the password derivation.
-4. **Diegetic neutrality**: every page is written for its in-world audience. Public pages publish what that
-   organization publishes (a roster entry: name, title, tenure, duties). Navigation is the site's own IA — nav
-   bar, index and listing pages, sitemap, footer; depth is crossed by a reach module (search / gate / account /
-   hand-typed URL — `references/design-playbook.md` §2), never by a "related files / archives / pages" link.
-   Formal documents carry real-world format (issuing body, number, date, addressee, body, seal, distribution
-   list), and the system shows only what such a system would show: no implementation talk, no game meta, no
-   clearance theater. A locked entry says plainly that it is not open to this visitor yet.
+1. **网站即世界**：每个叙事地点都是一个独立的 HTML 页面，玩家可以独立打开并选中其中的文字；
+   地址栏是叙事装置。笔记本或证据墙可以作为虚构世界自己的页面或应用存在；
+   而包裹在网站外面的游戏 UI 层不行。
+2. **双层叙事**：表层（日常）与秘密层（黑暗真相）是故事逻辑，分阶段递进展开。跨越两层时的视觉换皮
+   是模块选择（`references/design-playbook.md` §2），不是硬性要求——有些系统从头到尾不露接缝。
+3. **谜题即人物推理**：每个密码和关键词都派生自某个人物的生活痕迹（生日、姓名首字母、车牌、圈内黑话）；
+   禁止随机字符串。输入 UI 只标注字段，到此为止；反馈保持侧面暗示（`密码错误 🎂`）；
+   门禁页可以公布账号格式（真实内网就这么做），但绝不公布密码的推导方式。
+4. **剧内中立性**：每个页面都为剧内受众而写。公开页只发布该组织会发布的内容（一条人事名录条目：
+   姓名、职务、任期、职责）。导航是网站自身的信息架构——导航栏、索引页与列表页、站点地图、页脚；
+   深度只能通过触达模块跨越（搜索 / 门禁 / 账号 / 手输 URL —— `references/design-playbook.md` §2），
+   绝不通过「相关文件 / 档案 / 页面」这类链接。正式文书采用现实格式（发文机关、文号、日期、主送、
+   正文、印章、抄送列表），而系统只显示这类系统会显示的东西：不谈实现，不谈游戏元信息，不做权限表演。
+   锁定的条目就直说尚未向这位访问者开放。
 
-**Prohibited forms of Constraint 1** (any one is a structural departure): a single `index.html` shell with JS
-scene switching (a generic adventure engine) or canvas scene rendering; an inventory / evidence tray / player
-notebook rendered as chrome around the site; a `register(type, panel)`-style puzzle registry engine; a build
-step that bundles the site back into a single-file dist; Alpine driving a single-page shell or a puzzle engine
-(in-page component lifecycle only). The single carve-out: the chrome-as-apparatus form (`references/structure/form-device.md`
-§5) — one document whose *drawn* chrome is the fiction — permitted only with all five conditions recorded in
-the system profile; never for convenience.
+**约束 1 的禁止形态**（任意一条都属结构性背离）：单个 `index.html` 外壳加 JS 场景切换（通用冒险引擎）
+或 canvas 场景渲染；把物品栏 / 证据盘 / 玩家笔记本渲染成包裹网站的 chrome；`register(type, panel)` 式的
+谜题登记引擎；把网站重新打包回单文件 dist 的构建步骤；用 Alpine 驱动单页外壳或谜题引擎
+（只允许页面内组件生命周期）。唯一的例外：chrome-as-apparatus 形态（`references/structure/form-device.md`
+§5）——单个文档，其*绘制出的* chrome 即虚构本身——仅当全部五项条件都记录在装配记录中才允许；
+绝不为图方便而用。
 
-## Canonical rules (R1–R13)
+## 规范规则（R1–R13）
 
-Every rule that more than one file states has exactly one canonical home: this table. Other files cite the
-rule by ID — a one-line restatement plus `(Rn)` — and where a citation and this table disagree, this table
-wins. `scripts/check-docs.mjs` verifies that every cited ID exists here.
+每条被多个文件陈述的规则都有且只有一个规范出处：本表。其他文件按 ID 引用规则——一行复述加 `(Rn)`——
+当引用与本表不一致时，以本表为准。`scripts/check-docs.mjs` 会验证每个被引用的 ID 都存在于本表。
 
-| ID | Rule (canonical statement) | Elaborated in |
+| ID | 规则（规范表述） | 详细展开于 |
 |---|---|---|
-| R1 | The deliverable is a multi-page tree of independently openable HTML documents; single-file shells, canvas scenes, puzzle-registry engines, and bundle-to-dist steps are prohibited; game-UI carriers live inside the fiction, never around it. The one exception is the chrome-as-apparatus single page — a single document whose drawn chrome is the fiction — permitted only with the five conditions recorded in the system profile (R12 exercised, never tacit) | this file: Constraint 1 + Prohibited forms; `references/structure/base.md` §1; `references/structure/form-device.md` §5 |
-| R2 | Two-layer narrative is story logic: surface + secret layers, revealed in stages; any reskin or visual switch is a selected module, never a requirement | Constraint 2; `references/design-playbook.md` §2 |
-| R3 | Every credential and keyword derives from a character's life traces; random strings are prohibited; keyword tables and gate hashes ship hashed and the plaintext `.src.json` never reaches the deployed tree. Where the fiction needs privacy the hash tier cannot give (a private message that must survive a grep of the deployed tree), the selected encrypted-content tier applies: WebCrypto AES-GCM with the key assembled from life traces | Constraint 3; `references/structure/components.md` §1; `workflow/02-container.md` §3 |
-| R4 | Input UI names the field only (`placeholder` / label / help text / empty state); failure hints point at the source obliquely and stop there; a gate page may post the account format, never the password derivation | Constraint 3; `references/design-playbook.md` §4; `references/structure/components.md` §3 |
-| R5 | Public pages publish what that organization publishes; no public page mentions the plot; no in-world page addresses the player | Constraint 4; `references/design-playbook.md` §4 |
-| R6 | Formal documents carry real-world format: issuing body, document number, date, addressee, body, signature and seal, distribution list | Constraint 4; `references/design-playbook.md` §4 |
-| R7 | Every link exists because that organization would publish it; depth is crossed by a reach module, never by a "related files / archives / pages" link into a deeper area | Constraint 4; `workflow/04-reachability.md` |
-| R8 | Search (M1): each search surface returns only what its audience may see; the public index carries no restricted-area URL; a hit the visitor may not open resolves to its gate or a plain locked notice, never the document. A system form keeps one index, resolved through the account matrix | Constraint 4; `references/structure/form-website.md` §2 |
-| R9 | Search-result titles are catalog entries — issuing body + document type + number/date — never plot summaries | Constraint 4; `references/structure/components.md` §1 |
-| R10 | System containers use per-account access: a page opens only to the accounts it names (`data-access`), granted only by a login gate (`data-grant`); no numeric ladder, no admin-opens-all; only the initial account may be printed, every other login is inferred from clues | `references/structure/form-system.md` §1 |
-| R11 | Copy is plain and declarative: contrast frames (是…不是… / 是…而是… / 不能…只能… / 并非…而是…), metaphor, personification, and adjectives piled for effect stay out of site and guidance copy | `references/design-playbook.md` §4 |
-| R12 | Realism outranks any check; a conflict is recorded — page, rule, what realism requires — and routed to the user through the orchestrator, never resolved silently | this file: Priority |
-| R13 | State follows device ownership: login state always lives in a session cookie (cleared when the browser closes, never `localStorage`); progress and world-response state persist only on a player-owned device or where the fiction really saves; every read-gated entry declares its source page with `data-after` so the walk proves the order; the site never explains its storage to the player | `references/structure/form-device.md` §3; `workflow/04-reachability.md` route 10 |
+| R1 | 交付物是一棵多页 HTML 文档树，每个文档都可独立打开；禁止单文件外壳、canvas 场景、谜题登记引擎以及打包成 dist 的步骤；游戏 UI 载体存在于虚构之内，绝不在虚构之外。唯一的例外是 chrome-as-apparatus 单页——单个文档，其绘制出的 chrome 即虚构本身——仅当五项条件记录在装配记录中才允许（R12 必须显式行使，绝不默许） | 本文件：约束 1 + 禁止形态；`references/structure/base.md` §1；`references/structure/form-device.md` §5 |
+| R2 | 双层叙事是故事逻辑：表层 + 秘密层，分阶段展开；任何换皮或视觉切换都是被选中的模块，绝不是硬性要求 | 约束 2；`references/design-playbook.md` §2 |
+| R3 | 每个凭据和关键词都派生自人物的生活痕迹；禁止随机字符串；关键词表与门禁哈希以哈希形式发布，明文 `.src.json` 绝不进入部署树。当虚构需要哈希层给不了的隐私（一条必须扛住对部署树 grep 的私密信息）时，启用选定的加密内容层：WebCrypto AES-GCM，密钥由生活痕迹拼装而成 | 约束 3；`references/structure/components.md` §1；`workflow/02-container.md` §3 |
+| R4 | 输入 UI 只标注字段（`placeholder` / 标签 / 帮助文本 / 空状态）；失败提示只侧面指向线索来源，到此为止；门禁页可以公布账号格式，绝不公布密码推导 | 约束 3；`references/design-playbook.md` §4；`references/structure/components.md` §3 |
+| R5 | 公开页只发布该组织会发布的内容；任何公开页都不提剧情；任何剧内页面都不对玩家喊话 | 约束 4；`references/design-playbook.md` §4 |
+| R6 | 正式文书采用现实格式：发文机关、文号、日期、主送、正文、签章、抄送列表 | 约束 4；`references/design-playbook.md` §4 |
+| R7 | 每个链接的存在都因为该组织会把它发布出来；深度只能通过触达模块跨越，绝不通过指向更深层区域的「相关文件 / 档案 / 页面」链接 | 约束 4；`workflow/04-reachability.md` |
+| R8 | 搜索（M1）：每个搜索面只返回其受众可见的内容；公开索引不携带受限区 URL；访问者无权打开的命中结果解析到它的门禁页或一条朴素的锁定提示，绝不给出文档。系统形态维护单一索引，通过权限矩阵解析 | 约束 4；`references/structure/form-website.md` §2 |
+| R9 | 搜索结果标题是目录条目——发文机关 + 文种 + 文号/日期——绝不做剧情摘要 | 约束 4；`references/structure/components.md` §1 |
+| R10 | 系统容器按账号分别授权：页面只对它点名的账号开放（`data-access`），且只能由登录门禁授予（`data-grant`）；没有数字等级，没有管理员全开；只有初始账号可以印出来，其他所有登录都从线索推断 | `references/structure/form-system.md` §1 |
+| R11 | 文案平实、陈述句：对照句式（是…不是… / 是…而是… / 不能…只能… / 并非…而是…）、比喻、拟人以及堆砌效果的形容词，一律不得进入站内文案与引导文案 | `references/design-playbook.md` §4 |
+| R12 | 真实感高于任何检查；冲突必须记录——页面、规则、真实感要求什么——并通过编排者上报给用户，绝不悄悄了结 | 本文件：优先级 |
+| R13 | 状态跟随设备归属：登录状态永远放在会话 cookie 里（浏览器关闭即清除，绝不使用 `localStorage`）；进度与世界回应状态只持久化在玩家自有的设备上或剧情确实会存档的地方；每个读态条目都用 `data-after` 声明它的来源页，让走图能够证明顺序；网站绝不向玩家解释自己的存储机制 | `references/structure/form-device.md` §3；`workflow/04-reachability.md` 路线 10 |
 
-## Rationalizations (observed in baseline tests; rationalization → counter)
+## 合理化借口（见于基线测试；借口 → 反驳）
 
-| Rationalization | Counter |
+| 合理化借口 | 反驳 |
 |---|---|
-| "We're short on time — one HTML file is enough." | Cut content volume (fewer pages and puzzles); structure stays. A single file falls outside the paradigm unless the drawn chrome is the fiction and all five conditions of `references/structure/form-device.md` §5 are recorded (R1). |
-| "The reference site ships a save, so we save too." | State follows device ownership (R13): a remote system that never saves matches its fiction; copying persistence onto a system that would not keep it is a realism break in the other direction. |
-| "Don't start over; the engine layer is frozen." | A generic game framework scaffold is not a fake system. Migrate the content layer as-is and replace the engine with multi-page plus reach modules (R1). |
-| "Generate passwords randomly now; fix them later." | Password-as-character-inference is the puzzle quality itself; there is no "later" (R3). |
-| "Every story needs an account system." | Reach follows the container: a public website differentiates by search and gates, a system fiction by accounts. Add accounts only where the fiction really has identities and logins (`workflow/02-container.md`). |
-| "Turn on every module so it feels like a game." | Modules are selected for the fiction at step 2, with the user. A search box nobody needs, a reskin nothing uses, or a clearance badge reads as game scaffolding. |
-| "A hint in the placeholder helps stuck players." | The disguise is the product. A hint turns a real system into game UI; stuck players get an oblique failure hint (R4). |
-| "One extra link saves the player a search." | Every link the organization would keep off its own site is a visible seam. Clues ride nav bars, index pages, and the selected reach modules (R7). |
-| "This page has no way in; I'll add a link in the body." | Add it to a listing the site would really keep, or make it search-only. `workflow/04-reachability.md` lists the orphan fixes (R7). |
-| "Search is the hub; it should index everything." | A search surface returns only what its audience may see; deep pages open by their own access path. One flat index turns the search box into a walkthrough (R8). |
+| 「时间不够了——一个 HTML 文件就够了。」 | 砍内容体量（更少的页面和谜题）；结构不动。单文件不属于本范式，除非绘制出的 chrome 即虚构本身且 `references/structure/form-device.md` §5 的五项条件全部记录在案（R1）。 |
+| 「参考站点带存档功能，所以我们也存。」 | 状态跟随设备归属（R13）：从不存档的远程系统符合它的虚构；把持久化照搬到一个不该保留数据的系统上，是反方向的真实感破坏。 |
+| 「别推倒重来，引擎层已经冻结了。」 | 通用游戏框架脚手架不是假系统。原样迁移内容层，用多页加触达模块替换引擎（R1）。 |
+| 「先随机生成密码，之后再修。」 | 密码即人物推理，这本身就是谜题质量；没有「之后」（R3）。 |
+| 「每个故事都需要账号系统。」 | 触达方式随容器而定：公开网站用搜索和门禁区分深度，系统虚构用账号。只有虚构中真实存在身份和登录时才加账号（`workflow/02-container.md`）。 |
+| 「把所有模块都打开，才像个游戏。」 | 模块在步骤 2 与用户一起按虚构需要选定。没人需要的搜索框、没人用的换皮、一枚权限徽章，读起来都是游戏脚手架。 |
+| 「在 placeholder 里加个提示，帮帮卡住的玩家。」 | 伪装就是产品。一句提示就把真实系统变成游戏 UI；卡住的玩家应得到一条侧面的失败提示（R4）。 |
+| 「多放一个链接，省玩家一次搜索。」 | 凡是该组织绝不会放在自家网站上的链接，都是看得见的接缝。线索搭载导航栏、索引页和选定的触达模块（R7）。 |
+| 「这个页面没有入口，我在正文里加个链接。」 | 把它加进网站真实会维护的某个列表页，或改成只能搜索到。`workflow/04-reachability.md` 列出了孤儿页的修复方式（R7）。 |
+| 「搜索是枢纽，应该索引一切。」 | 搜索面只返回其受众可见的内容；深层页面按自己的访问路径打开。一张扁平索引会把搜索框变成通关攻略（R8）。 |
 
-## Red Flags — stop and revise the system profile or GDD
+## 危险信号 —— 停下，修订装配记录或 GDD
 
-- Only one HTML file exists in the project, apparatus conditions unrecorded (R1)
-- Canvas scene rendering or a puzzle registry engine appears (R1)
-- Passwords are random strings with no derivable source in page copy (R3)
-- A public page mentions the plot (R5); a page carries a link absent from the reachability table (R7)
-- A search surface returns a page beyond its audience, or an unopenable result opens its document (R8)
-- An input's `placeholder`, label, or help text carries the answer or restates it (R4)
-- An announcement or contract reads as game copy (R6)
-- Guidance or site copy uses metaphor, personification, piled adjectives, or contrast frames (R11)
-- A module selected in `docs/system-profile.md` is missing from the built site, or an unselected one appears
-- An entry the copy claims appears only after a read carries no `data-after` — the claim must be mechanical (R13)
-- A device class or state contract declared in the profile that the built shell and storage do not honor
-- A check is broken, or realism bent, without the conflict going to the user (R12)
-- "Let's get a demo running first"
+- 项目里只有一个 HTML 文件，chrome-as-apparatus 条件没有记录（R1）
+- 出现 canvas 场景渲染或谜题登记引擎（R1）
+- 密码是随机字符串，页面文案里找不到可推导的来源（R3）
+- 公开页提到剧情（R5）；页面上有触达表里不存在的链接（R7）
+- 搜索面返回了超出其受众的页面，或打不开的结果直接打开了它的文档（R8）
+- 输入框的 `placeholder`、标签或帮助文本给出答案或换说法重述答案（R4）
+- 公告或合同读起来像游戏文案（R6）
+- 引导文案或站内文案使用比喻、拟人、堆砌的形容词或对照句式（R11）
+- `docs/system-profile.md` 里选中的模块在建好的站点里缺失，或出现了没选的模块
+- 文案声称「读过之后才出现」的条目没有 `data-after`——这种声明必须由机制保证（R13）
+- 装配记录里声明的设备类或状态契约，建好的外壳与存储没有兑现
+- 破坏了检查规则，或扭曲了真实感，却没有把冲突上报给用户（R12）
+- 「先跑个 demo 出来再说」
 
-## When not to use
+## 不适用场景
 
-- Non-mystery, non-horror premises (the "mundane surface vs. dark secret layer" contrast is a prerequisite)
-- Non-web delivery (Unity / mobile game / visual novel engine); pure interactive fiction without puzzles
+- 非悬疑、非恐怖的前提（「日常表层 vs. 黑暗秘密层」的反差是先决条件）
+- 非网页载体（Unity / 手游 / 视觉小说引擎）；没有谜题的纯互动小说

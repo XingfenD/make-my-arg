@@ -1,108 +1,108 @@
-# Front-End Base (Shared Across Containers; a Single index.html Is Prohibited)
+# 前端基础（跨容器共享；禁止单文件 index.html）
 
-> Pure static, no build step: HTML + CSS + Alpine.js v3 core (vendored locally; no plugins, no runtime CDN).
-> The Node tools are optional, dependency-free, and run on built-ins. Runs on any static host (GitHub Pages
-> preferred). This file covers the directory tree (§1) and the page skeleton (§2). The Alpine component
-> canonical code ships as files under `assets/templates/` (index: `assets/templates/README.md`) and the rules they implement in `references/structure/components.md`; check cadence, shared config, and
-> manual methods in `references/structure/tooling.md`.
+> 纯静态、无构建步骤：HTML + CSS + Alpine.js v3 内核（本地 vendor 化；无插件、无运行时 CDN）。
+> Node 工具可选、零依赖、只用内置模块运行。可跑在任何静态主机上（推荐
+> GitHub Pages）。本文件涵盖目录树（§1）与页面骨架（§2）。Alpine 组件的规范
+> 代码以文件形式放在 `assets/templates/` 下（索引：`assets/templates/README.md`），它们实现的规则见 `references/structure/components.md`；检查节奏、共享配置与
+> 人工方法见 `references/structure/tooling.md`。
 
-## 1. Directory Structure
+## 1. 目录结构
 
-Module marks (M1…M14) come from `references/design-playbook.md` §2 and appear only when selected in
-`docs/system-profile.md`; everything else belongs to the base.
+模块标记（M1…M14）来自 `references/design-playbook.md` §2，仅在
+`docs/system-profile.md` 中被选中时出现；其余一切都属于基础部分。
 
 ```
 <game-name>/
-├── index.html                    # Entry page (M9): role assignment + start button + the link back to the skill repo (keep it); rules only where the fiction needs them
-├── search.html                   # M1 search module
+├── index.html                    # 入口页（M9）：角色分配 + 开始按钮 + 指回本 skill 仓库的链接（保留它）；规则只在剧情需要处出现
+├── search.html                   # M1 搜索模块
 ├── pages/
-│   ├── home.html  menu.html  news.html …      # public pages, flat until the fiction needs sections
-│   └── internal/                 # restricted area — name it with the fiction's own word (staff/ archive/ members/),
-│       │                         # never "secret"; filenames must not spoil. Point CONFIG.secretUrl here (tooling.md §2).
+│   ├── home.html  menu.html  news.html …      # 公开页；剧情需要分区之前保持平铺
+│   └── internal/                 # 受限区——用剧情自己的词命名（staff/ archive/ members/），
+│       │                         # 绝不叫 "secret"；文件名不得剧透。把 CONFIG.secretUrl 指向这里（tooling.md §2）。
 │       └── s19-record.html  s23-diary.html …
 ├── assets/
 │   ├── css/
-│   │   ├── base.css              # shared layout skeleton, document realism kit, x-cloak
-│   │   ├── surface.css           # public skin
-│   │   ├── secret.css            # M5 layer-reskin module
-│   │   ├── phone.css             # device class phone chrome (template: assets/templates/css/phone.css)
-│   │   └── chrome.css            # drawn address bar (template: assets/templates/css/chrome.css)
+│   │   ├── base.css              # 共用布局骨架、文档拟真套件、x-cloak
+│   │   ├── surface.css           # 公开层皮肤
+│   │   ├── secret.css            # M5 分层换皮模块
+│   │   ├── phone.css             # 设备类 phone 的外壳（模板：assets/templates/css/phone.css）
+│   │   └── chrome.css            # 画出来的地址栏（模板：assets/templates/css/chrome.css）
 │   ├── js/
-│   │   ├── components.js         # Alpine components (search / gate / access / staging / progress), registered on alpine:init
+│   │   ├── components.js         # Alpine 组件（search / gate / access / staging / progress），注册在 alpine:init 上
 │   │   └── vendor/
-│   │       └── alpine.min.js     # Alpine v3 core, pinned (vendored once via tools/vendor-alpine.mjs; never edited; no plugins)
-│   └── img/  audio/  docs/       # Images, audio puzzles, downloadable mock documents (pdf/xlsx)
+│   │       └── alpine.min.js     # Alpine v3 内核，钉死版本（经 tools/vendor-alpine.mjs 内置一次；永不修改；无插件）
+│   └── img/  audio/  docs/       # 图片、音频谜题、可下载的拟真文档（pdf/xlsx）
 ├── data/
-│   ├── keywords.surface.src.json # Plaintext public index (development only; excluded from the deploy tree)
-│   ├── keywords.secret.src.json  # Plaintext deep index (development only; excluded from the deploy tree)
-│   ├── keywords.surface.json     # Public hash table — must contain no restricted-area URL (R8)
-│   ├── keywords.secret.json      # Deep hash table, fetched only by deep pages
-│   ├── forbidden.json            # M6 module (hashes + forbidden-state copy)
-│   └── credentials.src.json      # M2 derived-credential provenance (development only)
-├── tools/                        # the tool files copied from this skill's assets/tools/ at scaffold time
-├── viewer/                       # the graph renderer tree copied at scaffold time (graph-viewer.html + css/ + js/); never a site page
-├── .gitignore                    # ships inside assets/starter/: development by-products stay out of history
-├── .dockerignore                 # ships inside assets/starter/: plaintext sources / docs / dev trees stay out of the image
-└── README.md                     # How to run + GDD link + player notes
+│   ├── keywords.surface.src.json # 明文公开索引（仅开发期；不进部署树）
+│   ├── keywords.secret.src.json  # 明文深层索引（仅开发期；不进部署树）
+│   ├── keywords.surface.json     # 公开哈希表——不得含任何受限区 URL（R8）
+│   ├── keywords.secret.json      # 深层哈希表，只由深层页取用
+│   ├── forbidden.json            # M6 模块（哈希 + 禁用词状态文案）
+│   └── credentials.src.json      # M2 派生凭据溯源（仅开发期）
+├── tools/                        # 脚手架阶段从本 skill 的 assets/tools/ 拷入的工具文件
+├── viewer/                       # 脚手架阶段拷入的图渲染器树（graph-viewer.html + css/ + js/）；永不是站点页面
+├── .gitignore                    # 随 assets/starter/ 发出：开发副产物不进版本历史
+├── .dockerignore                 # 随 assets/starter/ 发出：明文源表 / 文档 / 开发树不进镜像
+└── README.md                     # 如何运行 + GDD 链接 + 玩家须知
 ```
 
-`tools/`, `viewer/`, `docs/` and `deploy/` hold no site page: the page-walking tools skip them (`CONFIG.skipDirs`,
-`references/structure/tooling.md` §2), so a generated `docs/site-graph/` tree can never inflate the page count.
+`tools/`、`viewer/`、`docs/` 和 `deploy/` 不放站点页面：走图工具会跳过它们（`CONFIG.skipDirs`，
+`references/structure/tooling.md` §2），所以生成的 `docs/site-graph/` 树永远不会虚增页面数。
 
-The tree is materialized by **`assets/starter/`**, the starting project every game is based on: it ships the
-invariant files — the entry shell (carrying the link back to the skill repo), `base.css` + `surface.css`, the
-`components.js` kernel, the two ignore files above, and the project README — so a project starts from a real
-tree instead of an empty directory. Everything
-module-marked or device-marked (`search.html`, `data/`, `secret.css`, `phone.css` / `chrome.css`, the restricted area, the ending pages — templates in `assets/templates/`) and the assembled
-infrastructure (`tools/`, `viewer/`) are added at scaffold time per `docs/system-profile.md`
-(`workflow/06-scaffold.md`). The starter therefore ships no `data/*.src.json`: its own `.gitignore` would ignore
-them, and a plaintext table is created at 6a only when the profile selects the module that needs it.
+这棵树由 **`assets/starter/`** 物化而来，它是每个游戏所依据的起点项目：它带上了
+恒定不变的文件——入口外壳（带着回到 skill 仓库的链接）、`base.css` + `surface.css`、
+`components.js` 内核、上面两个 ignore 文件以及项目 README——让项目从一棵真实的树
+开始，而不是一个空目录。所有带模块标记或设备标记的部分（`search.html`、`data/`、
+`secret.css`、`phone.css` / `chrome.css`、受限区、结局页——模板在 `assets/templates/`）
+以及装配好的基础设施（`tools/`、`viewer/`）都在脚手架阶段按 `docs/system-profile.md`
+（`workflow/06-scaffold.md`）添加。因此起点项目不带 `data/*.src.json`：它自带的
+`.gitignore` 会忽略这些文件；明文表只在 6a 阶段、当装配记录选中了需要它的模块时才创建。
 
-Two ignore files come with the tree: they live in `assets/starter/` as `.gitignore` and `.dockerignore` (bodies:
-those files; do not retype them here), so copying the starter lands both at the project root. They answer two
-different questions and a project needs both:
+树上自带两个 ignore 文件：它们以 `.gitignore` 和 `.dockerignore` 的形式放在
+`assets/starter/` 里（正文见那两个文件；不要在这里重抄），复制起点项目会把它们
+落到项目根目录。它们回答两个不同的问题，项目两个都需要：
 
-- **`.gitignore`** — what must never enter history. Development by-products: the plaintext `data/*.src.json`
-tables (the answer key, R3), the generated `docs/site-graph.{json,html}`, an agent's scratch `memory/`, editor
-and OS junk. Everything the site publishes stays tracked (`index.html`, `pages/`, `assets/`, `data/*.json`,
-`tools/`, `viewer/`, the `docs/*.md` artifacts).
-- **`.dockerignore`** (or the deploy script's rsync exclude list) — what must never reach a visitor. Deploying a
-static tree is a copy, so the same material is a second problem: the plaintext tables, the `docs/` artifacts
-(the GDD and reachability chain are the whole game in prose), and the `tools/` `viewer/` `deploy/` machinery.
-A plaintext source is listed in both files.
+- **`.gitignore`** ——什么绝不能进版本历史。开发副产物：明文 `data/*.src.json`
+  表（答案册，R3）、生成的 `docs/site-graph.{json,html}`、代理的草稿目录 `memory/`、
+  编辑器与系统垃圾文件。站点对外发布的一切都保持被跟踪（`index.html`、`pages/`、
+  `assets/`、`data/*.json`、`tools/`、`viewer/`、`docs/*.md` 产物）。
+- **`.dockerignore`**（或部署脚本的 rsync 排除清单）——什么绝不能到达访客手里。
+  部署静态树就是一次复制，所以同样的材料成了第二个问题：明文表、`docs/` 产物
+  （游戏设计文档与触达链就是整个游戏的散文版），以及 `tools/` `viewer/` `deploy/`
+  这些机器件。明文源文件同时列在两个文件里。
 
-The tools ship under `assets/tools/` in this skill; scaffold copies them into `tools/` so the project stays
-self-contained and re-runnable. They run on Node built-ins only (`node:crypto`, `node:fs`, `node:path`,
-`node:child_process`) — no dependencies, no install step. The checkers import their assumptions from the shared
-`tools/config.mjs`: a project that renames directories, layer names, or markers edits that one file instead of
-rewriting a checker (`references/structure/tooling.md` §2 lists the knobs, its section 3 the methods no static
-check replaces). Keyword tables are auto-discovered, so the per-layer convention above and a single-table project both
-work with zero configuration. Re-run the checks after every content edit, not just before deploy — the canonical
-pass/fail checklist is `workflow/08-self-check.md`.
+工具在本 skill 里位于 `assets/tools/` 下；脚手架把它们复制进 `tools/`，让项目保持
+自包含、可反复运行。它们只用 Node 内置模块（`node:crypto`、`node:fs`、`node:path`、
+`node:child_process`）——零依赖、无安装步骤。检查器从共享的 `tools/config.mjs`
+读取它们的假设：项目若重命名目录、层名或标记，改这一个文件即可，而不必重写检查器
+（`references/structure/tooling.md` §2 列出旋钮，其第 3 节列出静态检查无法替代的
+人工方法）。关键词表是自动发现的，所以上面的分层约定与单表项目都能零配置工作。
+每次内容编辑后都要重跑检查，而不仅是在部署前——规范的通过/失败清单是
+`workflow/08-self-check.md`。
 
-Vendor the Alpine runtime once at scaffold time (the script pins the version and verifies the sha256 before
-writing the file, which is then committed with the game):
+在脚手架阶段把 Alpine 运行时 vendor 化一次（脚本会锁定版本并在写文件前校验
+sha256，之后该文件随游戏一起提交）：
 
 ```bash
 node tools/vendor-alpine.mjs      # writes assets/js/vendor/alpine.min.js (alpinejs@3.17.3, checksum-verified)
 ```
 
-The tree above is the shared base; the form docs adapt the pages and the reach model:
+上面这棵树是共享基础；各形态文档对页面与触达模型做相应调整：
 
-- **Container A — fake official website**: `references/structure/form-website.md` — search hub, audience-scoped indexes, gates.
-- **Containers B/C/D — system fictions**: `references/structure/form-system.md` — account login, per-account access (RBAC-style), and the desktop / simulated-internet / archive shells. A system project's page root may be `apps/` instead of `pages/`; set `pagesDir` once in `tools/config.mjs` (tooling.md §2).
-- **Device, state, apparatus**: `references/structure/form-device.md` — shell components per device class, the R13 state contract (progress / world-response storage), the apparatus single-page carve-out.
+- **容器 A——仿官方网站**：`references/structure/form-website.md` ——搜索枢纽、按受众分域的索引、门禁。
+- **容器 B/C/D——系统类虚构**：`references/structure/form-system.md` ——账号登录、按账号的访问控制（RBAC 式），以及桌面 / 模拟互联网 / 档案系统外壳。系统项目的页面根目录可以是 `apps/` 而非 `pages/`；在 `tools/config.mjs` 里设置一次 `pagesDir` 即可（tooling.md §2）。
+- **设备、状态、装置**：`references/structure/form-device.md` ——按设备类的外壳组件、R13 状态契约（进度 / 世界回应存储）、装置单页豁免。
 
-## 2. Page Skeleton Template (uniform across pages)
+## 2. 页面骨架模板（所有页面统一）
 
-Canonical file: **`assets/templates/html/page-skeleton.html`** — 6b copies it per page, so the head,
-script order, and the skin links never drift from this description.
+规范文件：**`assets/templates/html/page-skeleton.html`** ——6b 逐页复制它，因此
+head、脚本顺序与皮肤链接永远不会偏离本节的描述。
 
-**Persistent top bar** — every page's header (same for container B's top menu bar) is fixed to the top
-of the viewport and does not leave view on long pages (base.css gives `position: sticky; top: 0` + an opaque
-background site-wide, deep pages included); the header carries that organization's own nav links, which together
-with the footer's own links (and the M1 search box when selected) are the only cross-page links a public page
-carries (R7). Every `<input>` placeholder names its field (`Search...`, `Employee ID`) (R4). Every page loads the
-same two scripts in the same order (`components.js` before the Alpine runtime) and carries no inline behavior
-wiring — behavior lives in `x-data` components. Deep-page footers may use anomalous numbers such as `ex/36` or
-`?/36` (M7); the `[This content has been deleted]` placeholder is a valid narrative element.
+**常驻顶栏** ——每个页面的页头（容器 B 的顶部菜单栏同样如此）固定在视口顶部，
+长页面滚动时也不离开视野（base.css 全站给出 `position: sticky; top: 0` + 不透明
+背景，深层页同样如此）；页头带有该组织自己的导航链接，它们与页脚自己的链接
+（以及被选中时的 M1 搜索框）一起，构成公开页面携带的全部跨页链接（R7）。每个
+`<input>` 的 placeholder 都标明字段名（`Search...`、`Employee ID`）（R4）。每个
+页面都以相同顺序加载相同的两个脚本（`components.js` 在 Alpine 运行时之前），且
+不带任何内联行为接线——行为都在 `x-data` 组件里。深层页页脚可以使用 `ex/36` 或
+`?/36` 这类反常数字（M7）；`[This content has been deleted]` 占位符是合法的叙事元素。

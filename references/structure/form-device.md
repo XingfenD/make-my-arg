@@ -1,121 +1,118 @@
-# Form — Device, State, Apparatus (Axes 2 / 4 / 3 of Step 2)
+# 形态——设备、状态、装置（步骤 2 的第 2 / 4 / 3 轴）
 
-> Required reading when `docs/system-profile.md` carries a non-pure-web device class, a persistent or
-> world-response state contract, or the apparatus single-page form (`workflow/02-container.md`). Canonical
-> rule texts live in `references/guardrails.md` (R1, R3, R12, R13); this file is the detail and the
-> code templates ship as files under `assets/templates/` (index: `assets/templates/README.md`). The desktop (B) shell and the RBAC matrix stay in
-> `references/structure/form-system.md`.
+> 当 `docs/system-profile.md` 带有非纯 Web 设备类、持久化或世界回应状态契约、
+> 或装置单页形态时（`workflow/02-container.md`），本文件为必读。规范规则文本在
+> `references/guardrails.md`（R1、R3、R12、R13）；本文件是细则，代码模板以文件
+> 形式放在 `assets/templates/` 下（索引：`assets/templates/README.md`）。桌面（B）
+> 外壳与 RBAC 矩阵仍在 `references/structure/form-system.md`。
 
-## 1. What the device class decides
+## 1. 设备类决定什么
 
-The container answers *whose* system this is; the device class answers what the player's eye sees. It fixes:
+容器回答这是*谁的*系统；设备类回答玩家的眼睛看到什么。它确定：
 
-- the shell components step 6a instantiates (status bar / window chrome / address bar / nav header);
-- the sensory inputs that exist (touch targets; a speaker for audio puzzles; a cursor for the flashlight mask);
-- the progress idiom: **screens** on a phone (album, chat), **pages** on the web (M7 counts accordingly);
-- the persistence story (R13): a device that stays in the player's pocket keeps state; a remote system does not.
+- 步骤 6a 实例化的外壳组件（状态栏 / 窗口边框 / 地址栏 / 导航头）；
+- 存在哪些感官输入（触摸目标；音频谜题的扬声器；手电筒遮罩用的光标）；
+- 进度习语：手机上是**屏幕**（相册、聊天），网页上是**页面**（M7 据此计数）；
+- 持久化故事（R13）：揣在玩家口袋里的设备保存状态；远程系统不保存。
 
-A B-variant on a phone is still container B — reach stays account/desktop logic while the *skin* is iOS:
-the class is presentation plus state, not a new reach model.
+手机上的 B 变体仍然是容器 B——触达仍是账号/桌面逻辑，只是*皮肤*是 iOS：
+设备类关乎呈现加状态，不是新的触达模型。
 
-## 2. Shell reference components
+## 2. 外壳参考组件
 
-Canonical shells ship as files under `assets/templates/` (index: `assets/templates/README.md`); the
-subsections name their own files. Same script order as every page (`references/structure/base.md` §2);
-no component routes or switches scenes (R1).
+规范外壳以文件形式放在 `assets/templates/` 下（索引：`assets/templates/README.md`）；
+各小节注明自己的文件。脚本顺序与所有页面相同（`references/structure/base.md` §2）；
+任何组件都不得路由或切换场景（R1）。
 
-### Phone (`phone.css` + `x-data="phone"`)
+### 手机（`phone.css` + `x-data="phone"`）
 
-- **status bar**: fixed top strip — time, signal, battery. The clock is fiction: freeze one timestamp (an
-  era-locked device) or tick it live; never print a real-world date that contradicts the story.
-- **app chrome**: title bar with a back affordance; tab-bar bottom nav. Chat bubbles left/right; an unread
-  badge count is a diegetic progress device (M7's phone idiom). Absence renders as a grey system line —
-  "对方手机已关机" / "该用户已注销" — which is `references/design-playbook.md` §4.7 (absence) made visible.
-- **home screen**: icon grid + dock; this is the desktop shell's sibling, not the same component — the
-  grid holds apps, the apps are pages.
-- **lock screen as gate**: a passcode keypad shaped like the OS lock; `data-expect-hash` sits on the code
-  input. The unlock transition is M12 staging (a swipe, a shake) — not a page navigation.
+- **状态栏**：固定在顶部的窄条——时间、信号、电量。时钟是虚构的：冻结某个时间戳
+  （时代锁定的设备），或让它实时走动；绝不要印出与故事矛盾的真实世界日期。
+- **应用边框**：带返回控件的标题栏；底部标签栏导航。聊天气泡居左/居右；未读徽标
+  计数是剧内进度装置（M7 的手机习语）。缺席呈现为一行灰色系统文字——
+  "对方手机已关机" / "该用户已注销"——这是 `references/design-playbook.md` §4.7
+  （缺席）的可视化。
+- **主屏**：图标网格 + dock；这是桌面外壳的近亲，但不是同一个组件——网格装应用，
+  应用是页面。
+- **锁屏即门禁**：形似操作系统锁屏的密码键盘；`data-expect-hash` 放在密码输入上。
+  解锁过渡是 M12 暂存（一次滑动、一次摇动）——不是页面导航。
 
-Mount shape, clock affordances and the grey absence line: `assets/templates/html/phone-shell.html` +
-`assets/templates/js/modules/phone.js`; structure CSS: `assets/templates/css/phone.css`.
+挂载形态、时钟控件与灰色缺席行：`assets/templates/html/phone-shell.html` +
+`assets/templates/js/modules/phone.js`；结构 CSS：`assets/templates/css/phone.css`。
 
-### Browser chrome (`chrome.css`)
+### 浏览器边框（`chrome.css`）
 
-- The site draws its own address bar / tab strip; the player types into a **fake URL input**. A Wayback
-  shape accepts one whitelisted origin (a credential-triad H-type gate: `data-expect-hash` on the URL field);
-  anything else answers a period-true error page. Styles: `assets/templates/css/chrome.css`.
-- **The 604 pattern** (apparatus single page, §5): one document containing hand-drawn chrome plus hidden
-  templates; the bar never leaves view because the fiction is one tab of one fabricated session.
+- 站点自己绘制地址栏 / 标签条；玩家在**假 URL 输入框**里打字。一个 Wayback 形态
+  只接受一个白名单来源（凭据三件套的 H 型门禁：URL 字段上放 `data-expect-hash`）；
+  其余一切返回一个符合年代的错误页。样式：`assets/templates/css/chrome.css`。
+- **604 模式**（装置单页，§5）：一份文档，内含手绘边框加隐藏模板；地址栏永不
+  离开视野，因为整个虚构就是一次伪造会话里的一个标签页。
 
-### Pure web — nothing to add; `references/structure/base.md` plus the container form doc.
+### 纯 Web——无需补充；`references/structure/base.md` 加上容器形态文档即可。
 
-## 3. The state contract (R13)
+## 3. 状态契约（R13）
 
-Three families, one storage answer each:
+三个状态族，各有一个存储答案：
 
-| Family | The question it answers | Storage | Rule |
+| 状态族 | 它回答的问题 | 存储 | 规则 |
 |---|---|---|---|
-| login | who am I | session cookie | the `session` store in the starter kernel (`assets/starter/assets/js/components.js`); cross-tab; cleared on close; never localStorage — rules: `references/structure/components.md` §3 |
-| progress | what have I read / visited | localStorage **only when** the profile records `persistent`; else session-only or none | a player-owned device keeps state (R13); `NN/total` footers and unread badges read it |
-| world-response | the site changed because a page was read | LS read-keys **plus the `data-after` attribute**, which is the checker-visible contract | route 10 in `workflow/04-reachability.md`; an entry without `data-after` is an unconditional link and loses its story reason |
+| 登录 | 我是谁 | 会话 cookie | 起点内核中的 `session` store（`assets/starter/assets/js/components.js`）；跨标签页；关闭时清除；绝不用 localStorage——规则：`references/structure/components.md` §3 |
+| 进度 | 我读过 / 到访过什么 | **仅当**装配记录写明 `persistent` 时用 localStorage；否则仅会话级或不存 | 玩家自有的设备保存状态（R13）；`NN/total` 页脚与未读徽标读取它 |
+| 世界回应 | 因为读了某页，站点发生了变化 | LS 读取键**加上 `data-after` 属性**，后者是检查器可见的契约 | `workflow/04-reachability.md` 中的路线 10；没有 `data-after` 的条目就是无条件链接，会失去它的剧情理由 |
 
-The code ships as files, not prose: the `readState` store lives in the starter kernel
-(`assets/starter/assets/js/components.js`); the source-page mount is `assets/templates/js/modules/read-state.js`
-(`x-data="markRead('<page>')`); the conditional entry markup is `assets/templates/html/read-entry.html` —
-`href` is the target, `data-after` names the page whose READING makes this exist. Until then the block
-renders nothing: a missing row, not a locked row. Keep the two page paths (`data-after` and `markRead`) in
-sync by construction — the attribute is what the checkers walk, the JS is what the player sees.
+代码以文件而非散文发布：`readState` store 在起点内核里
+（`assets/starter/assets/js/components.js`）；源页面挂载是
+`assets/templates/js/modules/read-state.js`（`x-data="markRead('<page>')`）；
+条件条目标记是 `assets/templates/html/read-entry.html`——`href` 是目标，
+`data-after` 指明"读过哪一页"才让本条目存在。在此之前该区块什么都不渲染：
+是一行缺失，不是一行锁定。从构造上保证两个页面路径（`data-after` 与 `markRead`）
+同步——属性是检查器走图的依据，JS 是玩家看到的东西。
 
-**Save / continue / wipe, in-fiction**: one boot surface lists the three (a boot menu, a "继续上次调查"
-notice, a registry reset). Wipe deletes exactly the keys the boot surface reads. The player never sees the
-word localStorage; a wipe is the OS reset / 清档公告 / "记录已被删除". When the profile says `none`, the
-boot surface itself is out of the game — and so is any entry whose existence depends on reading.
+**存档 / 继续 / 清档，剧情内呈现**：一个开机界面把三者列出来（开机菜单、
+"继续上次调查"提示、登记表重置）。清档删掉的恰好是开机界面读取的那几个键。玩家
+永远不会看到 localStorage 这个词；清档就是系统重置 / 清档公告 / "记录已被删除"。
+当装配记录写明 `none` 时，开机界面本身不进游戏——任何以"读过"为存在前提的条目
+也随之出局。
 
-Persistence may be the ending's blade (604): a sanction that survives the browser close — the group still
-muted, the badge still revoked — is a different ending than one that evaporates on refresh. Record it in
-the profile at step 2; the GDD and the endings inherit it.
+持久化可以是结局的刀锋（604）：一次挺过浏览器关闭的制裁——群聊依然被禁言、
+徽章依然被吊销——与刷新即蒸发的制裁是不同的结局。在步骤 2 就把它记进装配记录；
+游戏设计文档与结局都继承它。
 
-## 4. Event-driven unlocks and the checkers
+## 4. 事件驱动解锁与检查器
 
-- `data-after` is parsed like `data-next` (`tools/config.mjs` knobs `afterAttr` / `nextAttr`);
-  `check-solvable.mjs` fires the edge only once the **source page** is visited, so the cold-start walk
-  proves the same order the player must live through.
-- The read-marking itself lives in JS and is invisible to the walk — the DOM contract is the edge.
-  A page that shows an entry by checking LS at runtime without the `data-after` attribute is invisible to
-  the graph; step 8's re-walk and the chrome sweep catch the mismatch (`references/structure/tooling.md`
-  §3 item 7 extends here).
-- Gates that ask for no verifiable secret (the "请输入需要修复的记忆" that accepts anything) mark each
-  input `data-expect-any` — the component accepts any non-empty value and the walk never hunts a hash
-  for it. An unmarked input on a `gate` page stays a leak (workflow/05 Q4): the wildcard is declared,
-  never implied.
+- `data-after` 的解析方式与 `data-next` 相同（`tools/config.mjs` 旋钮
+  `afterAttr` / `nextAttr`）；`check-solvable.mjs` 只有在**源页面**被访问后才触发
+  这条边，因此冷启动走图证明的顺序与玩家必须经历的顺序相同。
+- 读标记本身在 JS 里，对走图不可见——DOM 契约才是那条边。一个页面若在运行时查
+  LS 来显示条目、却没有 `data-after` 属性，对图来说就是不可见的；步骤 8 的重走图
+  与 chrome 扫描能抓住这种不一致（`references/structure/tooling.md` §3 item 7
+  在此也适用）。
+- 不索要任何可验证秘密的门禁（"请输入需要修复的记忆"这种来者不拒的）要把每个
+  输入标记为 `data-expect-any`——组件接受任何非空值，走图绝不会为它寻找哈希。
+  `gate` 页面上未标记的输入始终是泄漏（workflow/05 Q4）：通配必须声明，绝不能隐含。
 
-## 5. The apparatus carve-out (R1 via R12)
+## 5. 装置豁免（R1 经 R12 的例外）
 
-One HTML document whose drawn chrome is the fiction. All conditions must hold, recorded in
-`docs/system-profile.md` ("Technical form" line) and re-quoted in `docs/self-check.md`:
+一份 HTML 文档，其绘制的边框就是虚构本身。以下条件必须全部成立，并记录在
+`docs/system-profile.md`（"Technical form"一行）中、在 `docs/self-check.md` 中
+再次引用：
 
-1. the medium-argument sentence (`workflow/02-container.md` §1) **depends** on the seamless single
-   surface — name the dependency in one line;
-2. the chrome is diegetic furniture: the drawn bar/window never navigates for real;
-3. every location stays independently openable *to the player* (back button and deep state survive; no
-   lost-on-refresh content);
-4. the GDD still registers each location as its own row — the page map does not collapse with the file
-   count;
-5. the profile records what the checker model loses and what replaces it: the page walk finds one document,
-   so gate/keyword provenance is verified by hand (`references/structure/tooling.md` §3 item 11) and `check-links` only proves
-   the single document parses.
+1. 媒介论证那句话（`workflow/02-container.md` §1）**依赖**于无缝的单一界面——用一行写明这项依赖；
+2. 边框是剧内陈设：绘制的地址栏/窗口绝不进行真实导航；
+3. 每个地点*对玩家*都保持可独立打开（后退按钮与深层状态不丢；没有刷新即丢失的内容）；
+4. 游戏设计文档仍把每个地点登记为独立的一行——页面地图不随文件数塌缩；
+5. 装配记录写明检查器模型丢失了什么、由什么替代：走图只找到一份文档，因此门禁/关键词的出处要人工验证（`references/structure/tooling.md` §3 item 11），`check-links` 只能证明这一份文档可解析。
 
-Convenience never earns it ("one file is easier" is the rationalization table's first row); an apparatus
-site that fails any condition backtracks to the multi-page tree — a `register(type, panel)` engine is still
-prohibited.
+图省事永远不配得到它（"一个文件更简单"是合理化借口对照表的第一行）；任何条件
+不达标的装置式站点都要退回多页树——`register(type, panel)` 引擎依旧被禁止。
 
-## 6. Anti-patterns
+## 6. 反模式
 
-| Anti-pattern | Why it fails |
+| 反模式 | 为何失败 |
 |---|---|
-| Persistence copied from a reference site with no fiction warrant (R13) | A remote system that never saves matches its fiction; saving there breaks it |
-| Login state persisted to localStorage | The remote system must forget you on close; login clears — that is the session fiction (`references/structure/form-system.md` §6) |
-| A conditional entry planted as a plain link while the copy claims "appears only after…" | The claim must be mechanical: `data-after` names the source (§4) |
-| Phone class declared, pure-web shell shipped | The device class is a promise the skin keeps: §2 components or change the class |
-| A save/continue/wipe surface on a profile with `progress: none` | Unselected machinery is module drift (`references/common-mistakes.md` §6) |
-| An apparatus single page without the five recorded conditions | The exception is R12'd, never tacit; R1's first rationalization row still applies |
+| 从参考站点抄来、没有剧情依据的持久化（R13） | 一个从不存档的远程系统才符合它的虚构设定；在那里存档反而破坏设定 |
+| 登录状态持久化到 localStorage | 远程系统必须在关闭后忘记你；登录态清掉——这就是会话式虚构（`references/structure/form-system.md` §6） |
+| 条目以普通链接的形式埋进去，文案却声称"只有在……之后才出现" | 声称必须由机制兑现：`data-after` 标明来源页（§4） |
+| 声明了手机设备类，交付的却是纯 Web 外壳 | 设备类是皮肤必须兑现的承诺：要么上 §2 的组件，要么改设备类 |
+| 在 `progress: none` 的装配记录上放存档/继续/清档界面 | 未选中的机械装置就是模块漂移（`references/common-mistakes.md` §6） |
+| 装置单页却没有记录那五项条件 | 例外必须经 R12 明确授权，绝不默认成立；R1 合理化借口表的第一行仍然适用 |

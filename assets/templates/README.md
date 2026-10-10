@@ -1,43 +1,42 @@
-# Front-End Templates (`assets/templates/`)
+# 前端模板（`assets/templates/`）
 
-Real files, not markdown code blocks: step 6a copies what `docs/system-profile.md` selects and deletes
-the rest. Shipping machinery the profile did not select is module drift (`references/common-mistakes.md` §6).
-The prose rules for every template stay in the reference docs cited per file — a template without its
-profile row is never pasted "to be safe".
+这里是真实文件，不是 markdown 代码块：步骤 6a 复制 `docs/system-profile.md` 选中的部分，删掉其余。
+把装配记录没有选中的机制一起交付出去就是模块漂移（`references/common-mistakes.md` §6）。
+每个模板的行文规则都留在逐文件引用的参考文档里——没有对应装配记录行的模板，绝不能
+「为了保险」而粘贴进来。
 
-## js/modules/*.js — Alpine component bodies
+## js/modules/*.js —— Alpine 组件函数体
 
-Each file is the body of one `Alpine.data(...)` registration. Paste it into the project's
-`components.js` inside the `alpine:init` listener, per the profile. **Never redefine `hash`, `session`,
-or `readState` in a component file** — they live in the starter kernel
-(`assets/starter/assets/js/components.js`) and are shared.
+每个文件都是某一次 `Alpine.data(...)` 注册的函数体。按装配记录，把它粘进项目
+`components.js` 里的 `alpine:init` 监听器中。**绝不要在组件文件里重新定义 `hash`、`session`
+或 `readState`**——它们住在起点项目的内核（`assets/starter/assets/js/components.js`）里，是共用的。
 
-| File | Module | Depends on | Mount / rules |
+| 文件 | 模块 | 依赖 | 挂载 / 规则 |
 |---|---|---|---|
-| `search.js` | M1 | `hash()` kernel | `assets/templates/html/search.html` · `references/structure/components.md` §2 |
-| `gate.js` | M2 | `hash()` + `session` kernel | `assets/templates/html/gate-a.html` / `gate-b.html` / `login-multi.html` · `references/structure/components.md` §3 |
-| `access.js` | M3 | `session` kernel | `assets/templates/html/access-protected.html` · `references/structure/form-system.md` §3 |
-| `staging.js` | M12 | — | inline mounts in the file's tail comments · `references/structure/components.md` §4 |
-| `progress.js` | M7 | footer mount (skeleton footer slot) | `assets/templates/html/page-skeleton.html` · `references/structure/components.md` §6 · `references/guardrails.md` R13 |
-| `read-state.js` | M14 | `readState` kernel | `assets/templates/html/read-entry.html` · `references/structure/form-device.md` §3–4 · `references/guardrails.md` R13 |
-| `phone.js` | device class: phone | — | `assets/templates/html/phone-shell.html` + `assets/templates/css/phone.css` · `references/structure/form-device.md` §2 |
+| `search.js` | M1 | `hash()` 内核 | `assets/templates/html/search.html` · `references/structure/components.md` §2 |
+| `gate.js` | M2 | `hash()` + `session` 内核 | `assets/templates/html/gate-a.html` / `gate-b.html` / `login-multi.html` · `references/structure/components.md` §3 |
+| `access.js` | M3 | `session` 内核 | `assets/templates/html/access-protected.html` · `references/structure/form-system.md` §3 |
+| `staging.js` | M12 | — | 文件尾部注释里的内联挂载 · `references/structure/components.md` §4 |
+| `progress.js` | M7 | 页脚挂载（骨架页脚槽位） | `assets/templates/html/page-skeleton.html` · `references/structure/components.md` §6 · `references/guardrails.md` R13 |
+| `read-state.js` | M14 | `readState` 内核 | `assets/templates/html/read-entry.html` · `references/structure/form-device.md` §3–4 · `references/guardrails.md` R13 |
+| `phone.js` | 设备类：phone | — | `assets/templates/html/phone-shell.html` + `assets/templates/css/phone.css` · `references/structure/form-device.md` §2 |
 
-## html/*.html — mount shapes
+## html/*.html —— 挂载形态
 
-`page-skeleton.html` is the uniform skeleton for every page (rules: `references/structure/base.md` §2).
-The gate / search / access mounts are the component's host markup; keep the marker attributes
-(`x-show="unlocked"`, `data-expect-hash`, `data-index`) exactly as written — they are what
-`tools/check-solvable.mjs` and `tools/check-links.mjs` read.
+`page-skeleton.html` 是每一页的统一骨架（规则：`references/structure/base.md` §2）。
+门禁 / 搜索 / 权限挂载是组件的宿主标记；标记属性（`x-show="unlocked"`、`data-expect-hash`、
+`data-index`）必须逐字保持原样——`tools/check-solvable.mjs` 和 `tools/check-links.mjs`
+读取的正是它们。
 
-## css/*.css — skins and shells
+## css/*.css —— 皮肤与外壳
 
-| File | Selected by | Content |
+| 文件 | 由谁选中 | 内容 |
 |---|---|---|
-| `secret.css` | M5 | deep-layer skin: retunes the base.css custom properties + `body.secret` |
-| `forbidden.css` | M6 | the forbidden-word full-page state (`body-forbidden`) |
-| `phone.css` | device class: phone | status bar / app chrome / chat bubbles / grey line / phone frame |
-| `chrome.css` | device class: browser-chrome | drawn address bar / tab strip / apparatus single page |
+| `secret.css` | M5 | 深层皮肤：重新调校 base.css 的自定义属性 + `body.secret` |
+| `forbidden.css` | M6 | 禁用词全页状态（`body-forbidden`） |
+| `phone.css` | 设备类：phone | 状态栏 / 应用外壳 / 聊天气泡 / 灰线 / 手机边框 |
+| `chrome.css` | 设备类：browser-chrome | 画出来的地址栏 / 标签条 / 装置单页 |
 
-`base.css` and `surface.css` ship inside the starter (`assets/starter/assets/css/`) and are not duplicated
-here. Every skin file retunes the same custom properties base.css reads (`--ink`, `--paper`, `--rule`,
-`--accent`, …) — a project edits colors in the skin, never in the kernel CSS.
+`base.css` 和 `surface.css` 随起点项目一起交付（`assets/starter/assets/css/`），这里不重复。
+每个皮肤文件都重新调校 base.css 读取的同一批自定义属性（`--ink`、`--paper`、`--rule`、
+`--accent`……）——项目只在皮肤里改颜色，绝不动内核 CSS。

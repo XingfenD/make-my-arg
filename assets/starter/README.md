@@ -6,10 +6,10 @@ make-my-arg 的起点项目：每个生成的项目都把这棵树复制为起�
 ## 模板说明（成稿时改写或删除本节）
 
 - `《》` 是占位符：组织名、页面标题、正文文案，全部换成虚构自己的话。本页随项目一起改写。
-- 模板里的 `<!-- -->` 注释是写作指引，不是给玩家看的内容：填充页面时逐条删除。step 8 的 chrome 扫描会把残留提示当泄漏处理（R4）。
+- 模板里的 `<!-- -->` 注释是写作指引，不是给玩家看的内容：填充页面时逐条删除。步骤 8 的外壳扫描会把残留提示当泄漏处理（R4）。
 - `<html lang>` 随故事的语言设置。
 - 入口页带一个指向 make-my-arg 技能仓库的 GitHub 链接（对技能的引用，请勿删除）；入口除此之外只有进入按钮，没有“关于”页。
-- 这棵树只放**不随模块变化**的那部分：入口外壳、共用 css/js、两份忽略文件、README。带模块标记的文件——`search.html`（M1）、`data/`（M1/M2/M6）、`secret.css`（M5）、`phone.css` / `chrome.css`（设备类）、`pages/` 与受限区域、结局页（M10）——由 step 6a 从技能仓库的 `assets/templates/`（js/css/html 前端代码模板，索引见其 README）按 `docs/system-profile.md` 的选择复制创建；profile 没选的机制一个都不出现。`tools/` 和 `viewer/` 由 step 6a 从 skill 的 `assets/` 拼装进来，它们各有唯一出处，不要在项目里分叉维护。
+- 这棵树只放**不随模块变化**的那部分：入口外壳、共用 css/js、两份忽略文件、README。带模块标记的文件——`search.html`（M1）、`data/`（M1/M2/M6）、`secret.css`（M5）、`phone.css` / `chrome.css`（设备类）、`pages/` 与受限区域、结局页（M10）——由 步骤 6a 从技能仓库的 `assets/templates/`（js/css/html 前端代码模板，索引见其 README）按 `docs/system-profile.md` 的选择复制创建；装配记录没选的机制一个都不出现。`tools/` 和 `viewer/` 由 步骤 6a 从 skill 的 `assets/` 拼装进来，它们各有唯一出处，不要在项目里分叉维护。
 - 起点项目里没有 `data/*.src.json`：它自带的 `.gitignore` 会把这些明文表忽略掉，而明文表只应在 6a 选中对应模块时才创建。
 
 ## 目录结构
@@ -20,8 +20,8 @@ make-my-arg 的起点项目：每个生成的项目都把这棵树复制为起�
 | `pages/` | 站点页面，一篇一文档；受限区域用虚构自己的词命名（`internal/` `staff/` `archive/`），绝不叫 `secret/`，文件名不许剧透 |
 | `assets/css/base.css` | 共用骨架：常驻顶栏、页面栏宽、文档套件、门禁表单、`x-cloak`、M11 纹理 |
 | `assets/css/surface.css` | 公开层皮肤：色板与字体，唯一随虚构气质改动的地方 |
-| `assets/css/secret.css` | M5 深层皮肤；profile 未选 M5 时这个文件不存在 |
-| `assets/js/components.js` | 共用内核：`hash()`、session store 与 `readState`（M14）；只注册 profile 选中的组件 |
+| `assets/css/secret.css` | M5 深层皮肤；装配记录未选 M5 时这个文件不存在 |
+| `assets/js/components.js` | 共用内核：`hash()`、session store 与 `readState`（M14）；只注册装配记录选中的组件 |
 | `assets/js/vendor/alpine.min.js` | `node tools/vendor-alpine.mjs` 拉取并校验 sha256 后落下，永不改动、不走 CDN |
 | `.gitignore` | 随起点项目落到项目根：开发副产物不进 Git 历史 |
 | `.dockerignore` | 随起点项目落到项目根：明文表 / `docs/` / 机制文件不进部署镜像 |
@@ -30,9 +30,9 @@ make-my-arg 的起点项目：每个生成的项目都把这棵树复制为起�
 | `data/keywords.*.json` | `node tools/build-keywords.mjs` 产出的哈希表，站点真正读取的文件 |
 | `data/forbidden.json` | M6 禁用词模块（哈希 + 触发态文案） |
 | `data/credentials.src.json` | M2 派生凭据的出处登记（部件 + 规则），开发专用 |
-| `tools/` | step 6a 从 `assets/tools/` 复制：检查器与 `config.mjs` |
-| `viewer/` | step 6a 从 `assets/viewer/` 复制：站点图渲染树，不是站点页面 |
-| `docs/` | step 1–5 的产物：story canon（五张表）、system-profile、GDD、触达链、谜题分析 |
+| `tools/` | 步骤 6a 从 `assets/tools/` 复制：检查器与 `config.mjs` |
+| `viewer/` | 步骤 6a 从 `assets/viewer/` 复制：站点图渲染树，不是站点页面 |
+| `docs/` | 步骤 1–5 的产物：故事正典（五张表）、system-profile、GDD、触达链、谜题分析 |
 | `deploy/` | 部署脚本与清单，用到才建 |
 
 `tools/`、`viewer/`、`docs/`、`deploy/` 里没有站点页面：走图工具按 `CONFIG.skipDirs` 跳过它们，所以生成的站点图永远不会把页数撑大。
@@ -67,8 +67,8 @@ node tools/check-solvable.mjs --self-test   # 改过 tools/config.mjs 之后自�
 
 ## 设计文档
 
-- `docs/system-profile.md` — step 2 与用户一起选定的容器与模块
-- `docs/gdd.md` — 游戏设计文档：front matter（资产清单 + 实体登记表）+ 八节
+- `docs/system-profile.md` — 步骤 2 与用户一起选定的容器与模块
+- `docs/gdd.md` — 游戏设计文档：首部（资产清单 + 实体登记表）+ 八节
 - `docs/reachability.md` — 触达链分析：每页从哪来、守门是什么
 - `docs/puzzle-audit.md` — 谜题设计分析：必要性 / 可得性 / 直观性 / 泄漏扫描
-- `docs/self-check.md` — step 8 的逐项通过 / 失败清单
+- `docs/self-check.md` — 步骤 8 的逐项通过 / 失败清单

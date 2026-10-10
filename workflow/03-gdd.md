@@ -1,89 +1,121 @@
-# Step 3 — Write the GDD
+# 步骤 3 — 撰写游戏设计文档（GDD）
 
-Four subagent rounds: **3a `docs/gdd-plan.md` → (3b `docs/gdd.md` ∥ 3c `docs/registry.md`) → 3d
-reconcile**. A full system profile yields 40+ pages, and a turn that reads the reference stack and then
-digests the inputs and drafts the output inside one reasoning block exhausts its response budget and
-returns nothing. Each round therefore runs as an explicit sequence of small steps and follows the rules
-below. Rounds 3b and 3c dispatch together in one message; 3d settles what they disagree on.
+四个子代理轮次：**3a `docs/gdd-plan.md` →（3b `docs/gdd.md` ∥ 3c `docs/registry.md`）→ 3d 调和**。
+一份完整的装配记录会产生 40 多页内容，而一个回合如果读完参考栈、又在同一个推理块里消化输入并
+起草输出，就会耗尽响应预算、什么都返回不了。因此每个轮次都按一串显式的小步骤运行，并遵守下面
+的规则。轮次 3b 与 3c 在同一条消息里一起派发；3d 裁定它们之间的分歧。
 
-**Rules (all rounds).**
+**规则（所有轮次通用）。**
 
-1. **The file is the only digest.** Never restate inputs — the story canon, the module matrix, the plan — in reasoning. Replaying the inputs and drafting the output in one response is exactly what truncates a turn.
-2. **Run the round's sequence; never batch.** After every read, the very next tool call is the write that read unblocks — never a second content read, never a planning pass in between. Reading everything before writing anything is the failure this rule exists to prevent. The only reads that may share a step are a content block plus the one small reference that governs it (a rules table, a shape example).
-3. **Read slices, never whole files.** A cited `file.md §N` is its own call, reading that section's lines. A runtime artifact is read by its named tables or headings — one or two per call, never the whole file.
+1. **文件就是唯一的摘要。**绝不在推理里复述输入——故事正典、模块矩阵、计划。在一次响应里重放
+   输入又起草输出，正是把回合截断的元凶。
+2. **按该轮次的顺序执行；绝不合并批跑。**每次读取之后，紧接着的下一个工具调用必须是该次读取
+   解锁的那次写入——绝不读第二份内容，中间绝不插一轮规划。先把一切读完再动笔写任何东西，正是
+   这条规则要防的失败。唯一可以同步共享一步的读取，是一个内容块加上管辖它的那一份小参考
+   （一张规则表、一个形态样例）。
+3. **只读切片，绝不整读文件。**被引用的 `file.md §N` 单独调用一次，只读该节的行。运行期产物按
+   它点名的表或标题来读——每次一两个，绝不读整个文件。
 
-Round outputs travel as named files (dispatch contract item 2); artifacts are never pasted into a prompt.
+轮次产出以具名文件传递（派发契约第 2 条）；产物绝不粘贴进提示词。
 
-## Round 3a — Plan
+## 轮次 3a — 计划
 
-Writes `docs/gdd-plan.md`: the whole GDD as one-line rows under ten fixed headings — the GDD's own
-numbering, so later rounds read one block at a time: `## 0 assets`, `## 1 page map`, `## 2 IA`,
-`## 3 register split`, `## 4 access inventory`, `## 5 puzzle allocation`, `## 6 endings`,
-`## 7 world texture`, `## 8 document specs`, `## registry seed`.
+写出 `docs/gdd-plan.md`：把整个 GDD 写成十个固定标题下的单行行——沿用 GDD 自己的编号，让后续
+轮次一次读一个块：`## 0 assets`、`## 1 page map`、`## 2 IA`、`## 3 register split`、
+`## 4 access inventory`、`## 5 puzzle allocation`、`## 6 endings`、`## 7 world texture`、
+`## 8 document specs`、`## registry seed`。
 
-Run this exact sequence:
+严格按以下顺序执行：
 
-1. Read `docs/system-profile.md`. → `write` creating `docs/gdd-plan.md`: the `## 1 page map` block with the public-area rows the selected modules imply — the shell pages plus every page a module switches on.
-2. Read `docs/story-canon.md`'s character-network and timeline tables. → append page-map rows for the restricted and nested areas, each with its unlock source.
-3. Read `docs/story-canon.md`'s evidence-inventory and contrast-matrix tables. → append the remaining page-map rows, then the `## registry seed` block (persons, IDs, key dates) and the `## 0 assets` block (every non-text asset: filename under `assets/`, referencing page(s), in-world caption).
-4. Read `docs/story-canon.md`'s twist-ordering table. → append the `## 6 endings` block, the `## 7 world texture` block, and `## 8 document specs` rows (per announcement, notice, contract, certificate: issuing body, document number, date, addressee, signature and seal, distribution list — R6).
-5. Read `references/design-playbook.md` §2. → append the `## 2 IA` block (nav bar, index and listing pages, sitemap, footer links, plus the entry points of the selected reach modules — search surface, gates, login) and the `## 3 register split` block (the pages that address the player vs. in-world only).
-6. Read `references/design-playbook.md` §3. → append the `## 5 puzzle allocation` block — 5 to 10 gates and puzzles from the 13 types; sensory puzzles declare hardware requirements.
-7. Read `references/guardrails.md`'s Canonical rules (R1–R13) table. → append the `## 4 access inventory` block — per gate or protected page: its credential triad (account clue on page A, password clue on page B, gate on page C, R3) or the granting account (`data-access`, granted by `data-grant`, R10); wildcard gates marked `data-expect-any` (`references/structure/form-device.md` §4); the index carrying each keyword (M1); what an unreadable search hit resolves to (its gate or a plain locked notice, never the document, R8/R9); read-gated entries with their `data-after` source page when the profile selects the world-response contract (M14/R13). Then fix in place any earlier row that breaks a rule.
+1. 读取 `docs/system-profile.md`。→ `write` 创建 `docs/gdd-plan.md`：写出 `## 1 page map` 块，
+   包含所选模块意味着的公开区各行——外壳页面，加上每个被模块开启的页面。
+2. 读取 `docs/story-canon.md` 的人物网络与时间线表。→ 追加受限区与嵌套系统区的页面地图行，
+   每行注明其解锁来源。
+3. 读取 `docs/story-canon.md` 的证据文档清单与对照矩阵表。→ 追加其余页面地图行，然后是
+   `## registry seed` 块（人名、ID、关键日期）和 `## 0 assets` 块（每个非文本资产：`assets/`
+   下的文件名、引用它的页面、剧内配文）。
+4. 读取 `docs/story-canon.md` 的反转次序表。→ 追加 `## 6 endings` 块、`## 7 world texture` 块，
+   以及 `## 8 document specs` 行（对每份公告、通知、合同、证书：发文机关、文号、日期、收件方、
+   签字与印章、分发清单——R6）。
+5. 读取 `references/design-playbook.md` §2。→ 追加 `## 2 IA` 块（导航栏、索引与列表页、站点地图、
+   页脚链接，外加所选触达模块的入口——搜索面、门禁、登录）和 `## 3 register split` 块
+   （面向玩家说话的页面 vs. 仅供剧内的页面）。
+6. 读取 `references/design-playbook.md` §3。→ 追加 `## 5 puzzle allocation` 块——从 13 种类型中
+   选出的 5 到 10 个门禁与谜题；感官谜题要声明硬件要求。
+7. 读取 `references/guardrails.md` 的规范规则（R1–R13）表。→ 追加 `## 4 access inventory` 块
+   ——对每个门禁或受保护页面：它的凭据三件套（页面 A 上的账号线索、页面 B 上的密码线索、
+   页面 C 上的门禁页，R3）或授权账号（`data-access`，由 `data-grant` 授予，R10）；标记
+   `data-expect-any` 的通配门禁（`references/structure/form-device.md` §4）；承载每个关键词的
+   索引（M1）；读不了的搜索命中解析成什么（它的门禁页或一条普通的锁定通知，绝不直接给出文档，
+   R8/R9）；当装配记录选了世界回应契约时，带 `data-after` 来源页的读态条目（M14/R13）。然后就地
+   修正前面任何违反规则的行。
 
-Every row traces to a story-canon row or a selected module — nothing invented. No single page may
-co-locate two components of one credential (a "zero-jump" solve) — split them so the derivation is the
-puzzle. The raw story source is a fallback only (SKILL.md dispatch contract item 1). The final message returns
-the file path plus unresolved questions.
+每一行都要能追溯到故事正典的某一行或某个已选模块——不得凭空发明。任何单页都不得把同一凭据的
+两个组成部分放在一起（那样就成了「零跳」解题）——把它们拆开，让推导过程本身成为谜题。原始
+故事源只是兜底（SKILL.md 派发契约第 1 条）。最后一条消息返回文件路径和未解决的问题。
 
-## Round 3b — Write docs/gdd.md
+## 轮次 3b — 写出 docs/gdd.md
 
-Reads only `docs/gdd-plan.md` (block by block) and three small references. Sections marked *conditional*
-are written only when the plan carries their block, else they get one line saying so. Run this exact
-sequence:
+只读 `docs/gdd-plan.md`（逐块读）和三份小参考。标记为*条件性*的小节仅在计划里有对应块时才写，
+否则只写一行说明。严格按以下顺序执行：
 
-1. Read the plan's `## 0 assets` and `## 1 page map` blocks. → `write` creating `docs/gdd.md`: the front matter (the asset list verbatim; step 7 phase 4 lands exactly this list, step 8 reconciles it — `references/structure/tooling.md` §3 item 9) and section 1 — the numbered page map: every page, its area (public / restricted / nested system), and its unlock source.
-2. Read the plan's `## 2 IA` and `## 3 register split` blocks. → append section 2 — the site information architecture — and section 3 — the register split.
-3. Read the plan's `## 4 access inventory` block plus `references/guardrails.md`'s Canonical rules (R1–R13) table. → append section 4. System containers record the access matrix and, per account, the inference chain that yields the login string — only the initial account may be printed. A **derived/composite** credential records its rule and public-page components here; prove it with `tools/check-credentials.mjs`, never by printing it (`references/structure/components.md` §3).
-4. Read the plan's `## 5 puzzle allocation` block plus `references/design-playbook.md` §3. → append section 5 — the puzzle allocation table.
-5. Read the plan's `## 6 endings` through `## 8 document specs` blocks. → append section 6 (ending plan, M10 — ending copy reuses documents the player has just read; dual moral choices when selected), section 7 (world-texture list, M11 — atmosphere pages off the critical path, epigraph, easter eggs; no non-progression labelling is needed), and section 8 (document format specs).
-6. Read `references/common-mistakes.md` §3. → fix every trap it names, in place.
-7. Read `examples/gdd-excerpt.md`. → check the artifact against the example's shape; fix deviations in place.
+1. 读取计划的 `## 0 assets` 与 `## 1 page map` 块。→ `write` 创建 `docs/gdd.md`：首部
+   （资产清单原样照抄；步骤 7 阶段 4 落定的正是这份清单，步骤 8 对它做调和——
+   `references/structure/tooling.md` §3 item 9）以及第 1 节——带编号的页面地图：每个页面、
+   它所属的区域（公开区 / 受限区 / 嵌套系统区）、以及它的解锁来源。
+2. 读取计划的 `## 2 IA` 与 `## 3 register split` 块。→ 追加第 2 节——站点信息架构——以及第 3 节
+   ——语域切分。
+3. 读取计划的 `## 4 access inventory` 块，以及 `references/guardrails.md` 的规范规则（R1–R13）表。
+   → 追加第 4 节。系统容器记录权限矩阵，并对每个账号记录推出其登录串的推理链——只有初始账号
+   可以被印出来。**派生/组合**凭据在这里记录它的规则和公开页组成部分；用
+   `tools/check-credentials.mjs` 证明它，绝不用打印的方式（`references/structure/components.md`
+   §3）。
+4. 读取计划的 `## 5 puzzle allocation` 块，以及 `references/design-playbook.md` §3。→ 追加第 5 节
+   ——谜题分配表。
+5. 读取计划中从 `## 6 endings` 到 `## 8 document specs` 的各块。→ 追加第 6 节（结局计划，M10
+   ——结局文案复用玩家刚读过的文档；选了双重道德抉择时写上）、第 7 节（世界质感清单，M11
+   ——关键路径之外的氛围页、题记、彩蛋；无需标注非推进内容）、第 8 节（文档格式规格）。
+6. 读取 `references/common-mistakes.md` §3。→ 就地修复它点名的每一个陷阱。
+7. 读取 `examples/gdd-excerpt.md`。→ 对照样例形态检查产物；就地修正偏差。
 
-Sections 2–4 are the inputs step 4 audits, and 4–5 the inputs step 5 audits. Writing them thinly guarantees
-both audits fail. The final message returns the file path plus unresolved questions.
+第 2–4 节是步骤 4 审计的输入，第 4–5 节是步骤 5 审计的输入。把它们写得单薄，等于保证两项审计
+双双失败。最后一条消息返回文件路径和未解决的问题。
 
-## Round 3c — Write docs/registry.md
+## 轮次 3c — 写出 docs/registry.md
 
-Run this exact sequence:
+严格按以下顺序执行：
 
-1. Read the plan's `## registry seed` block. → `write` creating `docs/registry.md`: the table header and the first 5 entity rows — person names, IDs, account strings and their derivation rules, page titles, document numbers, key dates.
-2. Read `references/guardrails.md`'s Canonical rules (R1–R13) table. → append the remaining rows; only the initial account may be printed (R10), and a derived/composite credential records its rule and public-page components, proven with `tools/check-credentials.mjs`, never printed.
-3. Read `examples/gdd-excerpt.md`. → normalize the table to the example's registry shape.
+1. 读取计划的 `## registry seed` 块。→ `write` 创建 `docs/registry.md`：表头和前 5 行实体
+   ——人名、ID、账号串及其推导规则、页面标题、文号、关键日期。
+2. 读取 `references/guardrails.md` 的规范规则（R1–R13）表。→ 追加其余各行；只有初始账号可以被
+   印出来（R10），派生/组合凭据记录其规则和公开页组成部分，用 `tools/check-credentials.mjs`
+   证明，绝不打印。
+3. 读取 `examples/gdd-excerpt.md`。→ 把表归一化成样例中的登记表形态。
 
-Every page copies the registry verbatim, and most cross-page contradictions are registry violations. It
-ships as its own file so a step-7 phase can load the registry without loading the whole GDD. The final
-message returns the file path plus unresolved questions.
+每个页面都逐字复制登记表，大多数跨页矛盾都是登记表违规。它以独立文件交付，好让步骤 7 的某个
+阶段只加载登记表而不必加载整个 GDD。最后一条消息返回文件路径和未解决的问题。
 
-## Round 3d — Reconcile
+## 轮次 3d — 调和
 
-**Input:** `docs/registry.md` plus `docs/gdd.md`. No reference files — this round is a mechanical diff
-between two files already on disk. **First tool call: `read` of `docs/gdd.md` section 1 only — never the
-whole file.**
+**输入：**`docs/registry.md` 加 `docs/gdd.md`。不读参考文件——本轮次只是对两个已在磁盘上的
+文件做机械比对。**第一个工具调用：`read` `docs/gdd.md` 的第 1 节，只读这一节——绝不整读文件。**
 
-**Procedure — one forward walk, the four checks applied as their evidence appears.** Read the registry
-once, then read `docs/gdd.md` one section per call in the order 1, 2, 4, 5, 8, dropping each section
-after it is fixed. Never read ahead, never hold two GDD sections in reasoning at once, and never
-accumulate findings for a later summary — every fix is applied immediately with `edit`, in whichever
-file is wrong (the registry wins by default, the GDD wins when it carries the more precise value).
+**流程——一次向前的走查，四项检查在证据出现时就地应用。**把登记表读一遍，然后按 1、2、4、5、8
+的顺序逐节读取 `docs/gdd.md`，每节修完就丢弃。绝不提前读，绝不同时在推理里持有两节 GDD，
+也绝不把发现攒到后面统一总结——每个修复都立刻用 `edit` 落地，哪个文件错了就改哪个（默认以
+登记表为准，当 GDD 带着更精确的取值时以 GDD 为准）。
 
-1. **Page naming** — during the section 1–2 pass: a page named two ways (page map vs. IA vs. its own title) is fixed to the registry spelling.
-2. **Entity usage** — in every section walked: each person name, ID, account string, page title, document number and key date as written there against its registry row.
-3. **Worked examples** — where a walked section carries one: the example against its own stated rule (sample account `wang00□□` against a "pinyin initials" rule).
-4. **One fact, two values** — after the walk, from the fixes already applied: two sections that assigned the same fact different values are settled to one.
+1. **页面命名**——在过第 1–2 节时：同一个页面有两种叫法（页面地图 vs. IA vs. 自身标题）的，
+   统一改成登记表的写法。
+2. **实体用法**——在走查的每一节中：把其中写到的每个人名、ID、账号串、页面标题、文号和关键
+   日期与登记表对应行核对。
+3. **示例**——在带示例的被走查小节中：把示例与它自己声明的规则对照（示例账号 `wang00□□`
+   对照「拼音首字母」规则）。
+4. **一个事实，两个取值**——走查结束后，依据已经落地的修复：把给了同一事实不同取值的两个小节
+   收敛为一个。
 
-**Output:** the final message lists the fixes applied (file plus what changed) and unresolved questions.
+**输出：**最后一条消息列出已应用的修复（文件加改动内容）和未解决的问题。
 
-**User review checkpoint.** When 3d returns, the orchestrator presents the asset manifest,
-`docs/registry.md`, page map, IA, register split, access inventory, puzzle allocation, and ending plan to
-the user; steps 4 and 5 start only after approval, and requested changes go back to step 3.
+**用户审阅检查点。**3d 返回后，编排者把资产清单、`docs/registry.md`、页面地图、IA、语域切分、
+权限清单、谜题分配和结局计划呈给用户；步骤 4 与步骤 5 只有在批准后才开始，要求的修改退回
+步骤 3。

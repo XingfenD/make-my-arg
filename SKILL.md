@@ -1,73 +1,66 @@
 ---
 name: make-my-arg
-description: Use when generating a multi-page static web puzzle game (ARG-lite) from any story source — a novel, a screenplay, setting material, or the user's own idea — or when the user asks for a web puzzle site, an interactive story adaptation, a puzzle website, or a mystery game disguised as a real website. Also use when such a project drifts toward a single-file SPA, canvas scene engine, inventory-based adventure UI, generic puzzle framework, or random passwords, even when told to "keep it simple" or that an engine was already scaffolded.
+description: 当需要从任意故事源——小说、剧本、设定材料，或用户自己的创意——生成多页静态网页解密游戏（ARG-lite），或用户要求制作网页解密站点、互动故事改编、解谜网站、伪装成真实网站的悬疑游戏时使用。当此类项目偏向单文件 SPA、canvas 场景引擎、物品栏式冒险 UI、通用谜题框架或随机密码时，即使用户说「保持简单」或说引擎已经搭好，也使用本技能。
 ---
 
-# make-my-arg: Story Source → Interactive Web Puzzle Game
+# make-my-arg：故事源 → 互动网页解密游戏
 
-Build a multi-page static puzzle game disguised as a real website (ARG-lite) from any story source — a novel,
-a screenplay, setting material, or the user's own idea; success means the player feels they are infiltrating
-a real site. The guardrails — four constraints,
-canonical rules R1–R13, prohibited forms, baseline rationalizations, red flags, and exclusions — live in
-`references/guardrails.md`: read it before step 1 and when reviewing any artifact.
+从任意故事源——小说、剧本、设定材料，或用户自己的创意——构建一个伪装成真实网站的多页静态解谜游戏（ARG-lite）；
+成功的标准是玩家觉得自己正在潜入一个真实站点。护栏——四条约束、规范规则 R1–R13、禁止形态、
+基线测试中的合理化借口、危险信号与不适用场景——都在 `references/guardrails.md` 里：
+在步骤 1 之前读它，审阅任何产物时也读它。
 
-**Project-root convention.** The generated game lives in `<cwd>/<game-name>/` (kebab-case, named after the
-story) unless the user specifies another location. Every `docs/*.md` artifact path in the workflow files is
-relative to that project root, not to this skill directory.
+**项目根目录约定。**生成的游戏位于 `<cwd>/<game-name>/`（kebab-case，以故事命名），
+除非用户指定别的位置。workflow 文件里每个 `docs/*.md` 产物路径都相对于该项目根目录，
+而不是本 skill 目录。
 
-## Workflow
+## 工作流
 
-Eight steps. Each step body lives in `workflow/`; this section routes. Step 2 assembles the system
-from the module catalog (`references/design-playbook.md` §2); steps 3–5 fill that system with game content.
-Most of the sequence is strict, but four dispatches overlap: 3b∥3c, 4∥5, 6a alongside 3–5, and inside step 7
-(4a with 1–3, 5 with 3). The Example column names the artifact-shape
-anchor included in that step's dispatch prompt, when one exists.
+共八个步骤。每个步骤的正文都在 `workflow/` 里，本节只负责路由。步骤 2 从模块目录
+（`references/design-playbook.md` §2）组装系统；步骤 3–5用游戏内容填充这个系统。
+序列的大部分是刚性的，但有四组派发彼此重叠：3b∥3c、4∥5、6a 与 3–5 并行，以及步骤 7 内部
+（4a 随 1–3，5 与 3）。示例列给出该步骤派发提示词中携带的产物形态锚点（若存在）。
 
-| Step | File | Deliverable | Example | Dispatch |
+| 步骤 | 文件 | 交付物 | 示例 | 派发 |
 |---|---|---|---|---|
-| 1 Story intake | workflow/01-story-intake.md | five tables | examples/story-canon-excerpt.md | long-form source: one subagent per chunk → 1 merge (past ~150k tokens), single subagent below; structured material / original idea: orchestrator; user checkpoint after the tables when any row is invented |
-| 2 Choose the form + assemble the system | workflow/02-container.md | `docs/system-profile.md` (five form axes + modules selected with the user) | — | orchestrator (asks the user) |
-| 3 Write the GDD | workflow/03-gdd.md | `docs/gdd.md` (asset manifest + eight sections) + `docs/registry.md` (entity registry) | examples/gdd-excerpt.md | 3a gdd-plan → (3b gdd ∥ 3c registry) → 3d reconcile (subagents) → user review checkpoint |
-| 4 Reachability chain analysis 触达链分析 | workflow/04-reachability.md | `docs/reachability.md` | examples/reachability-excerpt.md | subagent — dispatched together with step 5 |
-| 5 Puzzle design audit 谜题设计分析 | workflow/05-puzzle-audit.md | `docs/puzzle-audit.md` with dispositions | examples/puzzle-audit-excerpt.md | subagent — dispatched together with step 4 |
-| 6 Scaffold | workflow/06-scaffold.md | framework + every page skeletoned | — | 6a framework (plot-blind; after step 2, parallel to 3–5) → 6b skeletons (plot-aware; after 6a and the gates) |
-| 7 Implementation | workflow/07-implementation.md | finished site | — | one subagent per phase; 1→2→3 chained, 4a ∥ 1, 4b after 3, 5 ∥ 3, 6 after 3, 7 last |
-| 8 Self-check | workflow/08-self-check.md | `docs/self-check.md`, pass/fail per item | — | 3 parallel subagents (lanes A/B/C) + merge |
+| 1 故事源接入 | workflow/01-story-intake.md | 正典五表 | examples/story-canon-excerpt.md | 长篇源：每个分块一个子代理 → 1 次合并（超过约 150k token 时），低于此量单个子代理即可；结构化素材 / 原创创意：编排者；正典五表中出现虚构行时，在五表之后设用户检查点 |
+| 2 选择游戏形式 + 组装系统 | workflow/02-container.md | `docs/system-profile.md`（形态五轴 + 与用户一同选定的模块） | — | 编排者（询问用户） |
+| 3 撰写游戏设计文档（GDD） | workflow/03-gdd.md | `docs/gdd.md`（资产清单 + 八节）+ `docs/registry.md`（实体登记表） | examples/gdd-excerpt.md | 3a 计划 → (3b gdd ∥ 3c registry) → 3d 调和（子代理）→ 用户审阅检查点 |
+| 4 触达链分析 | workflow/04-reachability.md | `docs/reachability.md` | examples/reachability-excerpt.md | 子代理——与步骤 5 一同派发 |
+| 5 谜题设计分析 | workflow/05-puzzle-audit.md | `docs/puzzle-audit.md`（带处置） | examples/puzzle-audit-excerpt.md | 子代理——与步骤 4 一同派发 |
+| 6 脚手架 | workflow/06-scaffold.md | 框架 + 每一页都搭好骨架 | — | 6a 框架（不看剧情；步骤 2 一返回就派发，与 3–5 并行）→ 6b 页面骨架（看剧情；在 6a 与两个门禁之后） |
+| 7 实现 | workflow/07-implementation.md | 成品站点 | — | 每个阶段一个子代理；1→2→3 串成链，4a ∥ 1，4b 在 3 之后，5 ∥ 3，6 在 3 之后，7 最后 |
+| 8 自检 | workflow/08-self-check.md | `docs/self-check.md`，逐项通过 / 失败 | — | 3 个并行子代理（通道 A/B/C）+ 合并 |
 
-Step 1 ends with a user confirmation checkpoint when the canon tables carry rows marked `〔invented〕` —
-always for an original idea, only on delegated gap-fills otherwise: the orchestrator presents the five
-tables, and step 2 starts only after approval; requested changes go back to step 1.
+当正典五表里有标着 `〔invented〕` 的行时，步骤 1 以用户确认检查点收尾——原创创意必然如此，
+其他情况只出现在委派补缺时：编排者展示正典五表，批准之后才开始步骤 2；用户要求的修改退回步骤 1。
 
-Step 3 ends with a user review checkpoint: after round 3d returns, the orchestrator presents the
-artifacts to the user and asks for review before dispatching the gates. Approval is required;
-requested changes go back to step 3.
+步骤 3 以用户审阅检查点收尾：3d 轮返回后，编排者把产物呈现给用户，在派发两个门禁之前请用户审阅。
+必须获得批准；用户要求的修改退回步骤 3。
 
-Steps 4 and 5 are gates. A GDD that fails either returns to step 3 before scaffolding starts. They
-dispatch together in one message; the orchestrator cross-checks the pages step 4 cuts against the
-source-page column step 5's audit cites.
+步骤 4 和步骤 5 是门禁。任何一项不通过的 GDD 都要在脚手架开始之前退回步骤 3。两者在同一条消息里
+一同派发；编排者把步骤 4 裁掉的页面与步骤 5 分析引用的「答案来源页」列逐一对照。
 
-Step 6a dispatches the moment step 2 returns, in parallel with steps 3–5; only 6b waits for both it
-and the gates.
+6a 在步骤 2 一返回就派发，与步骤 3–5并行；只有 6b 要同时等它和两个门禁。
 
-**Dispatch contract.** The orchestrator writes the prompt, reads the returned artifact, then dispatches the
-next step. It performs step 2 itself and delegates the rest. Subagents hold no conversation with the user.
-Where a step file marks rounds parallel, their prompts go out together in one message and the orchestrator
-merges the returns.
-Every subagent prompt carries all six items below (a filled sample: examples/dispatch-prompt.md):
+**派发契约。**编排者撰写提示词，读取返回的产物，然后派发下一步。步骤 2 由编排者亲自执行，
+其余全部委派。子代理不与用户对话。步骤文件里凡标为并行的轮次，其提示词在同一条消息里一并发出，
+返回结果由编排者合并。
+每个子代理提示词都要携带以下六项（填写好的样例：examples/dispatch-prompt.md）：
 
-1. the story source path — step 1 always; step 3 only as a fallback when `docs/story-canon.md` lacks a life trace the GDD needs (the prompt says so explicitly); no other step receives it, and their prompts state that the raw source material must not be read;
-2. the project root (convention above) and the file paths of prior artifacts — naming the sections the step file specifies (e.g. `docs/gdd.md` sections 1, 2, 4), never a whole file where a section list exists;
-3. that step's deliverable definition, copied from its workflow file;
-4. the reference file paths that step cites, plus that step's example file from the table above when one exists;
-5. the realism-priority line — references/guardrails.md R12: realism outranks any check, and a conflict goes to the user through the orchestrator;
-6. the closing line: "return the artifact plus unresolved questions; route questions back through the orchestrator."
+1. 故事源路径——步骤 1 始终携带；步骤 3 仅在 `docs/story-canon.md` 缺少 GDD 所需的生活痕迹时作为兜底携带（提示词里要明说这一点）；其余步骤一律不带，且它们的提示词要声明不得阅读原始素材；
+2. 项目根目录（约定见上）与既有产物的文件路径——按步骤文件的规定点名到节（例如 `docs/gdd.md` 第 1、2、4 节），凡是有节清单的地方就绝不给整份文件；
+3. 该步骤的交付物定义，从它的 workflow 文件里原样复制；
+4. 该步骤引用的参考文件路径，加上表中该步骤的示例文件（若存在）；
+5. 真实感优先那一行——references/guardrails.md R12：真实感高于任何检查，遇到冲突经由编排者交给用户裁决；
+6. 收尾行：「返回产物和未决问题；问题经由编排者转达」。
 
-A prompt carries paths and the round definition — nothing else: never an inline digest of an artifact the
-round is about to read (the file is the input; a prompt summary is input the round has to hold twice), and
-never required reading beyond what the step file cites (the step file's list is complete — nothing gets
-added at dispatch time).
+提示词只带路径与轮次定义——除此之外什么都不带：绝不内联摘录该轮即将读取的产物（文件本身就是输入；
+提示词里的摘要等于让该轮把同一份输入握两遍），也不给步骤文件引用范围之外的必读材料（步骤文件的清单
+是完整的——派发时不得添加任何东西）。
 
-The one exception is step 6a: its prompt carries `docs/system-profile.md` and the infrastructure references
-only — no raw story source, no plot-bearing artifacts.
+唯一的例外是 6a：它的提示词只带 `docs/system-profile.md` 和基础设施类参考文件——不带原始故事源，
+不带任何承载剧情的产物。
 
-Step 3 dispatches the six items four times, once per round (3b and 3c together in one message); which files each round's prompt names is specified in `workflow/03-gdd.md`.
+步骤 3 要把这六项派发四次，每轮一次（3b 与 3c 在同一条消息里一起发）；每轮提示词点名哪些文件，
+由 `workflow/03-gdd.md` 规定。

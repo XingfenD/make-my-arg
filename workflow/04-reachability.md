@@ -1,57 +1,85 @@
-# Step 4 — Reachability Chain Analysis (触达链分析)
+# 步骤 4 — 触达链分析
 
-A gate step. A GDD that fails here goes back to step 3 before any scaffolding starts.
+一个门禁步骤。在这里不合格的 GDD，必须在任何脚手架搭建之前退回步骤 3。
 
-**Input:** `docs/gdd.md` sections 1, 2, 4, plus the keyword table. **Output:** `docs/reachability.md`. A sample of the expected artifact shape: examples/reachability-excerpt.md.
+**输入：**`docs/gdd.md` 第 1、2、4 节，外加关键词表。**输出：**`docs/reachability.md`。期望产物
+形态的样例：examples/reachability-excerpt.md。
 
-**Dispatched together with step 5.** When this step cuts a page (fix 4 below), name it in the return so the orchestrator can cross-check it against the source-page column of `docs/puzzle-audit.md` — a cut page that some puzzle's inference chain depends on fails the gate.
+**与步骤 5 一起派发。**当本步砍掉一个页面（下文修复 4）时，在返回中点名它，让编排者能拿它与
+`docs/puzzle-audit.md` 的来源页面列交叉核对——如果某个谜题的推理链依赖被砍的页面，门禁就不通过。
 
-Build a directed graph: nodes are pages, edges are inbound routes, root is `index.html`. Walk it breadth-first. Every page the walk misses is an orphan.
+构建一张有向图：节点是页面，边是入站路线，根是 `index.html`。广度优先走图。走图没走到的每个
+页面都是孤儿页。
 
-## Legitimate inbound routes (closed list)
+## 合法入站路线（封闭清单）
 
-An edge counts only if it belongs to this list. Anything else is a planted clue link.
+只有属于本清单的边才算数。其余一切都是硬塞的线索链接。
 
-0. Entry ritual page start button — the single edge from `index.html` into the public world
-1. Nav bar
-2. Index or listing page entry — news list, staff list, menu list, archive list, sitemap; a query form's result page counts as the listing the page carrying the form owns
-3. Footer link — 员工入口, 联系我们, 备案信息
-4. Search hit (M1) — keyword → hidden page, from the index of the audience the search surface belongs to
-5. Gate or login unlock (M2/M3) — a `data-next` target
-6. Breadcrumb or "back to list" link inside a document
-7. Related-document reference that the issuing body would really print — a contract citing its annex, a notice citing the regulation behind it. Same area only: a shallow page never links a deeper area's page under "related files / archives / pages".
-8. Hand-typed URL (container C only)
-9. Off-site or fourth-wall link, declared in the GDD
-10. Read-gated entry (M14, R13) — an `<a href data-after="pages/source.html">`: the edge exists in the DOM but fires only once that source page has been READ (`references/structure/form-device.md` §4). The row's 来源页面 column carries both the anchor page and the read page; the fourth column says why the entry appears at that moment of the story.
+0. 入场仪式页的开始按钮——从 `index.html` 通往公开世界的唯一一条边
+1. 导航栏
+2. 索引页或列表页入口——新闻列表、员工列表、菜单列表、档案列表、站点地图；查询表单的结果页
+   算作该表单所在页面拥有的列表
+3. 页脚链接——员工入口、联系我们、备案信息
+4. 搜索命中（M1）——关键词 → 隐藏页面，来自该搜索面所属受众的索引
+5. 门禁或登录解锁（M2/M3）——一个 `data-next` 目标
+6. 文档内部的面包屑或「返回列表」链接
+7. 发文机关真的会印出来的相关文档引用——合同引用它的附件、通知引用它背后的规章。仅限同一区域
+   内：浅层页面绝不在「相关文件 / 档案 / 页面」名目下链接更深层区域的页面
+8. 手动输入的 URL（仅容器 C）
+9. 站外或第四面墙链接，须在 GDD 中声明
+10. 读态条目（M14, R13）——一个 `<a href data-after="pages/source.html">`：这条边存在于 DOM 中，
+    但只有在来源页被读过（READ）之后才生效（`references/structure/form-device.md` §4）。该行的
+    来源页面 列同时承载锚点页与被读页；第四列说明这个条目为何在故事的那一刻出现。
 
-## Deliverable table
+## 交付物表
 
-One row per page:
+每个页面一行：
 
 | 页面 | 触达方式（上表编号） | 来源页面 | 该来源为什么会放这个链接 | 从首页跳数 |
 |---|---|---|---|---|
 
-The fourth column takes one sentence written from the organization's point of view. An edge with no sentence gets deleted, and its target page gets re-routed.
+第四列写一句从组织视角出发的话。写不出这句话的边就被删除，其目标页面另行改道。
 
-## Orphan fixes, in priority order
+## 孤儿页修复，按优先级排序
 
-1. Add the page to a listing the site would really keep — news index, staff index, archive list, `sitemap.xml`, 友情链接.
-2. Make it search-only by adding a keyword entry. Fits hidden pages.
-3. Make it a gate target.
-4. Cut the page.
+1. 把页面加进网站真会维护的某个列表——新闻索引、员工索引、档案列表、`sitemap.xml`、友情链接。
+2. 加一条关键词，让页面只能通过搜索到达。适合隐藏页面。
+3. 让它成为某个门禁的目标。
+4. 砍掉这个页面。
 
-Planting a link in the body copy of an unrelated page is off the list. That is the defect this step exists to catch.
+在不相关页面的正文里硬塞链接不在清单之内。那正是本步要抓的缺陷。
 
-## Additional checks
+## 附加检查
 
-- **Reverse check (R7).** An edge whose only function is moving the player to the next clue is a defect even when its target is reachable. Delete it and re-route through a listing page or search.
-- **Depth check.** Count hops from `index.html` to the page carrying each gate's clue. A clue sitting more than three listing-levels deep gets a shallower index entry.
-- **Access check (R10; M3).** System containers: every protected page names the accounts that open it (`data-access`), every login gate names the account it grants (`data-grant`), and no account inherits another's page. A numeric privilege ladder, or an admin account that opens everything, fails this check (`references/structure/form-system.md` §1). A **derived/composite** account is not printed on any page, so the walk cannot read it as a verbatim clue: record its rule and public-page components in the GDD access inventory, declare them in `data/credentials.src.json`, and verify reachability with `tools/check-reachability.mjs` (a rehearsal copy with the values injected) — `tools/check-solvable.mjs` alone reports such a gate STUCK (`references/structure/tooling.md` §3 item 6).
-- **Keyword solvability (M1).** Every key in the plaintext keyword tables appears verbatim in the copy of a reachable page **of the same audience**. A keyword that appears nowhere makes its puzzle unsolvable; a public-index key that appears only on a restricted page has no legitimate delivery. (A derived *credential* is the exception to "appears verbatim": its parts appear, the assembled string does not — that is `check-credentials.mjs`'s job, not this check's.)
-- **Index scoping check (R8; M1).** The public table carries no restricted-area URL (default `internal/`, the `secretUrl` CONFIG knob), and every deep-table entry is fetched only from a deep page. A public search hit that opens a restricted page without a gate fails this check. (Website form; a system form keeps one index and resolves hits through the access matrix — `references/structure/form-system.md` §1.)
-- **Locked-entry check (R8).** Every result or list row the visitor may not open resolves to its gate or a plain locked notice; one that opens its document directly is a defect.
-- **Title check (R9).** Each keyword table title reads as a catalog entry (issuing body + document type + number/date). A title that summarizes the document leaks plot onto the search results page.
-- **Read-state check (M14; R13).** Every entry the GDD claims “appears only after page X was read” carries `data-after` naming X — a plain link making the same claim is the defect class R13 names; `check-solvable.mjs` fires the edge only after X joins the visited set.
-- **Post-implementation re-run.** After step 7, re-walk the graph with `node tools/check-links.mjs` plus the link-provenance item of the `workflow/08-self-check.md` checklist (cadence in `references/structure/tooling.md` §1). The graph drifts while pages are written.
+- **反向检查（R7）。**唯一作用是把玩家送到下一个线索的边，即便其目标可达也是缺陷。删掉它，
+  改经列表页或搜索重新布线。
+- **深度检查。**数出从 `index.html` 到承载每个门禁线索的页面的跳数。藏在三层列表之下的线索，
+  要给它一个更浅的索引入口。
+- **访问检查（R10；M3）。**系统容器：每个受保护页面都点名能打开它的账号（`data-access`），
+  每个登录门禁都点名它授予的账号（`data-grant`），且任何账号都不得继承另一个账号的页面。
+  数字型权限阶梯，或一个能打开一切的管理员账号，都通不过这项检查
+  （`references/structure/form-system.md` §1）。**派生/组合**账号不出现在任何页面上，因此走图
+  无法把它当作逐字线索读到：把它的规则和公开页组成部分记录在 GDD 权限清单里，在
+  `data/credentials.src.json` 中声明，并用 `tools/check-reachability.mjs`（一份注入了取值的
+  预演副本）验证可达性——只跑 `tools/check-solvable.mjs` 会把这样的门禁报成 STUCK
+  （`references/structure/tooling.md` §3 item 6）。
+- **关键词可解性（M1）。**明文关键词表里的每个键，都必须**在同一受众**的某个可达页面文案中
+  逐字出现。任何地方都不出现的关键词会让它的谜题无解；只出现在受限页面上的公开索引键没有任何
+  合法的传递途径。（派生*凭据*是「逐字出现」的例外：它的组成部分会出现，拼装出的字符串不会
+  ——那是 `check-credentials.mjs` 的职责，不是本项检查的。）
+- **索引范围检查（R8；M1）。**公开表不得携带任何受限区 URL（默认 `internal/`，即 `secretUrl`
+  这个 CONFIG 旋钮），每个深层表条目只能从深层页面取得。不经过门禁就打开受限页面的公开搜索
+  命中通不过这项检查。（网站形态；系统形态只保留一个索引，命中通过权限矩阵解析——
+  `references/structure/form-system.md` §1。）
+- **锁定条目检查（R8）。**访客不可打开的每个结果或列表行都要解析到它的门禁页或一条普通的锁定
+  通知；直接打开其文档的即为缺陷。
+- **标题检查（R9）。**每个关键词表标题都要读作一条目录条目（发文机关 + 文档类型 + 编号/日期）。
+  概括文档内容的标题会把剧情泄漏到搜索结果页上。
+- **读态检查（M14；R13）。**GDD 声称「仅在读过页面 X 之后出现」的每个条目，都必须携带点名 X 的
+  `data-after`——用普通链接做同样声称的，就是 R13 点名的缺陷类别；`check-solvable.mjs` 只在 X
+  加入已访问集合后才触发这条边。
+- **实现后重跑。**步骤 7 之后，用 `node tools/check-links.mjs` 加上 `workflow/08-self-check.md`
+  检查清单里的链接来源项重新走图（节奏见 `references/structure/tooling.md` §1）。页面在被写出的
+  过程中，图会漂移。
 
-Baseline-test traps for this step: references/common-mistakes.md §4 — check them before returning the artifact.
+本步的基线测试陷阱：references/common-mistakes.md §4 — 交付产物前先检查它们。

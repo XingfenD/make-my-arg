@@ -1,93 +1,93 @@
-# Baseline-Test Common Mistakes (observed; avoid each)
+# 基线测试常见错误（实际观察到；逐条避免）
 
-Traps observed while running this skill on real projects, grouped by the workflow step that owns them.
-Each step file cites its section; when a step cites this file, the orchestrator includes it in that
-subagent's dispatch prompt. Check the section before returning the step's artifact. Section numbers
-follow the workflow steps; rule IDs `(Rn)` cite the canonical table in `references/guardrails.md`.
+在真实项目上运行本 skill 时观察到的陷阱，按归属的工作流步骤分组。
+每个步骤文件引用自己的小节；当某个步骤引用本文件时，编排者会把它纳入该
+子代理的派发提示词。交回该步骤的产物之前先对照本小节检查一遍。小节编号
+跟随工作流步骤；规则 ID `(Rn)` 引自 `references/guardrails.md` 的规范规则表。
 
-## Step 1 — Story Intake
+## 1. 故事摄入
 
-| Mistake | Correct approach |
+| 错误 | 正确做法 |
 |---|---|
-| Story chronology only | Twist points reordered by player discovery; the central twist page releases multiple side hooks in one page |
+| 只按故事时间线排 | 反转点按玩家发现顺序重排；核心反转页在一页内放出多个支线钩子 |
 
-## Step 2 — Container & Module Selection
+## 2. 容器与模块选择
 
-| Mistake | Correct approach |
+| 错误 | 正确做法 |
 |---|---|
-| An account/login system stuffed into a story that has no system fiction | Reach follows the container: a public website differentiates by search and gates, a system fiction by accounts (`workflow/02-container.md`) |
-| Every optional module turned on "to be safe", or the reskin impact chosen without asking | Modules are selected with the user at step 2 and recorded in `docs/system-profile.md`; the built site matches the selection exactly |
-| A form axis decided by taste when the fiction forces it (or the reverse: axes left blank because the story "picked itself") | All five axes are answered together with the user; an unanswered row becomes an explicit question — a later change re-runs step 2 before scaffolding (`workflow/02-container.md`) |
-| A device class declared (phone / browser-chrome) with a pure-web shell shipped | The class is a promise step 6a keeps with shell components (`references/structure/form-device.md` §2); step 8 checks it |
-| Persistence copied from a reference site with no fiction warrant, or a save surface on a `progress: none` profile | State follows device ownership (R13): the profile's state contract is the only source of storage decisions |
+| 往没有系统虚构的故事里硬塞账号/登录系统 | 触达方式随容器而定：公开网站用搜索和门禁区分深度，系统虚构用账号（`workflow/02-container.md`） |
+| 为了「保险」把每个可选模块都打开，或不问用户就拍板换皮冲击 | 模块在步骤 2 与用户一起选定并记入 `docs/system-profile.md`；建好的站点与选择严格一致 |
+| 虚构已经强制了某个形态轴，却凭口味拍板（反过来也一样：因为故事「自己选好了」而把形态轴留空） | 形态五轴都要和用户一起作答；未作答的一行变成显式问题——后续变更要在脚手架之前重跑步骤 2（`workflow/02-container.md`） |
+| 声明了设备类（手机 / 浏览器 chrome），交付的却是纯网页外壳 | 设备类是步骤 6a 用外壳组件兑现的承诺（`references/structure/form-device.md` §2）；步骤 8 检查它 |
+| 从参考站点照搬持久化而虚构不背书，或在 `progress: none` 的装配记录上出现存档界面 | 状态跟随设备归属（R13）：装配记录里的状态契约是存储决策的唯一来源 |
 
-## Step 3 — Write the GDD
+## 3. 撰写 GDD
 
-| Mistake | Correct approach |
+| 错误 | 正确做法 |
 |---|---|
-| Puzzles detached from characters (abstract mechanisms, random passwords) | Password = character inference; finding the password = understanding a character (R3) |
-| Horror delivered through adjectives and jump-scare copy | Horror delivered through bureaucratic ledgers, repetition (one sentence copied 21 times), absence (unanswered posts, `[deleted]`) |
-| An ending that is a score | The ending reuses documents the player has just read; a moral choice + fourth-wall close when M10 is selected |
-| No progress feedback when M7 is selected | `NN/total` in each page footer; deep pages use anomalous numbering such as `ex/total` |
-| (Website form) one flat keyword index spanning both areas; (system forms) access maintained in the keyword JSONs | Website form: one index per audience (R8). System forms: one index, and the account matrix on the pages decides what a hit opens — access never lives in the JSON (R10; `references/structure/form-system.md` §1) |
-| (System forms) a colleague's login printed on a public page (`账号：chen.gd` in the roster) | Only the initial account may be printed; every other account is inferred from text clues (R10; `references/structure/form-system.md` §1) |
-| GDD contradicts itself — a page named two ways (page map vs. nav vs. its own title), or a value one line forbids and another requires on the same page | Run the step-3 self-consistency scan before the user checkpoint; `docs/registry.md` is the single source of truth every page copies |
-| A worked example that violates the rule it illustrates (sample `wang00□□` against a "pinyin initials" rule, or the wrong shape) | Every example satisfies its stated derivation and matches the real value's length / separators / mask |
-| Two components of one credential co-located on a page (工号 + year together → zero-jump solve) | Split the components across pages so the derivation is the puzzle (R3; GDD puzzle allocation table) |
+| 谜题脱离人物（抽象机制、随机密码） | 密码 = 人物推理；找密码 = 理解人物（R3） |
+| 靠形容词和跳吓文案输出恐怖 | 靠官僚台账、重复（一句话抄 21 遍）、缺席（无人回复的帖子、`[deleted]`）输出恐怖 |
+| 结局是一个分数 | 结局复用玩家刚读过的文档；选中 M10 时给道德选择 + 破墙收尾 |
+| 选中 M7 却没有进度反馈 | 每个页脚放 `NN/total`；深层页面用 `ex/total` 这类异常编号 |
+| （网站形态）一张横跨两个区域的扁平关键词索引；（系统形态）把权限维护在关键词 JSON 里 | 网站形态：每个受众一张索引（R8）。系统形态：单一索引，由页面上的权限矩阵决定命中打开什么——权限绝不放进 JSON（R10；`references/structure/form-system.md` §1） |
+| （系统形态）把同事的登录账号印在公开页上（名录里的 `账号：chen.gd`） | 只有初始账号可以印出来；其他账号一律从文本线索推断（R10；`references/structure/form-system.md` §1） |
+| GDD 自相矛盾——同一个页面两种叫法（页面地图 vs. 导航 vs. 它自己的标题），或同一个值一行禁止另一行要求 | 在用户审阅检查点之前跑步骤 3 自洽扫描；`docs/registry.md` 是每个页面照抄的唯一事实源 |
+| 示例违反了它要说明的规则（对着「拼音首字母」规则给出样例 `wang00□□`，或形状不对） | 每个示例都满足它声称的推导，并与真实值的长度 / 分隔符 / 掩码一致 |
+| 一个凭据的两个部件放在同一页（工号 + 年份 → 零跳解出） | 把部件拆到不同页面，让推导本身成为谜题（R3；GDD 谜题分配表） |
 
-## Step 4 — Reachability
+## 4. 触达链
 
-| Mistake | Correct approach |
+| 错误 | 正确做法 |
 |---|---|
-| Links planted to chain clue → clue | Clue delivery rides the site's own IA: nav bar, index and listing pages, sitemap, search (R7) |
-| Shallow page links a deep page under "related files / archives / pages" | Same-area references only; depth is crossed by a reach module (R7; `references/structure/form-system.md` §1) |
-| Numeric privilege ladder, or an admin account that opens everything | Per-account access: a page opens only to the accounts it names (`data-access`); no privilege inheritance (R10; `references/structure/form-system.md` §1) |
-| Result titles that summarize the plot ("…完整版", "四名家长信息") | Catalog entries as the archive would print them: issuing body + document type + number/date (R9) |
-| An unreadable entry with no way to understand it is locked | It resolves to its gate or a plain locked notice; it never opens the document (R8) |
-| Orphan pages nobody can reach | Step 4 audits the graph before scaffolding; step 8 re-walks it after |
+| 埋链接把线索 → 线索串起来 | 线索传递搭载网站自身的信息架构：导航栏、索引页与列表页、站点地图、搜索（R7） |
+| 浅层页面在「相关文件 / 档案 / 页面」下链接深层页面 | 只允许同区域引用；深度靠触达模块跨越（R7；`references/structure/form-system.md` §1） |
+| 数字权限阶梯，或一个全开的管理员账号 | 按账号分别授权：页面只对它点名的账号开放（`data-access`）；没有权限继承（R10；`references/structure/form-system.md` §1） |
+| 结果标题概括剧情（「…完整版」、「四名家长信息」） | 目录条目，按档案机构会印成的样子：发文机关 + 文种 + 文号/日期（R9） |
+| 打不开的条目没有任何途径让人知道它被锁了 | 它解析到自己的门禁页或一条朴素的锁定提示；绝不打开文档（R8） |
+| 谁也走不到的孤儿页 | 步骤 4 在脚手架之前审计整张图；步骤 8 之后重走一遍 |
 
-## Step 5 — Puzzle Audit
+## 5. 谜题设计分析
 
-| Mistake | Correct approach |
+| 错误 | 正确做法 |
 |---|---|
-| The answer in a `placeholder` or help text | Field names only; oblique failure hints carry the feedback (R4) |
-| A gate kept because it is already written | Step 5 necessity question; a blank justification means 删除 |
-| Printing a derived account on a public page to make `check-solvable` green | It only matches verbatim strings, so a derived credential reads STUCK; prove it with `check-credentials.mjs` (parts + rule + zero-plaintext), never by printing it — a static site has no server auth, so client-side masking is not privacy |
+| 答案写在 `placeholder` 或帮助文本里 | 只写字段名；反馈交给侧面的失败提示（R4） |
+| 因为已经写好了就保留一个门禁 | 步骤 5 的必要性问题；理由空着就意味着 删除 |
+| 把推导账号印在公开页上，只为让 `check-solvable` 变绿 | 它只匹配逐字字符串，所以推导凭据会显示 STUCK；用 `check-credentials.mjs` 证明它（部件 + 规则 + 零明文），绝不用打印的方式——静态站点没有服务端鉴权，客户端遮挡不算隐私 |
 
-## Step 6 — Scaffold
+## 6. 脚手架
 
-| Mistake | Correct approach |
+| 错误 | 正确做法 |
 |---|---|
-| Building a SPA adventure engine (canvas scenes, generic puzzle framework) | Multi-page fake system; each page is an independently openable "document" (R1). The apparatus exception requires the five recorded conditions up front (`references/structure/form-device.md` §5) — never discovered mid-implementation |
-| A module drift: the framework ships machinery the profile did not select, or misses one it did | Build exactly the selected modules — no unused skins, search tables, gate components, or account furniture (`workflow/06-scaffold.md`) |
-| Keywords stored in plaintext JSON | Build script hashes them into a table, preventing "read the source to win" (R3) |
-| Rewriting a checker to fit a renamed project | The shared `tools/config.mjs` absorbs renamed dirs, layer names, markers, and the search mount for both checkers; `references/structure/tooling.md` §2 lists the knobs and §3 the steps no static check replaces |
-| (6a) The prompt carries the raw story source, GDD, or other plot-bearing artifacts | 6a reads only `docs/system-profile.md` plus the infrastructure references; keeping plot out of its context is the point of the split |
-| (6a) Plot copy written into base pages to fill empty bodies | Base pages carry the system's own words; empty or placeholder bodies are correct at this stage |
-| (6b/7) Rebuilding or restyling the framework 6a produced | The shell, skins, components, and tools are fixed at 6a; 6b adds skeletons, step 7 fills content |
+| 搭一个 SPA 冒险引擎（canvas 场景、通用谜题框架） | 多页假系统；每一页都是可独立打开的「文档」（R1）。chrome-as-apparatus 例外要求五项条件事先记录在案（`references/structure/form-device.md` §5）——绝不允许在实现中途才冒出来 |
+| 模块漂移：框架带出了装配记录没选的机制，或漏掉了它选中的 | 严格只构建选中的模块——不要没用上的皮肤、搜索表、门禁组件或账号家具（`workflow/06-scaffold.md`） |
+| 关键词存成明文 JSON | 构建脚本把它们哈希进表里，杜绝「读源码就赢」（R3） |
+| 为了迁就改名的项目去改写检查器 | 共享的 `tools/config.mjs` 为两个检查器吸收目录改名、层级名、标记以及搜索挂载点；`references/structure/tooling.md` §2 列出旋钮，§3 列出静态检查无法替代的步骤 |
+| （6a）提示词里带着原始故事源、GDD 或其他含剧情的产物 | 6a 只读 `docs/system-profile.md` 加基础设施参考文档；把剧情挡在它的上下文之外正是这次拆分的意义 |
+| （6a）为了填充空白正文把剧情文案写进基础页面 | 基础页面只承载系统自己的话语；此阶段正文为空或占位才是正确的 |
+| （6b/7）重建或重新装饰 6a 产出的框架 | 外壳、皮肤、组件和工具在 6a 就定死了；6b 添加骨架，步骤 7 填内容 |
 
-## Step 7 — Implementation
+## 7. 实现
 
-| Mistake | Correct approach |
+| 错误 | 正确做法 |
 |---|---|
-| Plot stated on a public page ("head chef — and the man who vanished in 2019") | Public pages publish what that organization publishes; the player assembles the plot from the secret layer (R5) |
-| Announcements written as game hints | Real document format: issuer, number, date, addressee, body, seal, distribution list (R6) |
-| Guidance copy decorated with metaphor and personification | Plain declarative sentences (R11) |
-| Contrast frames in site copy (是…不是… / 是…而是…) | One positive clause per sentence (R11; `references/design-playbook.md` §4.14) |
-| Orchestrator writes the pages itself | One subagent per workflow step; the orchestrator dispatches and reviews |
-| A declared image / seal / scan / photo never landed (no `<img>` written, so no checker complains) | Step 7 phase 4 owns the GDD asset manifest; step 8 reconciles every declared asset against files + references |
-| One login split into two forms to give the checker "one form = one identity" | One box + `data-grants` (account→identity map); two forms leak the design intent in the title and read as game UI (`references/structure/form-system.md` §2) |
-| Access state in per-tab `sessionStorage` behind a `target="_blank"` result | Session cookie (cross-tab); the new tab the result opens else reads as logged out (`references/structure/components.md` §2–§3) |
-| A read-state entry planted as a plain link while the copy claims "appears after you read X" | `data-after="…/X.html"` is the mechanical claim; the walk proves it (`references/structure/form-device.md` §4, R13) |
-| Credential printed in plaintext to satisfy a static checker | Zero-plaintext: `check-credentials.mjs` asserts no account appears whole; client-side masking is not privacy on a static site |
+| 公开页上写明剧情（「主厨——2019 年失踪的那个人」） | 公开页只发布该组织会发布的内容；剧情由玩家从秘密层拼出（R5） |
+| 公告写成游戏提示 | 真实文书格式：发文机关、文号、日期、主送、正文、印章、抄送列表（R6） |
+| 引导文案用比喻和拟人装饰 | 平实的陈述句（R11） |
+| 站内文案出现对照句式（是…不是… / 是…而是…） | 每句只用一个正面陈述分句（R11；`references/design-playbook.md` §4.14） |
+| 编排者自己动手写页面 | 每个工作流步骤一个子代理；编排者只负责派发与审阅 |
+| 声明过的图片 / 印章 / 扫描件 / 照片从未落地（没写 `<img>`，所以没有检查器会报错） | 步骤 7 阶段 4 负责 GDD 资产清单；步骤 8 把每项声明的资产与文件 + 引用对账 |
+| 把一次登录拆成两个表单，只为迎合检查器的「一个表单 = 一个身份」 | 一个输入框 + `data-grants`（账号→身份映射）；两个表单会在标题里泄露设计意图，读起来像游戏 UI（`references/structure/form-system.md` §2） |
+| 在 `target="_blank"` 结果后面把访问状态存在按标签页隔离的 `sessionStorage` 里 | 会话 cookie（跨标签页）；否则结果打开的新标签页会读成未登录（`references/structure/components.md` §2–§3） |
+| 读态条目被当成普通链接埋进去，文案却声称「读完 X 之后出现」 | `data-after="…/X.html"` 才是机制层面的声明；走图会证明它（`references/structure/form-device.md` §4, R13） |
+| 把凭据明文打印出来，只为满足静态检查器 | 零明文：`check-credentials.mjs` 断言没有任何账号完整出现；静态站点上客户端遮挡不算隐私 |
 
-## Step 8 — Self-Check
+## 8. 自检
 
-| Mistake | Correct approach |
+| 错误 | 正确做法 |
 |---|---|
-| The answer leak-scanned only in form UI | Scan the page **chrome** too — `<title>`, top bar, footer. An answer printed in a header is the same defect as one in a `placeholder` (R4) |
-| Cross-tab unlock left untested because `check-solvable` is green | It models identities as one global set and cannot see per-tab isolation; run the manual new-tab test (log in → open a `target="_blank"` result → the protected doc must be unlocked there) |
-| Asset manifest unreconciled | Every GDD-declared asset exists under `assets/` and is referenced by ≥1 page; an `<img>` never written has no `src` for check-links to resolve |
-| Shared entities drift between pages | Reconcile names / IDs / accounts / page titles / dates against `docs/registry.md`; a roster missing a duty-schedule person, or a page under two titles, fails here |
-| Read-state edges invisible to the graph because marking lives only in JS | The anchor carries `data-after`; a runtime-only `readState.has()` check leaves the edge out of the walk — re-run `check-solvable.mjs` and compare the `after-read` set with the reachability table |
-| Shipping without a solvability check | Copy `assets/tools/check-solvable.mjs` in at scaffold time. It proves every gate stays solvable and every page reachable after content edits, and turns red when a leak fix removes a clue. For derived credentials add `check-credentials.mjs` + `check-reachability.mjs` |
+| 泄漏扫描只扫表单 UI | 页面 **chrome** 也要扫——`<title>`、顶栏、页脚。答案印在页眉里，和印在 `placeholder` 里是同一种缺陷（R4） |
+| 因为 `check-solvable` 是绿的就漏测跨标签页解锁 | 它把身份建模成一个全局集合，看不见按标签页的隔离；手动跑一次新标签页测试（登录 → 打开一个 `target="_blank"` 结果 → 受保护的文档在那里必须已解锁） |
+| 资产清单没有对账 | GDD 声明的每件资产都存在于 `assets/` 下，且被 ≥1 个页面引用；从没写出的 `<img>` 没有 `src` 供 check-links 解析 |
+| 共享实体在页面之间漂移 | 对照 `docs/registry.md` 核对名称 / ID / 账号 / 页面标题 / 日期；名录里少了排班表上的人，或一个页面挂着两个标题，都在这里判失败 |
+| 读态边只存在于 JS 里，对图不可见 | 锚点携带 `data-after`；只在运行时用 `readState.has()` 判断，会让这条边进不了走图——重跑 `check-solvable.mjs`，把 `after-read` 集合与触达表对比 |
+| 不做可解性检查就交付 | 脚手架阶段就把 `assets/tools/check-solvable.mjs` 拷进来。它证明内容编辑之后每个门禁仍可解、每页仍可达，且当泄漏修复顺手删掉一条线索时会变红。有推导凭据时再加 `check-credentials.mjs` + `check-reachability.mjs` |

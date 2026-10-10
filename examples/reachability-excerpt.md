@@ -1,9 +1,9 @@
-# Example — Reachability Excerpt (Step 4)
+# 示例——触达链摘录（步骤 4）
 
-Shape anchor for `docs/reachability.md`. One row per page; the fourth column is one sentence written
-from the organization's point of view (workflow/04-reachability.md).
+`docs/reachability.md` 的形态锚点。每页一行；第四列是从组织方视角写的一句话
+（workflow/04-reachability.md）。
 
-## Deliverable table (excerpt)
+## 交付物表（摘录）
 
 | 页面 | 触达方式（编号） | 来源页面 | 该来源为什么会放这个链接 | 从首页跳数 |
 |---|---|---|---|---|
@@ -13,17 +13,17 @@ from the organization's point of view (workflow/04-reachability.md).
 | pages/internal/s21-ledger.html | 4 搜索命中 | search.html（暗层索引） | 深区搜索指向暗层表 | 3 |
 | pages/internal/s22-diary.html | 5 门解锁 | login.html `data-next` | 登录后跳转的目标页 | 3 |
 
-## Defect examples (the two this step exists to catch)
+## 缺陷示例（本步骤存在的意义就是抓住这两类）
 
 | 缺陷行 | 为什么不合格 | 修复（按优先级） |
 |---|---|---|
 | pages/internal/s23.html ← 正文内链自 news.html | 编号外私植链接；组织不会在新闻正文链向私密页（R7） | 改为暗层索引加关键词，search-only 触达 |
 | pages/menu.html → pages/internal/s21-ledger.html（"相关文件"） | 浅层页跨区链深层页（R7/R8） | 删除该链；由搜索或门触达 |
 
-## Check verdicts (one line each)
+## 各项检查结论（每项一行）
 
-- Reverse check: 2 edges deleted (news.html 正文内链 ×2), re-routed via listing.
-- Depth check: max 3 hops, no clue deeper than 3 listing levels.
-- Keyword solvability: every public key appears verbatim in a reachable public page.
-- Index scoping check: keywords.surface.json carries no `pages/internal/` URL. PASS.
-- Title check: all titles are catalog entries (R9). PASS.
+- 反向检查：删除 2 条边（news.html 正文内链 ×2），改由列表页触达。
+- 深度检查：最深 3 跳，无线索深过 3 层列表层级。
+- 关键词可解性：每个公开区关键词都逐字出现在可达的公开页里。
+- 索引范围检查：keywords.surface.json 不含任何 `pages/internal/` URL。PASS。
+- 标题检查：所有标题都是目录条目（R9）。PASS。

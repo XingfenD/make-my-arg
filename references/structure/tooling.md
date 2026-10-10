@@ -1,44 +1,56 @@
-# Tooling — Check Cadence, Shared Config, Manual Methods
+# 工具——检查节奏、共享配置、人工方法
 
-> Companion to `references/structure/base.md` and `references/structure/components.md`. Required reading at
-> step 8 (and at step 6, when copying `tools/` into a project).
+> `references/structure/base.md` 与 `references/structure/components.md` 的配套
+> 文档。步骤 8 的必读材料（步骤 6 把 `tools/` 复制进项目时也是）。
 
-## 1. Running the checks
+## 1. 运行检查
 
-The canonical pass/fail checklist — every command and every manual item — is **`workflow/08-self-check.md`**;
-this section covers only the cadence and what the scripts automate.
+规范的通过/失败清单——每条命令与每个人工项——是 **`workflow/08-self-check.md`**；
+本节只讲节奏与脚本自动化的内容。
 
 ```bash
-node tools/build-keywords.mjs     # regenerate the hash table(s) after ANY edit to a data/keywords*.src.json
-node tools/check-links.mjs        # dead links + public-index leaks; expect "0 dead · 0 layer leaks"
-node tools/check-solvable.mjs     # cold-start walk; expect "fixpoint in N round(s) · gates 4/4 unlocked · pages 28/28 reachable"
-node tools/check-credentials.mjs  # composite/derived credentials: parts + rule + zero-plaintext (run whenever data/credentials.src.json exists)
-node tools/check-reachability.mjs # rehearsal build: inject the credentials into a throwaway copy, then prove gates unlock + pages reachable
-node tools/site-graph.mjs       # writes docs/site-graph.json + the viewer tree docs/site-graph/ (reporting tool — exits 0 with problems)
+node tools/build-keywords.mjs     # 只要改过任何 data/keywords*.src.json，就重新生成哈希表
+node tools/check-links.mjs        # 死链 + 公开索引泄漏；期望输出 "0 dead · 0 layer leaks"
+node tools/check-solvable.mjs     # 冷启动走图；期望输出 "fixpoint in N round(s) · gates 4/4 unlocked · pages 28/28 reachable"
+node tools/check-credentials.mjs  # 组合/派生凭据：部件 + 规则 + 零明文（只要 data/credentials.src.json 存在就跑）
+node tools/check-reachability.mjs # 演练构建：把凭据注入一次性副本，再证明门禁可解、页面可达
+node tools/site-graph.mjs       # 写出 docs/site-graph.json 与渲染器树 docs/site-graph/（报告工具——有问题也退出 0）
 ```
 
-`check-solvable.mjs` automates the credential-provenance half of the manual walkthrough **for verbatim credentials**, so the manual pass only judges tone and pacing. It exits non-zero when a clue is deleted, a password changes, a clue is misplaced inside a page's own post-unlock block, or a listing entry is cut — run it after every content edit, not just before deploy. It reads gate conventions from components.md §3 (`data-expect-hash`, `x-show="unlocked"` / `<template x-if="unlocked">`, `x-data="search"`); a project that renames those markers edits `tools/config.mjs` (§2), then re-checks the matcher with `node tools/check-solvable.mjs --self-test`.
+`check-solvable.mjs` **针对逐字凭据**把人工走查中"凭据出处"那一半自动化了，因此
+人工那一轮只需评判语气与节奏。当线索被删除、密码被改动、线索被错放进某个页面自己的
+解锁后区块、或列表条目被删掉时，它以非零码退出——每次内容编辑后都要运行它，而不仅
+是在部署前。它从 components.md §3 读取门禁约定（`data-expect-hash`、
+`x-show="unlocked"` / `<template x-if="unlocked">`、`x-data="search"`）；重命名这些
+标记的项目要改 `tools/config.mjs`（§2），然后用 `node tools/check-solvable.mjs --self-test` 重新校验匹配器。
 
-A **derived/composite** credential (assembled from parts, never printed whole) is outside check-solvable's
-verbatim model — it reports that gate STUCK. Do not print it to turn the check green (it leaks to every
-visitor; no server auth on a static site). `check-credentials.mjs` proves it assembles zero-plaintext from
-public-page components; `check-reachability.mjs` proves the graph still unlocks once it is known (§3 item 6).
+**派生/组合**凭据（由部分拼装、从不整体印出）在 check-solvable 的逐字模型之外——
+它会把那道门禁报为 STUCK。不要为了让检查变绿而把它印出来（那会泄露给每个访客；
+静态站点没有服务端鉴权）。`check-credentials.mjs` 证明它能从公开页面的组成部分
+零明文拼出；`check-reachability.mjs` 证明一旦知晓它、图依然能解锁（§3 item 6）。
 
-`hash.mjs` is a design-time helper (step 3/5, when computing a gate's `data-expect-hash` values);
-`vendor-alpine.mjs` runs once at scaffold time (step 6).
+`hash.mjs` 是设计期辅助工具（步骤 3/5，计算门禁的 `data-expect-hash` 值时使用）；
+`vendor-alpine.mjs` 在脚手架阶段运行一次（步骤 6）。
 
-`site-graph.mjs` shares `site-model.mjs` with `check-solvable.mjs`, so the graph can never disagree with the walk. It draws the same jump relations the walk follows — including `<form action>` submissions, which the walk has always followed (`linksOf`) and which an anchor-only edge set would leave out, calling a form-reached results page unreachable. Should a jump form still escape the graph, the page the walk reaches shows up as a `walk-divergence` problem instead of a silent `unreachable` verdict. It reports the same defects the checkers gate on (unreachable pages, stuck gates, dead targets, layer leaks) plus design-surface signals the checkers do not model: M7 progress extraction and mismatches, step-4 closed-list route claims per edge, and negative progress deltas on non-chrome edges (back-jumps). It exits 0 with problems — gating stays with the checkers.
+`site-graph.mjs` 与 `check-solvable.mjs` 共享 `site-model.mjs`，因此图绝不会与
+走图不一致。它绘制的跳转关系与走图所跟随的完全相同——包括 `<form action>` 提交，
+走图一直都在跟随它们（`linksOf`），而只认锚点的边集会把它们漏掉，进而把经由表单
+到达的结果页判为不可达。倘若某个跳转表单仍然逃出了图，走图能到达的那个页面会以
+`walk-divergence` 问题的形式出现，而不是给出静默的 `unreachable` 判定。它报告
+检查器用于把关的同样缺陷（不可达页面、卡死门禁、失效目标、层泄漏），外加检查器
+不建模的设计面信号：M7 进度提取及其不一致、步骤 4 封闭清单对每条边的路线判定，
+以及非 chrome 边上的负进度增量（回跳）。有问题时它仍以 0 退出——把关仍归检查器。
 
-## 2. Shared config (tools/config.mjs)
+## 2. 共享配置（tools/config.mjs）
 
-The tools are written to an interface, not to one book. Every checker imports its assumptions from the
-shared **`tools/config.mjs`**; a project that renames directories, layer names, or markers edits that one
-file instead of rewriting a checker (a rewrite throws away the defects these checks were built from).
+工具是面向接口写成的，而不是写死在某一套约定上。每个检查器都从共享的
+**`tools/config.mjs`** 读取自己的假设；重命名目录、层名或标记的项目只需改这一个
+文件，而不必重写检查器（重写会丢掉这些检查所针对的缺陷积累）。
 
-| Knob | Default | Used by |
+| 旋钮 | 默认值 | 使用者 |
 |---|---|---|
 | `dataDir` / `pagesDir` | `data` / `pages` | check-links, check-solvable, build-keywords |
-| `surfaceTable` / `secretUrl` | `/surface/i` on the filename / `/^internal\//` | check-links |
+| `surfaceTable` / `secretUrl` | 文件名上的 `/surface/i` / `/^internal\//` | check-links |
 | `entry` | `index.html` | check-solvable, check-reachability |
 | `gateHashAttr` / `indexAttr` | `data-expect-hash` / `data-index` | check-solvable, check-credentials |
 | `grantAttr` / `accessAttr` / `nextAttr` | `data-grant` / `data-access` / `data-next` | check-solvable (system-form accounts) |
@@ -48,29 +60,29 @@ file instead of rewriting a checker (a rewrite throws away the defects these che
 | `maxTokenLen` / `maxPhraseWords` / `maxPhraseLen` | 8 / 4 / 48 | check-solvable matcher |
 | `credTable` | `data/credentials.src.json` | check-credentials, check-reachability |
 | `derivedKinds` / `zeroPlaintextKinds` | `['account','secret']` / `['account']` | check-credentials |
-| `skipDirs` | `.git node_modules tools viewer docs deploy` | the page walk (check-links, check-solvable, site-graph) · check-credentials |
+| `skipDirs` | `.git node_modules tools viewer docs deploy` | 页面走图（check-links、check-solvable、site-graph）· check-credentials |
 | `solver` | `tools/check-solvable.mjs` | check-reachability |
 
-`node tools/check-solvable.mjs --self-test` verifies the matcher (multi-word, long-word, HTML entity, CJK)
-after a config edit.
+改过配置后，用 `node tools/check-solvable.mjs --self-test` 校验匹配器（多词、长词、
+HTML 实体、CJK）。
 
-## 3. What stays manual
+## 3. 哪些仍需人工
 
-Ten things no static checker can see. Each has a manual method or a companion tool; skipping it is the leak path.
+静态检查器看不见的十件事。每一件都有人工方法或配套工具；跳过它就是泄漏通道。
 
-1. **Runtime bindings** — `:href`, `x-bind`, DOM assembled in JS. Both link checkers resolve static `href`, static `<form action>`, and gate `data-next` targets only. The manual method is the keyword tables (search-result routes live there; `data-index` tells the checker which table a search page can reach) and modelling session state as `data-grant` / `data-access` (`references/structure/form-system.md` §5).
-2. **Hubs that are their own database** — container B's plaintext `FILE_DATABASE`, container C's absolute cross-site links. Manual method: treat the hub as a listing page in the step-4 walk, then click every entry once during the step-8 chrome sweep.
-3. **Un-skippability** — check-solvable proves a gate is solvable, never that it is unavoidable; the manual method is audience scoping (M1): per-audience tables, per-page `data-index`, check-links' leak guard (R8).
-4. **Hash normalization is a four-way contract** — the in-page helper, `hash.mjs`, `build-keywords.mjs`, and `check-credentials.mjs` must agree byte-for-byte (`trim().toLowerCase()` → md5 → base64). Switching algorithms means editing all of them in one change, then grepping for tables generated under the old rule (R3).
-5. **Multi-site layouts** — container C gives each site its own root; run the tools once per root (absolute cross-site urls are skipped by design, so the cross-site graph stays a step-4 artifact).
-6. **Derived / composite credentials** — check-solvable matches a value only when it appears *verbatim*, so an account assembled from parts reads as STUCK. The fix is **not** printing it (R12): declare it and prove it with `check-credentials.mjs` (parts + rule + zero-plaintext) plus `check-reachability.mjs` (a rehearsal copy with the values injected).
-7. **Per-tab session vs. new-tab results** — check-solvable models identities as one global set, so it cannot see that `sessionStorage` is per-tab while results open `target="_blank"` in a fresh tab; it reports green while the browser shows the document locked. Manual method: the step-8 cross-tab test; structural fix: a session cookie (components.md §2–§3, `references/structure/form-system.md` §6).
-8. **Element-level permission masking** — a checker reads page *text*, not computed visibility; a credential hidden only by `x-show` / a CSS class / an element-level `data-access` is still in the HTML sent to every visitor, and client-side masking is not privacy (R12). Treat it as public: the step-8 chrome scan and `check-credentials`' zero-plaintext assertion catch it.
-9. **GDD-declared assets that were never landed** — an emblem / seal / scan / photo / mock-doc the manifest lists but no page references has no `src` to resolve, so neither checker complains. Manual method: the step-8 asset-manifest reconciliation — every declared asset exists under `assets/` and is referenced by at least one page.
-10. **Route claims and progress back-jumps** — `site-graph.mjs` classifies every edge with a step-4 closed-list route (`structural` where the machine can decide, `heuristic` for a body link read as a related-document reference) and flags non-chrome edges whose progress delta is negative. Confirm every `heuristic` claim and every back-jump against `docs/reachability.md` — the tool cannot judge whether the organization would really print the link.
-11. **The apparatus single-page carve-out (R1 exception)** — when the profile records the chrome-as-apparatus form (`references/structure/form-device.md` §5), the walk sees one document: template pages have no file for check-links to resolve, and gate/keyword provenance needs a manual walkthrough. The five conditions are re-verified in `workflow/08-self-check.md` and recorded in `docs/self-check.md`.
-12. **The encrypted-content tier (R3)** — an AES-GCM key assembled from life traces is outside the verbatim/derived model: `check-credentials.mjs` proves the parts (public pages, zero plaintext); the decryption itself is proven by a rehearsal decrypt of the shipped `enc.json` at build time — never by printing the key into a page.
+1. **运行时绑定** —— `:href`、`x-bind`、在 JS 里拼装的 DOM。两个链接检查器都只解析静态 `href`、静态 `<form action>` 以及门禁的 `data-next` 目标。人工方法是关键词表（搜索结果路由放在那里；`data-index` 告诉检查器某个搜索页能触到哪张表），以及把会话状态建模为 `data-grant` / `data-access`（`references/structure/form-system.md` §5）。
+2. **自身即数据库的枢纽** —— 容器 B 的明文 `FILE_DATABASE`、容器 C 的绝对跨站链接。人工方法：在步骤 4 的走图中把枢纽当作列表页处理，然后在步骤 8 的 chrome 扫描中把每个条目各点一次。
+3. **不可跳过性** —— check-solvable 只能证明门禁可解，永远证明不了它不可绕过；人工方法是受众作用域（M1）：按受众分表、逐页 `data-index`、check-links 的泄漏防护（R8）。
+4. **哈希归一化是四方契约** —— 页内辅助函数、`hash.mjs`、`build-keywords.mjs` 与 `check-credentials.mjs` 必须逐字节一致（`trim().toLowerCase()` → md5 → base64）。更换算法意味着在一次改动中把它们全部改掉，然后 grep 查找按旧规则生成的表（R3）。
+5. **多站点布局** —— 容器 C 给每个站点自己的根目录；每个根目录跑一次工具（绝对路径的跨站 url 按设计被跳过，因此跨站图始终是步骤 4 的产物）。
+6. **派生 / 组合凭据** —— check-solvable 只在值*逐字*出现时才匹配，因此由部分拼出的账号会被判为 STUCK。修复办法**不是**把它印出来（R12）：声明它，并用 `check-credentials.mjs`（组成部分 + 规则 + 零明文）加 `check-reachability.mjs`（一份注入了这些值的演练副本）证明它。
+7. **按标签页的会话 vs 新标签页结果** —— check-solvable 把身份建模为一个全局集合，因此它看不见 `sessionStorage` 是按标签页的、而结果会以 `target="_blank"` 在新标签页里打开；浏览器显示文档锁定时它仍报绿。人工方法：步骤 8 的跨标签页测试；结构性修复：会话 cookie（components.md §2–§3，`references/structure/form-system.md` §6）。
+8. **元素级权限遮蔽** —— 检查器读的是页面*文本*，不是计算后的可见性；仅靠 `x-show` / CSS 类 / 元素级 `data-access` 藏起来的凭据，仍然在发给每个访客的 HTML 里，而客户端遮蔽不是隐私（R12）。把它当作公开信息处理：步骤 8 的 chrome 泄漏扫描与 `check-credentials` 的零明文断言能抓住它。
+9. **游戏设计文档声明了却从未落地的资产** —— 资产清单列出、却没有任何页面引用的徽章 / 印章 / 扫描件 / 照片 / 伪造文档，没有 `src` 可解析，两个检查器都不会报错。人工方法：步骤 8 的资产清单对账——每个声明的资产都存在于 `assets/` 下，且至少被一个页面引用。
+10. **路线判定与进度回跳** —— `site-graph.mjs` 用步骤 4 的封闭清单给每条边判定路线（机器可判定的标 `structural`，正文里被读成相关文档引用的链接标 `heuristic`），并标出进度增量为负的非 chrome 边。请对照 `docs/reachability.md` 核实每一个 `heuristic` 判定与每一次回跳——工具无法判断该组织是否真的会印出那条链接。
+11. **装置单页豁免（R1 例外）** —— 当装配记录写明"边框即装置"形态（`references/structure/form-device.md` §5）时，走图只看到一份文档：模板页没有文件供 check-links 解析，门禁/关键词的出处需要人工走查。五项条件在 `workflow/08-self-check.md` 中重新核验，并记录在 `docs/self-check.md` 中。
+12. **加密内容层（R3）** —— 由生活痕迹拼出的 AES-GCM 密钥在逐字/派生模型之外：`check-credentials.mjs` 证明各组成部分（公开页面、零明文）；解密本身由构建时对随附 `enc.json` 的一次演练解密来证明——绝不把密钥印进页面。
 
-The matcher reads *page text*, not the DOM, for the same reason the player does: it proves a string was
-readable before the gate. A clue hidden in a `placeholder`, `title`, or JS string is invisible to both player
-and checker — the step-8 chrome leak scan covers that class (R4).
+匹配器读的是*页面文本*，不是 DOM，原因和玩家一样：它要证明某个字符串在门禁之前
+就是可读的。藏在 `placeholder`、`title` 或 JS 字符串里的线索，对玩家和检查器都
+不可见——步骤 8 的 chrome 泄漏扫描覆盖这一类问题（R4）。

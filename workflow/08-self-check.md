@@ -1,84 +1,84 @@
-# Step 8 — Self-Check
+# 步骤 8 — 自检
 
-**Input:** the finished site plus all `docs/` artifacts — each lane below reads only its own subset. **Output:** a pass/fail line per item, written to `docs/self-check.md`. Every item must pass. This checklist is canonical — references/structure/tooling.md covers only the cadence, the shared CONFIG, and the manual methods; commands are not duplicated there.
+**输入：**完成的站点加全部 `docs/` 产物——下面每条通道只读自己的那部分。**输出：**每一项一行通过/未通过，写入 `docs/self-check.md`。每一项都必须通过。这份清单是唯一权威——references/structure/tooling.md 只覆盖节奏、共享 CONFIG 与手工方法；命令不在那里重复。
 
-## Dispatch — three parallel lanes
+## 派发——三条并行通道
 
-One subagent per lane, dispatched together; the orchestrator merges the three reports into `docs/self-check.md` — one pass/fail line per checklist item, in checklist order. A fail in any lane sends the step back; the orchestrator decides whether the fix re-runs one lane or all three.
+每条通道一个子代理，同时派发；编排者把三份报告合并进 `docs/self-check.md`——按清单顺序，每项一行通过/未通过。任一通道有未通过项，本步骤就退回；修复后是重跑一条通道还是三条全跑，由编排者决定。
 
-| Lane | Checklist sections | Reads |
+| 通道 | 清单章节 | 读取 |
 |---|---|---|
-| A Structure + reachability | Structure; Reachability | the built tree via the checkers; gdd sections 1, 2, 4; gdd front matter (asset manifest); `docs/system-profile.md`; `docs/reachability.md`; both keyword tables |
-| B Puzzle integrity + consistency | Puzzle integrity; Consistency | gate and inference-chain pages; gdd sections 4, 5; `docs/registry.md`; `docs/puzzle-audit.md` |
-| C Neutrality + copy + presentation | Diegetic neutrality; Copy register; Presentation | public pages, the entry page, endings; `references/design-playbook.md` §4; `references/guardrails.md` |
+| A 结构 + 触达链 | 结构；触达链 | 通过检查器读建成的目录树；gdd 第 1、2、4 节；gdd 首部（资产清单）；`docs/system-profile.md`；`docs/reachability.md`；两张关键词表 |
+| B 谜题完整性 + 一致性 | 谜题完整性；一致性 | 门禁页与推理链页；gdd 第 4、5 节；`docs/registry.md`；`docs/puzzle-audit.md` |
+| C 中立性 + 文案 + 呈现 | 剧内中立性；文案语域；呈现 | 公开页、入口页、结局；`references/design-playbook.md` §4；`references/guardrails.md` |
 
-Lane A runs the checkers first and quotes their output verbatim. Lanes B and C give the file and line for every fail. The chrome sweep (Presentation) is browser work, not reading — it needs no docs beyond the page list.
+通道 A 先跑检查器，并逐字引用它们的输出。通道 B 和 C 对每个未通过项给出文件与行号。chrome 扫描（呈现）是浏览器操作，不是读文档——除了页面清单外不需要任何文档。
 
-## Structure
+## 结构
 
-- [ ] `find . -name "*.html" | wc -l` returns 10 or more. The deliverable is a multi-HTML file tree (R1). An apparatus single page (profile's technical-form line records the five conditions) replaces this item with: the five conditions are on file, the location inventory equals the page map, and every location survives reload.
-- [ ] `node tools/build-keywords.mjs` runs cleanly before the checkers — a stale hash table hides link and solvability drift (R3).
-- [ ] `node tools/check-links.mjs` reports zero dead links (and zero layer leaks).
-- [ ] `node tools/check-solvable.mjs` reports every gate unlocked and every page reachable, and exits 0.
-- [ ] `node tools/check-credentials.mjs` passes (every derived credential assembles from public-page components, binds to its gate, and stays zero-plaintext) — run whenever `data/credentials.src.json` exists.
-- [ ] `node tools/check-reachability.mjs` exits 0 (rehearsal copy: once each credential is known, every gate unlocks and every page is reachable).
-- [ ] `grep -rL "alpine.min.js" --include=*.html .` returns nothing.
-- [ ] `grep -rn "keywords.*src\|credentials.*src" --include=*.html .` returns nothing (no page references a plaintext source table).
-- [ ] **Module match.** The built site matches `docs/system-profile.md`: every selected module is present and works, and every unselected one is absent (no dead skin, search table, gate component, or account furniture).
-- [ ] **Ignore files in place.** `.gitignore` and `.dockerignore` exist at the project root (they ship inside `assets/starter/` and land with the starter copy at step 6). Check them by content, not by snippet: `git check-ignore -v data/keywords.surface.src.json` names the rule, `git status --porcelain` shows no untracked `memory/` or `docs/site-graph*`, and the deploy copy excludes `data/*.src.json`, `docs/`, `tools/`, `viewer/`, `deploy/` (`references/structure/base.md` §1). A plaintext table that reaches history or the image is the answer key in one request (R3).
-- [ ] **Asset manifest reconciled.** Every asset the GDD asset manifest declares exists under `assets/` AND is referenced by at least one page (`grep -rn "<asset-filename>" --include=*.html .` returns ≥1 hit). An `<img>` that was never written has no `src` for check-links to resolve, so this is a manual reconciliation against the GDD list (`references/structure/tooling.md` §3 item 9).
-- [ ] Console on the entry page and one secret page: zero errors, zero 404s (including every `<img>` request).
-- [ ] Timers and observers are released in `destroy()`.
+- [ ] `find . -name "*.html" | wc -l` 返回 10 或更多。交付物是一棵多 HTML 文件树 (R1)。装置单页（装配记录的技术形态行记下五个条件）则把本项替换为：五个条件在案、地点清单与页面地图相等、每个地点在刷新后依然存在。
+- [ ] `node tools/build-keywords.mjs` 在检查器之前干净地跑完——过期的哈希表会掩盖链接与可解性漂移 (R3)。
+- [ ] `node tools/check-links.mjs` 报告零死链（零跨层泄漏）。
+- [ ] `node tools/check-solvable.mjs` 报告每道门禁都已解锁、每一页都可触达，并以 0 退出。
+- [ ] `node tools/check-credentials.mjs` 通过（每个派生凭据都由公开页部件拼装、绑定到自己的门禁，并保持零明文）——只要 `data/credentials.src.json` 存在就运行。
+- [ ] `node tools/check-reachability.mjs` 以 0 退出（演练陈述：一旦每条凭据都已知，每道门禁都能解锁、每一页都可触达）。
+- [ ] `grep -rL "alpine.min.js" --include=*.html .` 返回空。
+- [ ] `grep -rn "keywords.*src\|credentials.*src" --include=*.html .` 返回空（没有任何页面引用明文源表）。
+- [ ] **模块匹配。**建成的站点与 `docs/system-profile.md` 一致：每个选中的模块都在且可用，每个未选中的模块都不在（没有闲置的皮肤、搜索表、门禁组件或账号家具）。
+- [ ] **忽略文件就位。**项目根目录下存在 `.gitignore` 与 `.dockerignore`（它们随 `assets/starter/` 发出，在步骤 6 随起点项目复制落地）。按内容而不是片段检查它们：`git check-ignore -v data/keywords.surface.src.json` 点名对应规则、`git status --porcelain` 不显示未跟踪的 `memory/` 或 `docs/site-graph*`、部署副本排除 `data/*.src.json`、`docs/`、`tools/`、`viewer/`、`deploy/`（`references/structure/base.md` §1）。一张进入版本历史或镜像的明文表，等于一次请求就能拿到答案钥匙 (R3)。
+- [ ] **资产清单已核对。**GDD 资产清单声明的每件资产都存在于 `assets/` 下，并且至少被一个页面引用（`grep -rn "<asset-filename>" --include=*.html .` 返回 ≥1 条命中）。从没写出来的 `<img>` 没有 `src` 供 check-links 解析，所以这一步是对照 GDD 清单的手工核对（`references/structure/tooling.md` §3 item 9）。
+- [ ] 入口页与一个秘密页上的控制台：零错误、零 404（包括每个 `<img>` 请求）。
+- [ ] 定时器与观察者在 `destroy()` 中释放。
 
-## Reachability (re-run workflow/04 against the built tree)
+## 触达链（对建成的目录树重跑 workflow/04）
 
-- [ ] `node tools/check-solvable.mjs` passes: it walks the graph from the entry page over top-bar search, body links and post-gate links, and reports gate unlocks plus unreachable pages. This automates the three items below; do them by hand only for the ones it cannot model.
-- [ ] The graph walk from `index.html` reaches every page. Zero orphans.
-- [ ] Every `<a>` under `pages/` traces to a legitimate inbound route in the reachability table. Planted clue links are gone.
-- [ ] Every key in both plaintext keyword tables appears verbatim in the copy of a reachable page of the same audience.
-- [ ] The public keyword table carries no restricted-area URL (default `internal/`; the `secretUrl` CONFIG knob).
-- [ ] Every result or list row the visitor may not open resolves to its gate or a plain locked notice; nothing opens its document directly.
-- [ ] System containers (M3): every `data-access` account is granted by some login gate (`data-grant`); no page is reachable through a privilege ladder or a shallow-page "related archives" link; and a search hit to a protected document stays unreachable until the named account is authenticated.
-- [ ] Read-state entries (M14): every entry the reachability table lists as a route-10 edge carries `data-after` naming its source page; `check-solvable.mjs` fires it only after that page is visited; no entry making the same claim in copy ships as a plain link (R13).
+- [ ] `node tools/check-solvable.mjs` 通过：它从入口页出发走图，经由顶栏搜索、正文链接和过门后的链接，报告门禁解锁情况与不可触达的页面。下面三项由它自动完成；只有它建不了模的才手工做。
+- [ ] 从 `index.html` 出发的走图能到达每一页。零孤儿页。
+- [ ] `pages/` 下的每个 `<a>` 都能追溯到触达表里一条合法的入站路线。安插的线索链接已清除。
+- [ ] 两张明文关键词表里的每个关键词，都逐字出现在同一受众的某个可触达页面的文案中。
+- [ ] 公开关键词表不含任何受限区 URL（默认 `internal/`；即 `secretUrl` 这个 CONFIG 旋钮）。
+- [ ] 访客无权打开的每个结果或列表行，都解析到它的门禁或一条朴素的锁定提示；没有任何一项直接打开其文档。
+- [ ] 系统容器 (M3)：每个 `data-access` 账号都由某个登录门禁授予（`data-grant`）；没有任何页面能经由权限阶梯或浅层页的「相关档案」链接够到；对受保护文档的搜索命中，在指名账号通过认证之前始终不可触达。
+- [ ] 读态条目 (M14)：触达表中列为路线 10 边的每个条目都带 `data-after` 并写明其来源页；`check-solvable.mjs` 只在访问过那页之后才点亮它；文案里作同样声明的条目，不得以普通链接交付 (R13)。
 
-## Puzzle integrity (re-run workflow/05 Q4)
+## 谜题完整性（重跑 workflow/05 Q4）
 
-- [ ] Leak scan over the built tree: no answer, restatement, derivation rule, or location string on any gate page or inference-chain page. Scan the page **chrome** as well as the form UI — `<title>`, top bar, and footer have all leaked answers in practice.
-- [ ] `grep -rn "placeholder=" --include=*.html .` — every value names its field.
-- [ ] `grep -rn "data-fail-hint\|gate-hint" --include=*.html .` — failure hints point obliquely at the source (R4). `密码错误 🎂` passes; `想想陈师傅的本命年` fails.
-- [ ] `node tools/check-solvable.mjs` resolves every **verbatim** credential to prior page copy, naming the source page. This replaces the manual provenance pass; still replay the walkthrough yourself once, judging tone and pacing.
-- [ ] `node tools/check-credentials.mjs` resolves every **derived/composite** credential to its public-page components and asserts zero plaintext: no account string appears whole on any page (client-side masking — `x-show`, a CSS class, an element-level `data-access` — is not privacy on a static site with no server auth; the HTML reaches every visitor).
-- [ ] No single page co-locates two components of one credential (a "zero-jump" solve): if the 工号 and the year print on the same page, the player copies both without inferring. Split them per the GDD puzzle allocation table.
-- [ ] Wildcard gates are declared: every gate-mounted page's inputs carry `data-expect-hash` or `data-expect-any` — the `check-solvable.mjs` NOTE must be empty (a narrative gate that accepts anything says so in the markup; R4).
-- [ ] Result titles in both keyword tables are catalog entries; none summarizes the document's content.
+- [ ] 对建成的目录树做泄漏扫描：任何门禁页或推理链页上都不得有答案、复述、推导规则或位置字符串。表单 UI 之外，页面**外壳**也要扫——`<title>`、顶栏、页脚在实战中都泄过答案。
+- [ ] `grep -rn "placeholder=" --include=*.html .` ——每个取值都写明了字段。
+- [ ] `grep -rn "data-fail-hint\|gate-hint" --include=*.html .` ——失败提示含蓄地指向来源 (R4)。`密码错误 🎂` 通过；`想想陈师傅的本命年` 不通过。
+- [ ] `node tools/check-solvable.mjs` 把每个**原样照抄**的凭据解析到先前的页面文案，并点名来源页。这替代了手工溯源；但仍要自己把走查完整重放一次，判断语气与节奏。
+- [ ] `node tools/check-credentials.mjs` 把每个**派生/组合**凭据解析到它的公开页部件，并断言零明文：任何页面都不出现完整的账号字符串（客户端遮掩——`x-show`、某个 CSS 类、元素级的 `data-access`——在没有服务端鉴权的静态站上不构成隐私；HTML 会送达每一个访客）。
+- [ ] 任何单页都不得把一个凭据的两个部件放在一起（「零跳」解法）：如果工号和年份印在同一页，玩家不用推理就能两个都抄走。按 GDD 谜题分配表把它们拆开。
+- [ ] 通配门禁均已声明：每个挂载了门禁的页面上的输入都带 `data-expect-hash` 或 `data-expect-any`——`check-solvable.mjs` 的 NOTE 必须为空（接受任意输入的叙事门禁要在标记里写明；R4）。
+- [ ] 两张关键词表里的结果标题都是目录条目；没有一条在概述文档内容。
 
-## Consistency (`docs/registry.md` vs. the built tree)
+## 一致性（`docs/registry.md` 对照建成的目录树）
 
-- [ ] Every shared entity — person name, ID / license number, account, page title, nav label, document number, key date — is byte-identical across `docs/registry.md` and every page that carries it. A roster missing a person who appears on a duty schedule, or a page answering to two titles (nav vs. its own `<title>` vs. body references), fails here.
-- [ ] Every worked example satisfies the rule it illustrates. A sample account must obey the stated derivation (a "pinyin initials" rule cannot be exemplified by a full-pinyin string), and its shape must match real values (length, separators, mask).
-- [ ] No GDD self-contradiction survived into the pages: a value one GDD line forbids is not required by another line on the same page (the registry is the tiebreaker).
+- [ ] 每个共享实体——人名、证件号 / 许可证号、账号、页面标题、导航标签、文号、关键日期——在 `docs/registry.md` 与每个承载它的页面之间都逐字节一致。名册里少了值班表上出现的人，或者一页有两副标题（导航 vs. 自身 `<title>` vs. 正文提及），都在此项不通过。
+- [ ] 每个示范例子都满足它所说明的规则。示例账号必须遵守所述推导（「拼音首字母」规则不能拿全拼字符串当例子），其形状要与真实取值相符（长度、分隔符、掩码）。
+- [ ] GDD 的自相矛盾不得留到页面上：GDD 某一行禁止的取值，不能被同一页的另一行要求（登记表是裁决依据）。
 
-## Diegetic neutrality
+## 剧内中立性
 
-- [ ] Read each public page as a document of that organization. It is complete, plausible, and gives nothing away. No page mentions the plot.
-- [ ] Each announcement, notice, contract, and certificate carries issuing body, document number, date, addressee, signature or seal.
-- [ ] No in-world page addresses the player.
+- [ ] 把每张公开页当作那个组织的文档来读。它完整、可信、不漏底。没有一页提到剧情。
+- [ ] 每份公告、通知、合同、证书都带发文机关、文号、日期、抬头、签名或印章。
+- [ ] 没有任何剧内页面对玩家喊话。
 
-## Copy register
+## 文案语域
 
-- [ ] Guidance text on the entry ritual page is plain declarative sentences.
-- [ ] Contrast frames (是…不是… / 是…而是… / 不能…只能…) appear nowhere in site copy (R11). Scan with `grep -rnE '不是|而是|不能.*只能|并非.*而是' pages/ index.html`.
-- [ ] No metaphor, personification, or adjectives piled for effect in guidance text or documents.
+- [ ] 入口仪式页上的引导文字是朴素的陈述句。
+- [ ] 对照句式（是…不是… / 是…而是… / 不能…只能…）在站点文案中任何地方都不出现 (R11)。用 `grep -rnE '不是|而是|不能.*只能|并非.*而是' pages/ index.html` 扫描。
+- [ ] 引导文字与文档里没有比喻、拟人，也没有为效果而堆砌的形容词。
 
-## Presentation
+## 呈现
 
-- [ ] The header stays fixed to the viewport on long pages; body text scrolls beneath it.
-- [ ] Core interactions work at phone width.
-- [ ] Chrome sweep: load **every** page (plus each search state: hit / miss / forbidden) at desktop and phone width. Collect console errors, `requestfailed` (including every `<img>`), horizontal overflow (`scrollWidth > innerWidth`), and whether each `[x-data]` element actually initialized. Partial passes miss defects — a CSS specificity bug once silently disabled two declared puzzle types on the secret layer only.
-- [ ] **Cross-tab session (M3).** Log in, then open a search/result link (`target="_blank"`): the protected document must be unlocked in the new tab too. Close the browser, reopen: signed out. Per-tab `sessionStorage` fails the first half; a session cookie passes. `check-solvable.mjs` models identities as one global set and cannot see this — it reports green either way, so this manual test is the only catch (`references/structure/tooling.md` §3 item 7).
-- [ ] **State contract honored (R13).** `grep -rn "localStorage\|sessionStorage" --include=*.js --include=*.html .` — every hit is either the session-cookie helper's private-mode fallback or storage the profile sanctioned (`persistent` / world-response rows). Login state never persists across sessions: close the browser, reopen → signed out. `progress: none` sites ship zero progress storage. No page explains its storage to the player.
-- [ ] Sensory puzzle hardware requirements are declared on the entry page, and nothing is declared that the site does not actually implement.
-- [ ] When M5 is selected: entering the deep area restyles the whole page — background, title, logo, footer — and no theme shift fires in a project that did not select it.
-- [ ] Device class honored: a `phone` profile renders its chrome on every page (status bar present, tap targets sane at 390px, the shell CSS the profile selected actually loaded); `browser-chrome` keeps its drawn address bar fixed. A declared class the shell does not show is module drift (R12).
+- [ ] 长页面上页头固定在视口中；正文在其下方滚动。
+- [ ] 核心交互在手机宽度下可用。
+- [ ] chrome 扫描：以桌面宽度和手机宽度加载**每一页**（外加每种搜索状态：命中 / 未命中 / 禁止）。收集控制台错误、`requestfailed`（包括每个 `<img>`）、横向溢出（`scrollWidth > innerWidth`），以及每个 `[x-data]` 元素是否真的初始化了。只过一部分会漏掉缺陷——曾有一个 CSS 优先级 bug 悄悄只在秘密层上废掉了两种已声明的谜题类型。
+- [ ] **跨标签页会话 (M3)。**登录，然后打开一个搜索/结果链接（`target="_blank"`）：受保护文档在新标签页里也必须是解锁的。关掉浏览器再打开：已登出。按标签页隔离的 `sessionStorage` 过不了前半段；会话 cookie 能过。`check-solvable.mjs` 把身份建模为一个全局集合，看不见这件事——两种情况它都报绿，所以只有这项手工测试能抓住（`references/structure/tooling.md` §3 item 7）。
+- [ ] **状态契约已遵守 (R13)。**`grep -rn "localStorage\|sessionStorage" --include=*.js --include=*.html .` ——每处命中要么是会话 cookie 辅助函数的隐私模式回退，要么是装配记录批准的存储（`persistent` / 世界回应行）。登录状态绝不跨会话持久：关掉浏览器再打开 → 已登出。`progress: none` 的站点交付零进度存储。没有页面向玩家解释自己的存储。
+- [ ] 感官谜题的硬件要求在入口页上声明，并且声明的每一项站点都确实实现。
+- [ ] 选中 M5 时：进入深层区域会让整页换样式——背景、标题、logo、页脚——而未选中它的项目里不触发任何主题切换。
+- [ ] 设备类已遵守：`phone` 装配记录在每一页渲染它的外壳（状态栏在场、390px 下点按目标合理、装配记录选定的外壳 CSS 确实加载了）；`browser-chrome` 保持它画出的地址栏固定。声明了某类而外壳不显示，就是模块漂移 (R12)。
 
-Baseline-test traps for this step: references/common-mistakes.md §8 — check them before returning the artifact.
+本步骤的基线测试陷阱：references/common-mistakes.md §8 ——交回产物前先对照检查。

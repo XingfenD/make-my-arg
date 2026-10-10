@@ -1,50 +1,50 @@
-# Step 7 — Implementation
+# 步骤 7 — 实现
 
-**Input:** the scaffolded tree plus all `docs/` artifacts. **Output:** the finished site. One subagent per phase. Phases 1→2→3 are a chain; the rest overlap: 4a dispatches with 1, 4b after 3, 5 beside 3, 6 after 3, 7 last.
+**输入：**搭好骨架的目录树加全部 `docs/` 产物。**输出：**完成的站点。每个阶段一个子代理。阶段 1→2→3 串成一条链，其余可重叠：4a 随 1 一同派发，4b 在 3 之后，5 与 3 并行，6 在 3 之后，7 最后。
 
-| Phase | Work | Dispatch |
+| 阶段 | 工作 | 派发 |
 |---|---|---|
-| 1 | Public pages and realistic documents | subagent |
-| 2 | Search engine and password gates — complete one shortest playable path end to end | subagent |
-| 3 | Restricted-area pages (and reskinning when M5 is selected) | subagent |
-| 4a | Images, seals, scans, photos, and mock documents — write **every** asset the GDD asset manifest declares, under `assets/`; no page wiring yet | subagent — dispatch with phase 1 |
-| 4b | Wire each 4a asset into the pages that reference it — `<img src>` / download links — once those pages exist | subagent — after phase 3 |
-| 5 | Staging modules: countdown blackout, typewriter, scroll reveal (when M12 is selected) | subagent — may dispatch with phase 3 |
-| 6 | Endings and fourth-wall close (when M10 is selected) | subagent |
-| 7 | Entry page: role assignment, start button, declared requirements | subagent |
+| 1 | 公开页与拟真文档 | 子代理 |
+| 2 | 搜索引擎与密码门禁——端到端完成一条最短可玩路径 | 子代理 |
+| 3 | 受限区页面（选中 M5 时含换皮） | 子代理 |
+| 4a | 图片、印章、扫描件、照片与仿制文档——把 GDD 资产清单声明的**每一件**资产都写出来，放在 `assets/` 下；暂不接入页面 | 子代理——随阶段 1 派发 |
+| 4b | 等引用页面存在后，把 4a 的每件资产接进引用它的页面——`<img src>` / 下载链接 | 子代理——阶段 3 之后 |
+| 5 | 暂存模块：倒计时黑屏、打字机、滚动渐显（选中 M12 时） | 子代理——可与阶段 3 并行 |
+| 6 | 结局与破墙收尾（选中 M10 时） | 子代理 |
+| 7 | 入口页：角色分配、开始按钮、声明的需求 | 子代理 |
 
-Phase 7 lands last because its copy has to describe the game that now exists. Asset work is its own phase, not a detail of phases 1–3: a declared emblem / seal / scan / photo that no phase owns is exactly what gets dropped, and neither checker catches it (an `<img>` that was never written has no `src` to resolve — references/structure/tooling.md §3 item 9). 4a dispatches with phase 1, and 4b wires them once the referencing pages exist. Phase 5 may run beside phase 3.
+阶段 7 最后落地，因为它的文案必须描述这个已经存在的游戏。资产工作是独立阶段，不是阶段 1–3 的细枝末节：没有阶段认领的徽标 / 印章 / 扫描件 / 照片，恰恰就是被漏掉的那一件，而且两个检查器都发现不了（从没写出来的 `<img>` 没有 `src` 可解析——references/structure/tooling.md §3 item 9）。4a 随阶段 1 一同派发，4b 在引用页面存在后接线。阶段 5 可与阶段 3 并行。
 
-Each phase subagent receives only the artifact sections and references its row names — never a whole file where sections are listed — plus the list of pages it owns. It returns the changed file list plus unresolved questions. Component behavior comes from the project's own `components.js` (written by 6a); `assets/templates/` and `references/structure/components.md` are step-6a reading, not step-7 reading.
+每个阶段的子代理只拿到它那一行点名的产物章节与参考文件——绝不拿到「列了章节的整份文件」——外加它负责的页面清单。它返回改动文件清单加未决问题。组件行为以项目自己的 `components.js` 为准（由 6a 写出）；`assets/templates/` 与 `references/structure/components.md` 是步骤 6a 的读物，不是步骤 7 的读物。
 
-| Phase | Artifact sections | References |
+| 阶段 | 产物章节 | 参考 |
 |---|---|---|
-| 1 Public pages and realistic documents | gdd sections 1, 2, 8; `docs/registry.md` | `references/guardrails.md` (R5, R6, R12), `references/design-playbook.md` §4, `references/structure/base.md`, form doc |
-| 2 Search engine and password gates | gdd sections 4, 5; reachability rows for owned pages | project `components.js` (search, gate), `references/guardrails.md` (R3, R4, R8, R9), form doc; `references/structure/form-device.md` §4 when wildcard gates or read-state entries are selected |
-| 3 Restricted-area pages (+ reskin when M5; + read-state entries when M14) | gdd section 4; reachability rows for owned pages | project `components.js` (access, reskin, read-state), form doc, `references/guardrails.md` (R10, R12), `references/structure/form-device.md` §3 |
-| 4a Generate assets | gdd front matter (asset manifest) | `references/structure/tooling.md` §3 item 9 (asset reconciliation) |
-| 4b Wire assets into pages | gdd front matter (asset manifest); the page set from phases 1–3 | `references/structure/tooling.md` §3 item 9 (asset reconciliation) |
-| 5 Staging modules (when M12) | gdd section 5 (sensory rows) | project `components.js` (staging) |
-| 6 Endings and fourth-wall close (when M10) | gdd sections 3, 6 | `references/design-playbook.md` §4, `references/guardrails.md` (R11, R12) |
-| 7 Entry page | gdd sections 3, 6; `docs/system-profile.md` | `references/design-playbook.md` §4, `references/guardrails.md` (R12) |
+| 1 公开页与拟真文档 | gdd 第 1、2、8 节；`docs/registry.md` | `references/guardrails.md` (R5, R6, R12)、`references/design-playbook.md` §4、`references/structure/base.md`、形态文档 |
+| 2 搜索引擎与密码门禁 | gdd 第 4、5 节；所负责页面的触达表行 | 项目的 `components.js` (search, gate)、`references/guardrails.md` (R3, R4, R8, R9)、形态文档；选中通配门禁或读态条目时加 `references/structure/form-device.md` §4 |
+| 3 受限区页面（选中 M5 时含换皮；选中 M14 时含读态条目） | gdd 第 4 节；所负责页面的触达表行 | 项目的 `components.js` (access, reskin, read-state)、形态文档、`references/guardrails.md` (R10, R12)、`references/structure/form-device.md` §3 |
+| 4a 生成资产 | gdd 首部（资产清单） | `references/structure/tooling.md` §3 item 9（资产核对） |
+| 4b 把资产接进页面 | gdd 首部（资产清单）；阶段 1–3 的页面集合 | `references/structure/tooling.md` §3 item 9（资产核对） |
+| 5 暂存模块（选中 M12 时） | gdd 第 5 节（感官行） | 项目的 `components.js` (staging) |
+| 6 结局与破墙收尾（选中 M10 时） | gdd 第 3、6 节 | `references/design-playbook.md` §4、`references/guardrails.md` (R11, R12) |
+| 7 入口页 | gdd 第 3、6 节；`docs/system-profile.md` | `references/design-playbook.md` §4、`references/guardrails.md` (R12) |
 
-## Standing rules for every phase
+## 每个阶段的常设规则
 
-- **The framework is fixed.** Step 6a set the shell, skins, components, and tools; phases fill page copy and content — they do not rebuild or restyle the framework.
-- **Selected modules only.** Write the modules `docs/system-profile.md` selects; a disabled module leaves no furniture behind (no unused search table, skin, gate, or account page).
-- **Public pages stay neutral (R5).** Write each one as a document of that organization. A roster entry carries name, title, tenure, duties. The plot stays out of it.
-- **Links come from the reachability table and stay within their area (R7).** A link absent from that table does not get written; depth is crossed by a reach module — never by a "related files / archives / pages" link.
-- **System pages open only to their named accounts when M3 is selected (R10).** A protected page carries `data-access` (`references/structure/form-system.md` §1); an admin account never inherits a colleague's private document; only the initial account is printed — every other login is inferred from clues, never copied from a page.
-- **A derived/composite credential is proved by parts, never printed (R3, R12).** Author `data/credentials.src.json` (value + rule + public-page components + kind per gate field) and run `node tools/check-credentials.mjs` + `node tools/check-reachability.mjs`. Do not print an account to make `check-solvable.mjs` green — that leaks it to every visitor and kills the puzzle (`references/structure/components.md` §3; `references/structure/tooling.md` §3 item 6).
-- **One login box, session cookie, when M3 is selected (R10).** A single box serving several roles uses `data-grants` (account→identity map), not two forms on the page; access state lives in a session cookie so a result opened `target="_blank"` stays unlocked (`references/structure/form-system.md` §2; `references/structure/components.md` §3).
-- **Documents carry their format (R6).** Issuing body, document number, date, addressee, body, signature and seal, distribution list.
-- **Inputs name the field (R4).** `placeholder="工号"`, `placeholder="站内搜索…"`. The gate page may post the account format; the password derivation stays off it.
-- **Copy is declarative (R11).** See references/design-playbook.md §4.14 before writing any sentence.
-- **Keywords get hashed (R3).** Run `node tools/build-keywords.mjs` after any change to either `data/keywords.<layer>.src.json`.
-- **Read-gated entries carry `data-after` (M14, R13).** An entry that exists only after some page was read names that page in `data-after` — the checker-visible contract. Runtime `readState` alone makes the entry invisible to the graph. A wildcard gate marks its input `data-expect-any`; an undeclared input on a gate page raises the `check-solvable` NOTE (`references/structure/form-device.md` §4).
-- **Storage follows the state contract (R13).** Write `localStorage` only where the profile recorded persistence; login stays in the session cookie helper; no page ever explains its storage to the player.
-- **Shared entities stay identical.** A person name, ID, account, page title, or date that appears on more than one page is copied from `docs/registry.md` (written at step 3), never re-typed; the registry is the single source of truth.
+- **框架已定。**步骤 6a 已定下外壳、皮肤、组件与工具；各阶段只填充页面文案与内容——不得重建或重新设计框架。
+- **只写选中的模块。**只写 `docs/system-profile.md` 选中的模块；未选中的模块不留任何残件（没有闲置的搜索表、皮肤、门禁或账号页）。
+- **公开页保持中立 (R5)。**每一页都写成那个组织的一份文档。一条名册条目要有姓名、职务、任职时间、职责。剧情不掺进来。
+- **链接取自触达表，且不越出所在区域 (R7)。**不在表里的链接不得写；跨越深度要靠触达模块——绝不用「相关文件 / 档案 / 页面」这类链接。
+- **选中 M3 时，系统页只对指名的账号开放 (R10)。**受保护页面带 `data-access`（`references/structure/form-system.md` §1）；管理员账号绝不继承同事的私密文档；只有初始账号会被印出来——其余每个登录串都从线索推出，绝不能从页面上抄。
+- **派生/组合凭据只能靠部件拼出，绝不能直接印出 (R3, R12)。**编写 `data/credentials.src.json`（每个门禁字段的 value + rule + 公开页部件 + kind），并运行 `node tools/check-credentials.mjs` + `node tools/check-reachability.mjs`。不要为了让 `check-solvable.mjs` 变绿而印出某个账号——那等于把它泄漏给每一个访客，谜题也就死了（`references/structure/components.md` §3; `references/structure/tooling.md` §3 item 6）。
+- **选中 M3 时，一个登录框、会话 cookie (R10)。**一个服务多个角色的登录框用 `data-grants`（账号→身份映射），而不是在页面上放两个表单；权限状态存在会话 cookie 里，这样用 `target="_blank"` 打开的结果页仍是解锁的（`references/structure/form-system.md` §2; `references/structure/components.md` §3）。
+- **文档要有格式 (R6)。**发文机关、文号、日期、抬头、正文、签字与印章、分发名单。
+- **输入框要写明字段 (R4)。**`placeholder="工号"`、`placeholder="站内搜索…"`。门禁页可以公示账号格式；密码的推导规则不得出现在上面。
+- **文案是陈述句 (R11)。**写任何句子之前先看 references/design-playbook.md §4.14。
+- **关键词要做哈希 (R3)。**任一 `data/keywords.<layer>.src.json` 改动之后都要跑 `node tools/build-keywords.mjs`。
+- **读态条目要带 `data-after` (M14, R13)。**只有读过某页之后才存在的条目，在 `data-after` 里写明那一页——这是检查器看得见的契约。只有运行时 `readState`，这个条目在图上是看不见的。通配门禁把它的输入标为 `data-expect-any`；门禁页上未声明的输入会触发 `check-solvable` 的 NOTE（`references/structure/form-device.md` §4）。
+- **存储遵循状态契约 (R13)。**只在装配记录写明持久化的地方写 `localStorage`；登录状态留在会话 cookie 辅助函数里；任何页面都绝不向玩家解释自己的存储方式。
+- **共享实体保持一致。**出现在多个页面上的人名、证件号、账号、页面标题或日期，一律从 `docs/registry.md`（步骤 3 写出）复制，绝不重打；登记表是唯一事实源。
 
-At the end of each phase, re-run the leak scan from workflow/05-puzzle-audit.md Q4 over the files that phase touched.
+每个阶段结束时，对该阶段动过的文件重跑 workflow/05-puzzle-audit.md Q4 的泄漏扫描。
 
-Baseline-test traps for this step: references/common-mistakes.md §7 — check them before returning the artifact.
+本步骤的基线测试陷阱：references/common-mistakes.md §7 ——交回产物前先对照检查。

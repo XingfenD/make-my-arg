@@ -6,6 +6,13 @@ All notable changes to this skill should be documented in this file.
 The format loosely follows Keep a Changelog and can be adapted to the team's habits.
 本文档参考了 Keep a Changelog 的思路，也可以根据团队习惯调整。
 
+## [0.4.0] - 2026-10-11
+
+### Changed / 变更
+
+- Translate the skill's whole documentation chain into Simplified Chinese in place: `SKILL.md` (frontmatter description included), `references/` (guardrails · design-playbook · common-mistakes · the six structure docs), `workflow/` 01–08, `examples/` (all five shape anchors), and the two asset READMEs. File paths, `§N` citations, rule IDs (R1–R13), module IDs (M1–M14), numbered heading and list numbering, code and command literals, and every checker-visible marker stay byte-identical, so `scripts/check-docs.mjs` stays green; terminology is unified across the former batches (步骤 N · 权限清单 · 触达表 · 凭据三件套 · 泄漏扫描 · 开机界面 · 账号家具 · chrome 扫描 · 装置单页 · 首部 …).
+  把 skill 的整条文档链译为简体中文并就地替换：`SKILL.md`（含 frontmatter 描述）、`references/`（guardrails · design-playbook · common-mistakes · 六份 structure 文档）、`workflow/` 01–08、`examples/`（五份形态锚点样例）、两份资产 README。文件路径、`§N` 引用、规则编号（R1–R13）、模块编号（M1–M14）、标题与列表编号、代码与命令字面量、检查器可见标记一律逐字保留，`scripts/check-docs.mjs` 保持全绿；原各批次术语已统一（步骤 N · 权限清单 · 触达表 · 凭据三件套 · 泄漏扫描 · 开机界面 · 账号家具 · chrome 扫描 · 装置单页 · 首部 等）。
+
 ## [0.3.0] - 2026-09-29
 
 ### Added / 新增

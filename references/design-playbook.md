@@ -1,86 +1,84 @@
-# Design Modules — Catalog & Assembly (Prescriptive)
+# 设计模块 —— 目录与装配（规范性）
 
-> The step-2 menu. Select the modules the story actually needs, then assemble them into
-> `docs/system-profile.md` (`workflow/02-container.md`). Default: the container's native reach model plus the
-> entry page; every further module must earn its place in the fiction. Rule IDs `(Rn)` cite
-> `references/guardrails.md`; section citations use the form `§N.M` = item M of section N. Component code
-> templates: `assets/templates/` (index: `assets/templates/README.md`); conventions and rules:
-> `references/structure/components.md`.
+> 步骤 2 的菜单。选出故事真正需要的模块，然后把它们装配进
+> `docs/system-profile.md`（`workflow/02-container.md`）。默认配置：容器原生的触达模型加上
+> 入口页；其余每个模块都必须在虚构中挣得自己的位置。规则 ID `(Rn)` 引自
+> `references/guardrails.md`；章节引用采用 `§N.M` 形式 = 第 N 节第 M 项。组件代码
+> 模板：`assets/templates/`（索引：`assets/templates/README.md`）；约定与规则：
+> `references/structure/components.md`。
 
-## 1. Core loop (always on)
+## 1. 核心循环（始终开启）
 
-- **Master formula**: entry ritual page → disguised container → core loop (read → extract → unlock) → surface
-  crack → staged escalation into the secret layer → central twist page → finale → ending.
-- **Five-stage escalation**: (1) in the name of service → (2) systemic evil → (3) human gray → (4) the player's
-  guilt → (5) the cycle points at the player.
-- **Order by discovery**: twist points follow player discovery order, not story chronology (`workflow/01-story-intake.md`);
-  motive documents come last, reframing "defeat the monster" as "understand the monster".
-- **The page can be a character** (highest-order device): the site is built in-world by a character (the
-  killer's own official website / the missing person's final task) — browsing is itself plot.
+- **总公式**：入口仪式页 → 伪装容器 → 核心循环（阅读 → 提取 → 解锁）→ 表层
+  裂痕 → 分阶段深入秘密层 → 核心反转页 → 高潮 → 结局。
+- **五段递进**：(1) 以服务之名 → (2) 系统之恶 → (3) 人性灰度 → (4) 玩家的
+  罪疚 → (5) 循环指向玩家自己。
+- **按发现顺序排布**：反转点跟随玩家的发现顺序，而不是故事时间线（`workflow/01-story-intake.md`）；
+  动机文档放在最后，把「打败怪物」重新框定为「理解怪物」。
+- **页面本身可以是角色**（最高阶的装置）：网站由某个角色在剧内搭建（凶手
+  自己的官方网站 / 失踪者的最后一项任务）——浏览本身就是剧情。
 
-## 2. Module catalog (pick with the user at step 2; record each pick in `docs/system-profile.md`)
+## 2. 模块目录（在步骤 2 与用户一起挑选；每个选择记入 `docs/system-profile.md`）
 
-| # | Module | What it gives | Select when | Reference |
+| # | 模块 | 它带来什么 | 何时选择 | 参考 |
 |---|---|---|---|---|
-| M1 | Search index | hashed keyword → hidden page, exact match with synonym aliases; catalog result titles (R9) | the organization would have a search surface; keyword discovery fits the story | `references/structure/components.md` §1–§2 |
-| M2 | Password gates | credential triad (clue page A → clue page B → gate page C); verbatim or derived credentials | documents, rooms, or accounts are locked | `references/structure/components.md` §3 |
-| M3 | Account login | session login + per-account access; the native reach model of containers B/C/D | the fiction really has identities and a login (intranet, case system, desktop) | `references/structure/form-system.md` |
-| M4 | Address-bar props | hand-typed or obscure URLs as the route; the URL itself is a clue | era-flavored archaeology (container C) | — |
-| M5 | Layer reskin | whole-page visual switch on crossing over: background, title, logo, footer | ask the user — the story may not want the impact; without it the layers differ by pages and copy only | `references/structure/components.md` §5 |
-| M6 | Forbidden-word state | one term triggers a full-page shift | the fiction has a taboo word | `references/structure/components.md` §2 |
-| M7 | Progress numbering | `NN/total` footer; anomalous `ex/total` on deep pages | the player needs a soft map of the site; numbers suggest order, never lock it | `references/structure/base.md` §2 |
-| M8 | Collection carrier | notebook / evidence wall / map as an in-world page or app | the plot is a collection; keep the carrier inside the fiction (R1) | — |
-| M9 | Entry ritual page | role assignment + start; rules only where the fiction needs them (headphones, external search) | any game with a role frame; keep the copy light, no implementation notes | — |
-| M10 | Endings | dual moral-choice ending reusing just-read documents; fourth-wall close + author link | the story carries a dilemma; a single ending is fine otherwise | `workflow/03-gdd.md` |
-| M11 | World texture | atmosphere pages off the critical path, an epigraph at the deepest point, easter eggs | the world needs texture; no need to label pages as carrying no progress | — |
-| M12 | Interaction staging | countdown blackout, typewriter, scroll reveal, fake interactions; sensory puzzles with declared hardware | the system's reactions should carry weight | `references/structure/components.md` §4 |
-| M13 | Telemetry | search terms + page-view counts | difficulty iteration on real friction data is wanted | — |
-| M14 | Read-state entries | an entry appears only after its source page was read (`data-after`; the walk fires the edge, check-solvable proves the order) | the fiction reacts to being read — mail arrives, badges change, sanctions land | `references/structure/form-device.md` §3 |
+| M1 | 搜索索引 | 哈希关键词 → 隐藏页面，精确匹配并支持同义/别名；目录式结果标题（R9） | 该组织本来就会有搜索面；关键词发现适合这个故事 | `references/structure/components.md` §1–§2 |
+| M2 | 密码门禁 | 凭据三件套（线索页 A → 线索页 B → 门禁页 C）；原文照录或推导凭据 | 文档、房间或账号处于锁定状态 | `references/structure/components.md` §3 |
+| M3 | 账号登录 | 会话登录 + 按账号分别授权；容器 B/C/D 的原生触达模型 | 虚构中真实存在身份与登录（内网、案件系统、桌面端） | `references/structure/form-system.md` |
+| M4 | 地址栏道具 | 手动输入或冷僻 URL 作为路径；URL 本身就是线索 | 带时代感的考古（容器 C） | — |
+| M5 | 层级换皮 | 跨层时整页视觉切换：背景、标题、logo、页脚 | 问用户——故事可能不想要这种冲击；没有它，两层只在页面与文案上区分 | `references/structure/components.md` §5 |
+| M6 | 禁词状态 | 一个词触发整页剧变 | 虚构中存在一个禁忌词 | `references/structure/components.md` §2 |
+| M7 | 进度编号 | 页脚 `NN/total`；深层页面用异常的 `ex/total` | 玩家需要一张网站的柔性地图；数字暗示顺序，绝不锁死顺序 | `references/structure/base.md` §2 |
+| M8 | 收集载体 | 笔记本 / 证据墙 / 地图，作为剧内页面或应用 | 剧情本质是收集；载体必须留在虚构之内（R1） | — |
+| M9 | 入口仪式页 | 角色分配 + 开始；只有虚构需要时才写规则（耳机、站外搜索） | 任何带角色框架的游戏；文案保持轻盈，不写实现说明 | — |
+| M10 | 结局 | 复用刚读过的文档的双重道德选择结局；破墙收尾 + 作者链接 | 故事承载着一个两难；否则单一结局即可 | `workflow/03-gdd.md` |
+| M11 | 世界质感 | 关键路径之外的氛围页、最深处的题词、彩蛋 | 世界需要质感；不必给不带进度的页面打标签 | — |
+| M12 | 交互演出 | 倒计时黑屏、打字机、滚动揭示、假交互；声明硬件的感官谜题 | 系统的反应需要有分量 | `references/structure/components.md` §4 |
+| M13 | 遥测 | 搜索词 + 页面浏览计数 | 需要基于真实卡点数据迭代难度 | — |
+| M14 | 读态条目 | 条目只在其来源页被读过之后出现（`data-after`；走图触发这条边，check-solvable 证明顺序） | 虚构会对「被阅读」做出反应——邮件送达、徽章变化、制裁降临 | `references/structure/form-device.md` §3 |
 
-## 3. Puzzle types (choose 5–10 as a set)
+## 3. 谜题类型（成套选 5–10 种）
 
-**Iron rule: a password is character inference.** Every credential is a character's life trace (birth year
-derived from a zodiac year, child's birthday, initials, license plate, employee ID). The process of finding a
-password is the process of understanding a character.
+**铁律：密码即人物推理。** 每个凭据都是某个人物的生活痕迹（由生肖年推算出生年、
+孩子的生日、姓名首字母、车牌、工号）。寻找密码的过程，就是理解一个人物的过程。
 
-| Type | Mechanism |
+| 类型 | 机制 |
 |---|---|
-| A Keyword search gate | Literal term → hash lookup → hidden page; synonym/alias tolerance; one keyword can return multiple results. A hit the visitor may not open resolves to its gate or a locked notice (M1/M2), never the document |
-| B Cross-page credential delivery | **Three elements: account on page A, password clue on page B, gate on page C** — the minimum puzzle unit. The credential may be *derived* (account = pinyin initials + license-year, password = entry year), assembled from parts rather than printed whole; prove it with `tools/check-credentials.mjs`, never by printing it (`references/structure/components.md` §3) |
-| C Password hidden in URL | Filename/path is the credential (`passwordisXXX.html`); the address bar becomes a narrative prop; use sparingly — it spoils the reveal |
-| D Classical cryptography | Polybius square, Morse (audio dots/dashes at 1:3), book cipher (page-line); presented on the page, verified client-side |
-| E Sensory puzzles | Stereo channel separation (headphone requirement declared on the entry page), click counting, flashlight mask (radial-gradient + cursor tracking) |
-| F Visual concealment | Black-on-black text revealed by selection (`::selection` color change), CSS blur redaction (the redaction itself is a clue), same-color invisible links, text hidden inside images |
-| G Document contradiction inference | Make documents contradict each other: a compliance conclusion vs. red-flagged line items, stated purpose vs. itinerary endpoint, commendation text vs. later identity, pages interlocked by the same date. The page states both figures and leaves the contradiction to the reader |
-| H Credential combination login | Multi-field validation (campus + name + department + bed number), URL whitelist (the fake Wayback Machine accepts only one domain) |
-| I Knowledge-search tutorial | On a wrong answer, prompt "search the web for it" — teaches the player an external search engine (a core ARG skill) |
-| J Emotional/narrative puzzles | Psychological questionnaires, branching dialogue; no right or wrong, only choices; the finale may ask the player for the real-world time |
-| K Forbidden-word trigger | A specific word triggers a full-page horror shift (M6); the search box becomes Russian roulette |
-| L Staging type | Post-unlock countdown blackout ("the system has noticed you"), typewriter deletion and retyping, scroll-to-bottom pseudo-navigation ("depart now") (M12) |
-| M Meta-game easter eggs | `ex` page collection (the author page reveals the total), invisible links rewarding DOM inspectors, external links that break the fiction/reality boundary (M11) |
+| A 关键词搜索门禁 | 字面词 → 哈希查找 → 隐藏页面；容忍同义词/别名；一个关键词可以返回多条结果。访问者无权打开的命中解析到它的门禁页或锁定提示（M1/M2），绝不给出文档 |
+| B 跨页凭据传递 | **三要素：账号在 A 页、密码线索在 B 页、门禁在 C 页**——最小谜题单元。凭据可以是*推导*出来的（账号 = 拼音首字母 + 车牌年份，密码 = 入职年份），由部件拼装而非整体印出；用 `tools/check-credentials.mjs` 证明它，绝不用打印的方式（`references/structure/components.md` §3） |
+| C 藏在 URL 里的密码 | 文件名/路径即凭据（`passwordisXXX.html`）；地址栏变成叙事道具；慎用——它会剧透揭示时刻 |
+| D 古典密码 | 波利比奥斯方阵（Polybius square）、摩斯电码（音频点划 1:3）、书密码（页-行）；在页面上呈现，在客户端校验 |
+| E 感官谜题 | 立体声声道分离（耳机要求在入口页声明）、点击计数、手电筒遮罩（radial-gradient + 光标跟踪） |
+| F 视觉隐藏 | 黑底黑字靠选中显现（`::selection` 变色）、CSS 模糊涂黑（涂黑本身就是线索）、同色隐形链接、藏在图片里的文字 |
+| G 文档矛盾推理 | 让文档互相矛盾：合规结论 vs. 标红的条目、声称的目的 vs. 行程终点、嘉奖令 vs. 后来的身份、被同一日期咬合在一起的页面。页面陈述双方数据，把矛盾留给读者 |
+| H 凭据组合登录 | 多字段校验（校区 + 姓名 + 科室 + 床号）、URL 白名单（那个假的 Wayback Machine 只接受一个域名） |
+| I 知识检索教学型 | 答错时提示「上网搜一下」——教玩家使用站外搜索引擎（ARG 的核心技能） |
+| J 情感/叙事谜题 | 心理问卷、分支对话；没有对错，只有选择；高潮可以向玩家索取现实世界的时间 |
+| K 禁词触发 | 一个特定的词触发整页恐怖切换（M6）；搜索框变成俄罗斯轮盘 |
+| L 演出型 | 解锁后的倒计时黑屏（「系统已经注意到你」）、打字机删除重打、滚到底部的伪导航（「立即出发」）（M12） |
+| M 元游戏彩蛋 | `ex` 页面收集（作者页公布总数）、奖励 DOM 检查者的隐形链接、打破虚构/现实边界的外链（M11） |
 
-**Difficulty is paced by copy hints.** Client-side puzzles are always bypassable; mitigate with a hashed
-keyword table (blocks winning by reading source) and non-spoiling filenames. The disguise, not the lock, is the
-product (R4).
+**难度靠文案提示调节节奏。** 客户端谜题永远可以被绕过；用哈希
+关键词表（阻止「读源码就赢」）和不剧透的文件名来缓解。产品是伪装，不是那把锁（R4）。
 
-## 4. Copy rules (core)
+## 4. 文案规则（核心）
 
-1. **Surface layer: aggressively mundane** — warm, bureaucratic, or marketing register; mundanity is the disguise.
-2. **Secret layer: zero adjectives, cold documents** — a murder recorded as a ledger (name | date | note: confirmed by X); a tragedy recorded as a medical chart (chief complaint / history / dosage). Horror comes from the bureaucratic register.
-3. **Repetition visualizes obsession** — one sentence hand-copied 21 times; 67 repetitions of a prayer forming a wall; one name appearing 10 times in transaction records.
-4. **Jargon lexicon**: the secret layer has its own terminology (offering = sacrifice, pilgrim = prey); learning the jargon is itself the hidden progress bar.
-5. **Dual-phrasing contrast**: the same fact stated two ways, one per layer; the player assembles the reveal.
-6. **Everyday life carries the puzzles**: password material must first be a genuine life trace (a child-photo post date = password; a "my zodiac year" message = birth-year inference) (R3).
-7. **Absence is more frightening than presence**: a thread frozen at "Hi, are you still there?"; `[This content has been deleted]`; a dead-man's-switch email.
-8. **Simulated noise**: spam mail, error JSON, `report_FINAL_v2_actually_final.pdf`, low-effort replies ("bump") — useless information builds human texture.
-9. **Failure messages are copy slots**: `密码错误 🎂` hints at the source and stops; a bare "error" is prohibited (R4).
-10. **A compact epigram states the theme**: one epigrammatic couplet summing up the story's causal logic, placed at the deepest point.
-11. **Two voices**: in-world text (pages, documents, notices, error copy) is written for the site's own audience. Guidance text (entry page, hardware requirements) addresses the player in plain declarative sentences, carries no answer and no implementation notes.
-12. **Neutral surface pages**: pages carrying no clue are written in full anyway. A staff roster lists every employee with title, tenure, and duties, including the ones who matter; nothing on a public page acknowledges the plot (R5).
-13. **Document format is the realism**: an announcement reads as an announcement — issuing body, document number, date, addressee, body, signature and seal, distribution list. A contract carries parties, clauses, amounts, dates, seals (R6).
-14. **Declarative sentences**: copy states what is there, once. Contrast frames (是…不是… / 是…而是… / 不能…只能… / 并非…而是…) and personification read as essay voice, thin out the document register, and are a recognizable machine-writing tell. Where a page needs to exclude something, exclude it in its own plain sentence.
-    - Before: 这里没有随机密码，每一把钥匙都是某个人一生留下的痕迹。
-    - After: 每一个密码都出自站内某个人留下的生活痕迹：生肖、工号、纪念日。
-    - Before: 春水楼不会消失，它只是深吸一口气。
-    - After: 2020 年春季恢复营业，具体时间另行公告。
-15. **The medium argues**: the container says something by being this container — a script-fiction shop that hosts a real case file, one fabricated browser tab, a site frozen the year its author died. `workflow/02-container.md` closes axis 1 with one recorded sentence for it; when the chosen form says nothing beyond the plot, the form is a costume.
+1. **表层：极致的日常**——温暖、官僚或营销语域；日常感就是伪装。
+2. **秘密层：零形容词、冷文档**——一桩谋杀记成台账（姓名 | 日期 | 备注：经 X 确认）；一场悲剧记成病历（主诉 / 病史 / 剂量）。恐怖来自官僚语域。
+3. **重复让执念可视化**——一句话手抄 21 遍；67 遍重复的祷词砌成一堵墙；一个名字在交易记录里出现 10 次。
+4. **黑话词典**：秘密层有自己的术语体系（供品 = 祭品，朝圣者 = 猎物）；学会黑话本身就是隐藏的进度条。
+5. **双重措辞对照**：同一件事两种说法，每层各一种；玩家自己拼出揭示时刻。
+6. **日常承载谜题**：密码素材首先必须是真实的生活痕迹（一条孩子照片的发布日期 = 密码；一条「我的本命年」留言 = 出生年推断）（R3）。
+7. **缺席比在场更可怕**：冻结在「在吗，你还在吗？」的对话；`[This content has been deleted]`；一封死人开关邮件。
+8. **模拟噪音**：垃圾邮件、报错 JSON、`report_FINAL_v2_actually_final.pdf`、敷衍回复（「顶」）——无用信息堆出人的质感。
+9. **失败提示是文案槽位**：`密码错误 🎂` 侧面指向线索来源就停；禁止光秃秃的「错误」（R4）。
+10. **凝练的警句点题**：一联概括故事因果逻辑的格言，放在最深处。
+11. **两种语态**：剧内文字（页面、文书、通知、报错文案）为网站自己的受众而写。引导文字（入口页、硬件要求）用平实的陈述句对玩家说话，不携带任何答案，不写实现说明。
+12. **中性表层页面**：不带线索的页面也要完整写出。员工名录列出每一名员工的职务、任期和职责，包括那些关键人物；公开页上没有任何内容承认剧情的存在（R5）。
+13. **文书格式即真实感**：公告读起来就是公告——发文机关、文号、日期、主送、正文、签章、抄送列表。合同载明双方、条款、金额、日期、印章（R6）。
+14. **陈述句**：文案只陈述有什么，说一次。对照句式（是…不是… / 是…而是… / 不能…只能… / 并非…而是…）和拟人读起来像散文腔，稀释文书语域，是可辨认的机器写作痕迹。页面需要排除什么时，就用一句平实的话把它排除掉。
+    - 改前：这里没有随机密码，每一把钥匙都是某个人一生留下的痕迹。
+    - 改后：每一个密码都出自站内某个人留下的生活痕迹：生肖、工号、纪念日。
+    - 改前：春水楼不会消失，它只是深吸一口气。
+    - 改后：2020 年春季恢复营业，具体时间另行公告。
+15. **载体本身在说话**：容器以「身为这个容器」说出点什么——一家寄放真实案卷的剧本杀店、一个伪造的浏览器标签页、一座冻结在作者去世那年的网站。`workflow/02-container.md` 用一句记录为形态五轴的第 1 轴收口；当所选形态说不出剧情之外的东西时，形态只是一件戏服。

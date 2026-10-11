@@ -65,8 +65,7 @@
 结果，而新标签页拿到的是全新的 `sessionStorage`，因此以这种方式打开的
 `data-access` 保护文档会被读成锁定状态，尽管玩家在原标签页里已经"登录"。任何把
 账号登录与新标签页结果交叉在一起的容器（容器 D 的 `query → results → archive` 链）
-都必须把会话状态放在**会话 cookie**（跨标签页共享，浏览器关闭时清除）里，而不是
-每标签页一份的 `sessionStorage`；内核的 `session` store 正是这个（§3）。
+都必须把会话状态放在跨标签页共享的存储里（内核默认会话 cookie；装配记录写明剧情依据时也可用 `localStorage`），而不是每标签页一份的 `sessionStorage`；内核的 `session` store 正是前者（§3）。
 `check-solvable.mjs` 把身份建模为一个全局集合，看不见按标签页的隔离，所以真实
 浏览器已经失败时它仍报绿。只有步骤 8 的跨标签页人工测试能抓住这一点
 （tooling.md §3 item 7）。
@@ -105,7 +104,7 @@
 - **输入框只标明字段名（R4）。** `placeholder="Employee ID"` / `工号` 合格；`placeholder="e.g. 1977"` 属于泄露。推导规则不放在门禁页上；*账号格式*可以贴在那里。
 - **多字段门禁**由多个 `data-expect-hash` 输入框组成；必须全部匹配。门禁页自身的正文在门禁通过前不可读。藏在它自己的 `x-show="unlocked"` 区块里的线索在解锁前不算数，这正是检查所建模的边界。
 - **通配门禁必须显式声明，绝不能隐含。** 不索要任何可验证秘密的门禁（一次情感性的"输入即通过"仪式）要把它的输入标记为 `data-expect-any`；门禁页上未标记的输入会触发 `check-solvable.mjs` 的 NOTE，并始终属于泄漏类问题（workflow/05 Q4）。
-- **会话状态是技术实现，不是文案。** 账号存放在**会话 cookie**（跨标签页，浏览器关闭时清除；绝不用 `target="_blank"` 结果背后那每标签页一份的 `sessionStorage`），站点也不向玩家解释自己的存储方式（`references/structure/form-system.md` §6）。进度与读态存储遵循装配记录的状态契约（R13；`references/structure/form-device.md` §3）。
+- **会话状态是技术实现，不是文案。** 账号存放在跨标签页共享的存储里（内核默认会话 cookie，浏览器关闭时清除；装配记录写明剧情依据时可用 `localStorage`；绝不用 `target="_blank"` 结果背后那每标签页一份的 `sessionStorage`），站点也不向玩家解释自己的存储方式（`references/structure/form-system.md` §6）。进度与读态存储遵循装配记录的状态契约（R13；`references/structure/form-device.md` §3）。
 
 ## 4. 暂存组件（生命周期托管）
 
@@ -130,8 +129,7 @@ CSS：sticky 不透明页头、`.sheet` 文档套件、门禁表单、入口外�
 （references/guardrails.md R13，细节见 references/structure/form-device.md §3）：
 只有当装配记录写明 `persistent` 时（玩家自有的设备，或确实会存档的虚构设定），
 进度才持久化。`progress: session` 时把 localStorage 换成 sessionStorage；
-`progress: none` 时该模块本身不进游戏。登录状态永远不在这里——它在会话 cookie 里
-（§3），绝不在 localStorage。
+`progress: none` 时该模块本身不进游戏。登录状态不放在这里——它由内核的会话存储管理（§3），存储方式跟随状态契约。
 
 世界回应状态（M14：某条目只有在读过某页后才出现）是并生机制——起点内核里的
 `readState` store、`assets/templates/js/modules/read-state.js`（源页面上的

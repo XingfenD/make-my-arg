@@ -2,8 +2,8 @@
 // The storage question follows the profile's state contract (references/guardrails.md R13, detail
 // references/structure/form-device.md §3): progress persists ONLY when the profile records `persistent`
 // (a player-owned device or a fiction that really saves). With `progress: session`, swap localStorage
-// for sessionStorage; with `progress: none`, the module itself is out of the game. Login state is never
-// here — it lives in the session cookie (kernel), never localStorage.
+// for sessionStorage; with `progress: none`, the module itself is out of the game. Login state is not
+// handled here — it lives in the kernel's session store (session cookie by default).
 // Mount on the shared footer so it runs on every page:
 //   <footer x-data="progress"><small>© ... <span class="progress" x-text="seen.length + '/' + total"></span></small></footer>
 //   <body data-page="14" data-total="36">   (deep footers may print anomalous numbers: ex/36, ?/36)

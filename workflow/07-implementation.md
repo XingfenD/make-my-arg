@@ -42,7 +42,7 @@
 - **文案是陈述句 (R11)。**写任何句子之前先看 references/design-playbook.md §4.14。
 - **关键词要做哈希 (R3)。**任一 `data/keywords.<layer>.src.json` 改动之后都要跑 `node tools/build-keywords.mjs`。
 - **读态条目要带 `data-after` (M14, R13)。**只有读过某页之后才存在的条目，在 `data-after` 里写明那一页。这是检查器看得见的契约。只有运行时 `readState`，这个条目在图上是看不见的。通配门禁把它的输入标为 `data-expect-any`；门禁页上未声明的输入会触发 `check-solvable` 的 NOTE（`references/structure/form-device.md` §4）。
-- **存储遵循状态契约 (R13)。**只在装配记录写明持久化的地方写 `localStorage`；登录状态留在会话 cookie 辅助函数里；任何页面都绝不向玩家解释自己的存储方式。
+- **存储遵循状态契约 (R13)。**只在装配记录写明持久化的地方写 `localStorage`；登录状态由内核的会话存储管理（会话 cookie 为默认，持久化需装配记录写明）；任何页面都绝不向玩家解释自己的存储方式。
 - **共享实体保持一致。**出现在多个页面上的人名、证件号、账号、页面标题或日期，一律从 `docs/registry.md`（步骤 3 写出）复制，绝不重打；登记表是唯一事实源。
 
 每个阶段结束时，对该阶段动过的文件重跑 workflow/05-puzzle-audit.md Q4 的泄漏扫描。

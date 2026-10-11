@@ -62,8 +62,7 @@
 三个状态族，各有自己的存储答案（规范规则：`references/guardrails.md` R13；细节：
 `references/structure/form-device.md` §3）：
 
-- **登录状态**（我是谁）——一律用会话 cookie，跨标签页，浏览器关闭即清除。绝不用
-  `localStorage`。
+- **登录状态**（我是谁）——用跨标签页共享的存储：内核默认会话 cookie（浏览器关闭即清除），装配记录写明剧情依据时可用 `localStorage` 持久化。
 - **进度状态**（我读过什么）——跟随设备归属：玩家自有的设备（容器 B）持久化已访问的页面，
   可以带有剧内的存档 / 继续 / 清除；远程系统（A/C/D）关闭即清除，除非虚构设定真的会保存。
   记录 `progress: persistent | session | none` 并注明容器的归属。

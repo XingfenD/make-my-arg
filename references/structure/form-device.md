@@ -56,7 +56,7 @@
 
 | 状态族 | 它回答的问题 | 存储 | 规则 |
 |---|---|---|---|
-| 登录 | 我是谁 | 会话 cookie | 起点内核中的 `session` store（`assets/starter/assets/js/components.js`）；跨标签页；关闭时清除；绝不用 localStorage——规则：`references/structure/components.md` §3 |
+| 登录 | 我是谁 | 跨标签页共享的存储：内核默认会话 cookie（关闭时清除），装配记录写明剧情依据时可用 localStorage | 起点内核中的 `session` store（`assets/starter/assets/js/components.js`）；规则：`references/structure/components.md` §3 |
 | 进度 | 我读过 / 到访过什么 | **仅当**装配记录写明 `persistent` 时用 localStorage；否则仅会话级或不存 | 玩家自有的设备保存状态（R13）；`NN/total` 页脚与未读徽标读取它 |
 | 世界回应 | 因为读了某页，站点发生了变化 | LS 读取键**加上 `data-after` 属性**，后者是检查器可见的契约 | `workflow/04-reachability.md` 中的路线 10；没有 `data-after` 的条目就是无条件链接，会失去它的剧情理由 |
 
@@ -111,7 +111,6 @@
 | 反模式 | 为何失败 |
 |---|---|
 | 从参考站点抄来、没有剧情依据的持久化（R13） | 一个从不存档的远程系统才符合它的虚构设定；在那里存档反而破坏设定 |
-| 登录状态持久化到 localStorage | 远程系统必须在关闭后忘记你；登录态清掉——这就是会话式虚构（`references/structure/form-system.md` §6） |
 | 条目以普通链接的形式埋进去，文案却声称"只有在……之后才出现" | 声称必须由机制兑现：`data-after` 标明来源页（§4） |
 | 声明了手机设备类，交付的却是纯 Web 外壳 | 设备类是皮肤必须兑现的承诺：要么上 §2 的组件，要么改设备类 |
 | 在 `progress: none` 的装配记录上放存档/继续/清档界面 | 未选中的机械装置就是模块漂移（`references/common-mistakes.md` §6） |

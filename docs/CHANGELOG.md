@@ -10,6 +10,9 @@ The format loosely follows Keep a Changelog and can be adapted to the team's hab
 
 ### Changed / 变更
 
+- Retire the blanket "never localStorage" prohibition: login state now follows the state contract (R13) — the kernel still defaults to a cross-tab session cookie, but the assembly record may record a plot justification for `localStorage` persistence. The per-tab `sessionStorage` warning stands (it is a technical fact about `target="_blank"` results, not a storage ban), and the step-8 cross-tab / state-contract checks now verify behavior against the recorded contract instead of asserting "logged out after browser close" unconditionally. Affects `references/guardrails.md` R13, `references/structure/form-device.md`, `references/structure/form-system.md`, `references/structure/components.md`, `references/common-mistakes.md`, and workflow steps 2/6/7/8.
+  退役「一律禁用 localStorage」的整体禁令：登录态改随状态契约（R13）——内核默认仍是跨标签页会话 cookie，但装配记录可以写明剧情依据、改用 `localStorage` 持久化。按标签页 `sessionStorage` 的警告保留（那是 `target="_blank"` 结果的技术事实，不是存储禁令）；步骤 8 的跨标签页与状态契约检查改为对照契约核实行为，不再无条件断言「关浏览器即登出」。涉及 `references/guardrails.md` R13、`references/structure/form-device.md`、`references/structure/form-system.md`、`references/structure/components.md`、`references/common-mistakes.md` 与工作流第 2/6/7/8 步。
+
 - De-AI-flavor the translated skill docs with the lieflat-less-ai-tone whitelist: dash overuse is resolved (reveals and gratuitous supplements become commas or periods; definitional enumerations, conditionals, exception/contrast pairs, "label —— description" separators, table cells and quoted speech all stay), and five fronted 「当…时」 clauses drop the frame where the condition survives. No structure, meaning, or literal (paths, `§N` citations, rule IDs) touched; 101 line-level edits across 20 files.
   按 lieflat-less-ai-tone 白名单给译文去 AI 味：破折号滥用（揭晓式与无必要补充改为逗号/句号，定义枚举、条件、例外/对照、「标签 —— 说明」分隔、表格单元格与引用原话一律保留），并删去五处「当……时」前置框架（条件义不损）。结构、语义与字面量（路径、`§N` 引用、规则编号）零改动；20 个文件共 101 处行内修改。
 

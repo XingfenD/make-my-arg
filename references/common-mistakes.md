@@ -77,7 +77,7 @@
 | 编排者自己动手写页面 | 每个工作流步骤一个子代理；编排者只负责派发与审阅 |
 | 声明过的图片 / 印章 / 扫描件 / 照片从未落地（没写 `<img>`，所以没有检查器会报错） | 步骤 7 阶段 4 负责 GDD 资产清单；步骤 8 把每项声明的资产与文件 + 引用对账 |
 | 把一次登录拆成两个表单，只为迎合检查器的「一个表单 = 一个身份」 | 一个输入框 + `data-grants`（账号→身份映射）；两个表单会在标题里泄露设计意图，读起来像游戏 UI（`references/structure/form-system.md` §2） |
-| 在 `target="_blank"` 结果后面把访问状态存在按标签页隔离的 `sessionStorage` 里 | 会话 cookie（跨标签页）；否则结果打开的新标签页会读成未登录（`references/structure/components.md` §2–§3） |
+| 在 `target="_blank"` 结果后面把访问状态存在按标签页隔离的 `sessionStorage` 里 | 跨标签页共享的存储（会话 cookie 或 `localStorage`）；否则结果打开的新标签页会读成未登录（`references/structure/components.md` §2–§3） |
 | 读态条目被当成普通链接埋进去，文案却声称「读完 X 之后出现」 | `data-after="…/X.html"` 才是机制层面的声明；走图会证明它（`references/structure/form-device.md` §4, R13） |
 | 把凭据明文打印出来，只为满足静态检查器 | 零明文：`check-credentials.mjs` 断言没有任何账号完整出现；静态站点上客户端遮挡不算隐私 |
 

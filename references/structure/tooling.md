@@ -31,6 +31,9 @@ node tools/site-graph.mjs       # 写出 docs/site-graph.json 与渲染器树 do
 
 `hash.mjs` 是设计期辅助工具（步骤 3/5，计算门禁的 `data-expect-hash` 值时使用）；
 `vendor-alpine.mjs` 在脚手架阶段运行一次（步骤 6）。
+`init-project.mjs` 反过来只在 skill 仓库里运行、不复制进项目 `tools/`：脚手架期把
+起点项目、`tools/`、`viewer/` 与按 flag 选中的模块件镜像进项目根，对已存在文件一律
+跳过（flag 表：`assets/templates/README.md`；步骤 6）。
 
 `site-graph.mjs` 与 `check-solvable.mjs` 共享 `site-model.mjs`，因此图绝不会与
 走图不一致。它绘制的跳转关系与走图所跟随的完全相同——包括 `<form action>` 提交，

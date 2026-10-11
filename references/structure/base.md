@@ -49,7 +49,8 @@
 `tools/`、`viewer/`、`docs/` 和 `deploy/` 不放站点页面：走图工具会跳过它们（`CONFIG.skipDirs`，
 `references/structure/tooling.md` §2），所以生成的 `docs/site-graph/` 树永远不会虚增页面数。
 
-这棵树由 **`assets/starter/`** 物化而来，它是每个游戏所依据的起点项目：它带上了
+这棵树由 **`assets/starter/`** 经初始化脚本（`assets/tools/init-project.mjs`，步骤 6a 运行）
+物化而来，它是每个游戏所依据的起点项目：它带上了
 恒定不变的文件——入口外壳（带着回到 skill 仓库的链接）、`base.css` + `surface.css`、
 `components.js` 内核、上面两个 ignore 文件以及项目 README——让项目从一棵真实的树
 开始，而不是一个空目录。所有带模块标记或设备标记的部分（`search.html`、`data/`、
@@ -59,8 +60,8 @@
 `.gitignore` 会忽略这些文件；明文表只在 6a 阶段、当装配记录选中了需要它的模块时才创建。
 
 树上自带两个 ignore 文件：它们以 `.gitignore` 和 `.dockerignore` 的形式放在
-`assets/starter/` 里（正文见那两个文件；不要在这里重抄），复制起点项目会把它们
-落到项目根目录。它们回答两个不同的问题，项目两个都需要：
+`assets/starter/` 里（正文见那两个文件；不要在这里重抄），初始化脚本落地起点项目时
+把它们带到项目根目录。它们回答两个不同的问题，项目两个都需要：
 
 - **`.gitignore`** ——什么绝不能进版本历史。开发副产物：明文 `data/*.src.json`
   表（答案册，R3）、生成的 `docs/site-graph.{json,html}`、代理的草稿目录 `memory/`、

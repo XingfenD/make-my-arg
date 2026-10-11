@@ -1,15 +1,35 @@
 # 前端模板（`assets/templates/`）
 
-这里是真实文件，不是 markdown 代码块：步骤 6a 复制 `docs/system-profile.md` 选中的部分，删掉其余。
-把装配记录没有选中的机制一起交付出去就是模块漂移（`references/common-mistakes.md` §6）。
+这里是真实文件，不是 markdown 代码块：步骤 6a 用初始化脚本按 flag 复制
+`docs/system-profile.md` 选中的部分，其余不发（flag 表见下）。把装配记录没有选中的
+机制一起交付出去就是模块漂移（`references/common-mistakes.md` §6）。
 每个模板的行文规则都留在逐文件引用的参考文档里。没有对应装配记录行的模板，绝不能
 「为了保险」而粘贴进来。
 
+## init-project.mjs 的 flag（步骤 6a 运行）
+
+`node <skill 仓库>/assets/tools/init-project.mjs <项目根> [flags]`——对已存在文件
+一律跳过、绝不覆盖：
+
+| flag | 落地什么 |
+|---|---|
+| 无 flag 也落地 | 起点项目（入口外壳、`base.css`、`surface.css`、`components.js` 内核、两个 ignore 文件、README）、`tools/`、`viewer/`、`docs/` |
+| `--m1` | `js/modules/search.js` 注入内核；空而合法的 `data/keywords.*.src.json` 与生成的哈希表 |
+| `--m2` `--m3` `--m7` `--m12` `--m14` | 分别注入 `gate.js` / `access.js` / `progress.js` / `staging.js` / `read-state.js` |
+| `--m5` `--m6` | `css/secret.css` / `css/forbidden.css` |
+| `--device phone` | `css/phone.css` + 注入 `js/modules/phone.js` |
+| `--device browser-chrome` | `css/chrome.css` |
+| `--device desktop` / `--device pure-web` | 无额外文件 |
+
+M5 换皮不需要组件函数体：内核的 `session.reskin()` 已携带令牌，深层页面直接链接
+`secret.css`。挂载标记（`html/*.html`）不是复制件：写页面时按形态逐字取用。
+
 ## js/modules/*.js —— Alpine 组件函数体
 
-每个文件都是某一次 `Alpine.data(...)` 注册的函数体。按装配记录，把它粘进项目
-`components.js` 里的 `alpine:init` 监听器中。**绝不要在组件文件里重新定义 `hash`、`session`
-或 `readState`**。它们住在起点项目的内核（`assets/starter/assets/js/components.js`）里，是共用的。
+每个文件都是某一次 `Alpine.data(...)` 注册的函数体。初始化脚本按 flag 把它注入项目
+`components.js` 里的 `alpine:init` 监听器（内核已被手改时，脚本会点名需要手动粘贴的
+文件）。**绝不要在组件文件里重新定义 `hash`、`session` 或 `readState`**。它们住在起点
+项目的内核（`assets/starter/assets/js/components.js`）里，是共用的。
 
 | 文件 | 模块 | 依赖 | 挂载 / 规则 |
 |---|---|---|---|

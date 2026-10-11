@@ -6,6 +6,24 @@ All notable changes to this skill should be documented in this file.
 The format loosely follows Keep a Changelog and can be adapted to the team's habits.
 本文档参考了 Keep a Changelog 的思路，也可以根据团队习惯调整。
 
+## [0.4.1] - 2026-10-11
+
+### Added / 新增
+
+- Add `assets/tools/init-project.mjs`, a scaffold-time mirror script: one invocation materializes the starter tree (entry shell, `base.css` + `surface.css`, the `components.js` kernel, both ignore files, README), `tools/`, `viewer/` and `docs/`, plus the module pieces the flags select — skin CSS (`--m5` / `--m6` / `--device`), Alpine component bodies spliced into the kernel's `alpine:init` listener, and M1's empty-but-legal keyword sources with their hashed tables. It never overwrites an existing file (steps 3–5 may be writing `docs/` concurrently), reports skips, names the bodies that need manual splicing when a hand-edited kernel can't take injection, and stays skill-side rather than joining the project's `tools/` copy. Smoke-tested: fresh install, full-flag install, idempotent rerun, hand-edits preserved, unknown-flag rejection.
+  新增 `assets/tools/init-project.mjs` 脚手架镜像脚本：一次调用落地起点项目（入口外壳、`base.css` + `surface.css`、`components.js` 内核、两个 ignore 文件、README）、`tools/`、`viewer/`、`docs/`，外加 flag 选中的模块件——皮肤 CSS（`--m5` / `--m6` / `--device`）、注入内核 `alpine:init` 监听器的组件函数体、M1 的空关键词源表与生成的哈希表。对已存在文件一律跳过、绝不覆盖（步骤 3–5 可能同时在写 `docs/`）；内核被手改无法注入时点名需手动拼接的文件；只存在于 skill 仓库，不进项目 `tools/` 的复制清单。冒烟测试覆盖：全新安装、全 flag 安装、幂等重跑、手改文件保留、未知 flag 拒绝。
+
+- Add a 完成判据 (definition-of-done) checklist to workflow steps 1, 2, 3, 6 and 7: three to five mechanically checkable items per step (five-table completeness and the `〔invented〕` checkpoint; all five form axes answered and the system-profile row set complete; GDD plan / eight sections / registry coverage with the 3d reconciliation landed; a complete file tree with every touch-table page scaffolded and zero unselected modules; every stage's dispatch report, asset reconciliation and per-stage Q4 leak scan). Steps 4, 5 and 8 already had gate questions or the full self-check list; these five steps previously relied on orchestrator judgment alone.
+  为工作流第 1、2、3、6、7 步各补一份「完成判据」清单：每步 3–5 项可机械核对的条目（五表齐全与 `〔invented〕` 检查点；形态五轴全部作答且装配记录行集完整；计划 / 八节 / 登记表覆盖且 3d 调和落地；目录树完整、触达表每页有骨架、未选模块零残件；每阶段派发回报、资产对账与逐阶段 Q4 泄漏扫描）。第 4、5、8 步原本已有门禁问题清单或全量自检清单；这五步此前只靠编排者临场判断。
+
+### Changed / 变更
+
+- Replace step 6a's hand-copy list with one initialization-script invocation: the ignore-files prose bullet is deleted (its rationale keeps its single source in `references/structure/base.md` §1, and the failure mode it guarded against moves into `references/common-mistakes.md` §6), the skins / components / tools / renderer bullets collapse into the script's flag table (`assets/templates/README.md`), and 6a keeps only the judgment work — fictional region names, shell and base pages, state-contract wiring. One-line pointers added to `references/structure/tooling.md` and `references/structure/base.md`.
+  步骤 6a 的手工复制清单改为一次初始化脚本调用：忽略文件的说理段删除（动机的规范出处本就在 `references/structure/base.md` §1，它防的失败模式移入 `references/common-mistakes.md` §6），皮肤 / 组件 / 工具 / 渲染器各条并入脚本的 flag 对照表（`assets/templates/README.md`），6a 只保留判断题——虚构区域命名、外壳与基础页、状态契约接线。`references/structure/tooling.md` 与 `references/structure/base.md` 补对应的一行指针。
+
+- Restructure `workflow/06-scaffold.md` for cognitive load: the dual 6a/6b input contract becomes two labeled blocks so each dispatch reads only its own contract, and the four mega-bullets in the 6a build list (shell pages, skins and components, state contract, tools and renderer) become parent items with nested sub-items. Content unchanged; every path and marker stays byte-identical.
+  重构 `workflow/06-scaffold.md` 以降低认知负载：6a/6b 混排的输入契约拆成两个带标签的块，各自派发只读自己那一半；6a 构建清单里四条巨型条目（外壳基础页、皮肤与组件、状态契约、工具与渲染器）拆为父条目加嵌套子条目。内容不变，所有路径与标记逐字保留。
+
 ## [0.4.0] - 2026-10-11
 
 ### Changed / 变更

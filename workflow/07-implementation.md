@@ -47,4 +47,14 @@
 
 每个阶段结束时，对该阶段动过的文件重跑 workflow/05-puzzle-audit.md Q4 的泄漏扫描。
 
+## 完成判据
+
+逐项核对；任何一项未过，本步就未完成。
+
+- [ ] 每个阶段都返回了改动文件清单加未决问题；未决问题经编排者转达给用户
+- [ ] GDD 资产清单声明的每件资产都已写出（4a），并已接进引用它的页面（4b）
+- [ ] 每个阶段的 Q4 泄漏扫描已对动过的文件重跑，结果记入 `docs/puzzle-audit.md`
+- [ ] 触发条件成立时的工具已跑过且干净：关键词表改动后重跑 `node tools/build-keywords.mjs`；有派生凭据时 `node tools/check-credentials.mjs` 与 `node tools/check-reachability.mjs` 通过
+- [ ] 共享实体逐字来自 `docs/registry.md`；未选中的模块零残件
+
 本步骤的基线测试陷阱：references/common-mistakes.md §7 ——交回产物前先对照检查。

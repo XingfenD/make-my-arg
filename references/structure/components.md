@@ -46,9 +46,8 @@
 （`body-forbidden`）。
 
 **共享哈希契约。** 页内 `hash()` 位于起点内核
-（`assets/starter/assets/js/components.js`），**必须与 `tools/build-keywords.mjs`
-完全一致**（相同的 trim/lowercase 归一化、相同的 md5 + base64 输出）。绝不要在
-组件模板里重新定义它。
+（`assets/starter/assets/js/components.js`），其契约与 `tools/build-keywords.mjs`
+一致（§1）；绝不要在组件模板里重新定义它。
 
 **分层作用域（搜索模块按受众拆分索引时必需，R8）。** 组件查询挂载它的那个受众的
 索引：公开页携带 `data-index="data/keywords.surface.json"`；深层页携带

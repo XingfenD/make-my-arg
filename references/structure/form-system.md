@@ -99,9 +99,8 @@
   `check-credentials.mjs` + `check-reachability.mjs`；绝不要为了让 `check-solvable`
   变绿而把它印出来（§1）。
 - 若页面根目录不是 `pages/`（如 `apps/`），在 `tools/config.mjs` 里设置 `pagesDir`
-  （`tooling.md` §2）。只存于 JS 的状态，以及按标签页与跨标签页会话存储的差别，对
-  检查器不可见。用 `data-grant` / `data-access` 对它建模，或人工验证（`tooling.md`
-  §3 第 1 与第 7 项）。
+  （`tooling.md` §2）。检查器只解析静态绑定（`tooling.md` §3 第 1 项）：只存于 JS 的
+  状态要用 `data-grant` / `data-access` 建模，或人工验证（§3 第 1 与第 7 项）。
 
 ## 6. 会话状态（登录）——其他状态族遵循 R13
 

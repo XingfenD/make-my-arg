@@ -50,13 +50,12 @@
 `references/structure/tooling.md` §2），所以生成的 `docs/site-graph/` 树永远不会虚增页面数。
 
 这棵树由 **`assets/starter/`** 经初始化脚本（`assets/tools/init-project.mjs`，步骤 6a 运行）
-物化而来，它是每个游戏所依据的起点项目：它带上了
-恒定不变的文件——入口外壳（带着回到 skill 仓库的链接）、`base.css` + `surface.css`、
-`components.js` 内核、上面两个 ignore 文件以及项目 README——让项目从一棵真实的树
-开始，而不是一个空目录。所有带模块标记或设备标记的部分（`search.html`、`data/`、
+物化而来，它是每个游戏所依据的起点项目：它带上恒定不变的文件——入口外壳（带着回到
+skill 仓库的链接）、`base.css` + `surface.css`、`components.js` 内核、上面两个 ignore
+文件以及项目 README。所有带模块标记或设备标记的部分（`search.html`、`data/`、
 `secret.css`、`phone.css` / `chrome.css`、受限区、结局页——模板在 `assets/templates/`）
 以及装配好的基础设施（`tools/`、`viewer/`）都在脚手架阶段按 `docs/system-profile.md`
-（`workflow/06-scaffold.md`）添加。因此起点项目不带 `data/*.src.json`：它自带的
+（`workflow/06-scaffold.md`）添加。起点项目因此不带 `data/*.src.json`：它自带的
 `.gitignore` 会忽略这些文件；明文表只在 6a 阶段、当装配记录选中了需要它的模块时才创建。
 
 树上自带两个 ignore 文件：它们以 `.gitignore` 和 `.dockerignore` 的形式放在

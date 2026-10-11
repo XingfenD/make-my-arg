@@ -9,8 +9,7 @@ make-my-arg 的起点项目：每个生成的项目都把这棵树复制为起�
 - 模板里的 `<!-- -->` 注释是写作指引，不是给玩家看的内容：填充页面时逐条删除。步骤 8 的外壳扫描会把残留提示当泄漏处理（R4）。
 - `<html lang>` 随故事的语言设置。
 - 入口页带一个指向 make-my-arg 技能仓库的 GitHub 链接（对技能的引用，请勿删除）；入口除此之外只有进入按钮，没有“关于”页。
-- 这棵树只放**不随模块变化**的那部分：入口外壳、共用 css/js、两份忽略文件、README。带模块标记的文件——`search.html`（M1）、`data/`（M1/M2/M6）、`secret.css`（M5）、`phone.css` / `chrome.css`（设备类）、`pages/` 与受限区域、结局页（M10）——由 步骤 6a 从技能仓库的 `assets/templates/`（js/css/html 前端代码模板，索引见其 README）按 `docs/system-profile.md` 的选择复制创建；装配记录没选的机制一个都不出现。`tools/` 和 `viewer/` 由 步骤 6a 从 skill 的 `assets/` 拼装进来，它们各有唯一出处，不要在项目里分叉维护。
-- 起点项目里没有 `data/*.src.json`：它自带的 `.gitignore` 会把这些明文表忽略掉，而明文表只应在 6a 选中对应模块时才创建。
+- 这棵树只放**不随模块变化**的那部分。带模块标记的文件（模板在 skill 仓库的 `assets/templates/`，索引见其 README）与 `tools/`、`viewer/` 都由步骤 6a 按 `docs/system-profile.md` 拼装进来：装配记录没选的机制一个都不出现，拼装件在项目里不分叉维护。
 
 ## 目录结构
 
@@ -35,7 +34,7 @@ make-my-arg 的起点项目：每个生成的项目都把这棵树复制为起�
 | `docs/` | 步骤 1–5 的产物：故事正典（五张表）、system-profile、GDD、触达链、谜题分析 |
 | `deploy/` | 部署脚本与清单，用到才建 |
 
-`tools/`、`viewer/`、`docs/`、`deploy/` 里没有站点页面：走图工具按 `CONFIG.skipDirs` 跳过它们，所以生成的站点图永远不会把页数撑大。
+`tools/`、`viewer/`、`docs/`、`deploy/` 里没有站点页面：走图工具按 `CONFIG.skipDirs` 跳过它们。
 
 ## 本地运行
 

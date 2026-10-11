@@ -50,8 +50,8 @@
 - **多页树（默认，R1）。**每个叙事地点都是一个可独立打开的 HTML 文档。
 - **chrome-as-apparatus 单页（经 R12 的 R1 例外）。**单个 HTML 文档，其绘出的边框就是虚构
   ——一个假浏览器窗口、一个凝固的 kiosk 应用。仅当轴 1 那句话依赖无缝的单一表面时才允许；
-  装配记录要记下破坏了什么、以及该形态为何服务于虚构。便利永远换不来这个资格：「一个文件更
-  省事」始终被禁止。检查器后果：`references/structure/form-device.md` §5、
+  装配记录要记下破坏了什么、以及该形态为何服务于虚构。「一个文件更省事」不构成理由
+  （`references/guardrails.md` 合理化借口表）。检查器后果：`references/structure/form-device.md` §5、
   `references/structure/tooling.md` §3 item 11。
 - **加密内容层（可选，R3）。**当虚构需要超出哈希查找的隐私——一条绝不能在部署目录树里被
   grep 出来的私信——就加密载荷（WebCrypto AES-GCM，派生密钥用 PBKDF2），并用跨页面的生活

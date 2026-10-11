@@ -33,12 +33,10 @@ node tools/site-graph.mjs       # 写出 docs/site-graph.json 与渲染器树 do
 起点项目、`tools/`、`viewer/` 与按 flag 选中的模块件镜像进项目根，对已存在文件一律
 跳过（flag 表：`assets/templates/README.md`；步骤 6）。
 
-`site-graph.mjs` 与 `check-solvable.mjs` 共享 `site-model.mjs`，因此图绘制的跳转
-与走图跟随的完全相同——同一套静态 `href` / `<form action>` / `data-next` 上限
-（§3 item 1），图与走图绝不会不一致；建模不到的跳转以 `walk-divergence` 问题浮出，
-而不是静默判为不可达。它报告检查器把关的同类缺陷，外加检查器不建模的设计面信号：
-M7 进度提取及其不一致；路线判定与负进度回跳的人工方法见 §3 item 10。它只报告，
-把关仍归检查器（退出码见 §1 注释）。
+`site-graph.mjs` 与 `check-solvable.mjs` 共享 `site-model.mjs`，图与走图不会分叉；
+分叉出来的跳转会记为 `walk-divergence` 问题，解析上限见 §3 item 1。除检查器把关的
+缺陷外，它另报告设计面信号：M7 进度提取及其不一致、路线判定与负进度回跳（人工方法
+见 §3 item 10）。
 
 ## 2. 共享配置（tools/config.mjs）
 

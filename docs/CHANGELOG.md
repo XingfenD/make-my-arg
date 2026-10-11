@@ -10,6 +10,9 @@ The format loosely follows Keep a Changelog and can be adapted to the team's hab
 
 ### Changed / 变更
 
+- De-AI-flavor the translated skill docs with the lieflat-less-ai-tone whitelist: dash overuse is resolved (reveals and gratuitous supplements become commas or periods; definitional enumerations, conditionals, exception/contrast pairs, "label —— description" separators, table cells and quoted speech all stay), and five fronted 「当…时」 clauses drop the frame where the condition survives. No structure, meaning, or literal (paths, `§N` citations, rule IDs) touched; 101 line-level edits across 20 files.
+  按 lieflat-less-ai-tone 白名单给译文去 AI 味：破折号滥用（揭晓式与无必要补充改为逗号/句号，定义枚举、条件、例外/对照、「标签 —— 说明」分隔、表格单元格与引用原话一律保留），并删去五处「当……时」前置框架（条件义不损）。结构、语义与字面量（路径、`§N` 引用、规则编号）零改动；20 个文件共 101 处行内修改。
+
 - Translate the skill's whole documentation chain into Simplified Chinese in place: `SKILL.md` (frontmatter description included), `references/` (guardrails · design-playbook · common-mistakes · the six structure docs), `workflow/` 01–08, `examples/` (all five shape anchors), and the two asset READMEs. File paths, `§N` citations, rule IDs (R1–R13), module IDs (M1–M14), numbered heading and list numbering, code and command literals, and every checker-visible marker stay byte-identical, so `scripts/check-docs.mjs` stays green; terminology is unified across the former batches (步骤 N · 权限清单 · 触达表 · 凭据三件套 · 泄漏扫描 · 开机界面 · 账号家具 · chrome 扫描 · 装置单页 · 首部 …).
   把 skill 的整条文档链译为简体中文并就地替换：`SKILL.md`（含 frontmatter 描述）、`references/`（guardrails · design-playbook · common-mistakes · 六份 structure 文档）、`workflow/` 01–08、`examples/`（五份形态锚点样例）、两份资产 README。文件路径、`§N` 引用、规则编号（R1–R13）、模块编号（M1–M14）、标题与列表编号、代码与命令字面量、检查器可见标记一律逐字保留，`scripts/check-docs.mjs` 保持全绿；原各批次术语已统一（步骤 N · 权限清单 · 触达表 · 凭据三件套 · 泄漏扫描 · 开机界面 · 账号家具 · chrome 扫描 · 装置单页 · 首部 等）。
 

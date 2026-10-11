@@ -73,11 +73,11 @@
 
 工具在本 skill 里位于 `assets/tools/` 下；脚手架把它们复制进 `tools/`，让项目保持
 自包含、可反复运行。它们只用 Node 内置模块（`node:crypto`、`node:fs`、`node:path`、
-`node:child_process`）——零依赖、无安装步骤。检查器从共享的 `tools/config.mjs`
+`node:child_process`），零依赖、无安装步骤。检查器从共享的 `tools/config.mjs`
 读取它们的假设：项目若重命名目录、层名或标记，改这一个文件即可，而不必重写检查器
 （`references/structure/tooling.md` §2 列出旋钮，其第 3 节列出静态检查无法替代的
 人工方法）。关键词表是自动发现的，所以上面的分层约定与单表项目都能零配置工作。
-每次内容编辑后都要重跑检查，而不仅是在部署前——规范的通过/失败清单是
+每次内容编辑后都要重跑检查，而不仅是在部署前。规范的通过/失败清单是
 `workflow/08-self-check.md`。
 
 在脚手架阶段把 Alpine 运行时 vendor 化一次（脚本会锁定版本并在写文件前校验
@@ -95,7 +95,7 @@ node tools/vendor-alpine.mjs      # writes assets/js/vendor/alpine.min.js (alpin
 
 ## 2. 页面骨架模板（所有页面统一）
 
-规范文件：**`assets/templates/html/page-skeleton.html`** ——6b 逐页复制它，因此
+规范文件：**`assets/templates/html/page-skeleton.html`**。6b 逐页复制它，因此
 head、脚本顺序与皮肤链接永远不会偏离本节的描述。
 
 **常驻顶栏** ——每个页面的页头（容器 B 的顶部菜单栏同样如此）固定在视口顶部，
@@ -104,5 +104,5 @@ head、脚本顺序与皮肤链接永远不会偏离本节的描述。
 （以及被选中时的 M1 搜索框）一起，构成公开页面携带的全部跨页链接（R7）。每个
 `<input>` 的 placeholder 都标明字段名（`Search...`、`Employee ID`）（R4）。每个
 页面都以相同顺序加载相同的两个脚本（`components.js` 在 Alpine 运行时之前），且
-不带任何内联行为接线——行为都在 `x-data` 组件里。深层页页脚可以使用 `ex/36` 或
+不带任何内联行为接线，行为都在 `x-data` 组件里。深层页页脚可以使用 `ex/36` 或
 `?/36` 这类反常数字（M7）；`[This content has been deleted]` 占位符是合法的叙事元素。

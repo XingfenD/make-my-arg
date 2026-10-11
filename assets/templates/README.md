@@ -2,14 +2,14 @@
 
 这里是真实文件，不是 markdown 代码块：步骤 6a 复制 `docs/system-profile.md` 选中的部分，删掉其余。
 把装配记录没有选中的机制一起交付出去就是模块漂移（`references/common-mistakes.md` §6）。
-每个模板的行文规则都留在逐文件引用的参考文档里——没有对应装配记录行的模板，绝不能
+每个模板的行文规则都留在逐文件引用的参考文档里。没有对应装配记录行的模板，绝不能
 「为了保险」而粘贴进来。
 
 ## js/modules/*.js —— Alpine 组件函数体
 
 每个文件都是某一次 `Alpine.data(...)` 注册的函数体。按装配记录，把它粘进项目
 `components.js` 里的 `alpine:init` 监听器中。**绝不要在组件文件里重新定义 `hash`、`session`
-或 `readState`**——它们住在起点项目的内核（`assets/starter/assets/js/components.js`）里，是共用的。
+或 `readState`**。它们住在起点项目的内核（`assets/starter/assets/js/components.js`）里，是共用的。
 
 | 文件 | 模块 | 依赖 | 挂载 / 规则 |
 |---|---|---|---|
@@ -25,7 +25,7 @@
 
 `page-skeleton.html` 是每一页的统一骨架（规则：`references/structure/base.md` §2）。
 门禁 / 搜索 / 权限挂载是组件的宿主标记；标记属性（`x-show="unlocked"`、`data-expect-hash`、
-`data-index`）必须逐字保持原样——`tools/check-solvable.mjs` 和 `tools/check-links.mjs`
+`data-index`）必须逐字保持原样。`tools/check-solvable.mjs` 和 `tools/check-links.mjs`
 读取的正是它们。
 
 ## css/*.css —— 皮肤与外壳
@@ -39,4 +39,4 @@
 
 `base.css` 和 `surface.css` 随起点项目一起交付（`assets/starter/assets/css/`），这里不重复。
 每个皮肤文件都重新调校 base.css 读取的同一批自定义属性（`--ink`、`--paper`、`--rule`、
-`--accent`……）——项目只在皮肤里改颜色，绝不动内核 CSS。
+`--accent`……）。项目只在皮肤里改颜色，绝不动内核 CSS。

@@ -22,7 +22,7 @@
 
 - 公开页用 `data-index="data/keywords.surface.json"` 挂载搜索组件；深层页把
   `data-index` 指向深层表（`references/structure/components.md` §2）。受众作用域
-  是强制的（R8）——一张扁平索引会把搜索框变成通关攻略。
+  是强制的（R8）。一张扁平索引会把搜索框变成通关攻略。
 - 公开关键词路由到公开页或门禁——绝不能直入受限文档。访客无权打开的命中结果解析
   到它的门禁或一条朴素的锁定提示（R8）。
 - 门禁采用形态 A/B（`references/structure/components.md` §3）；凭据三件套适用（R3）。

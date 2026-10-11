@@ -19,12 +19,12 @@ node tools/site-graph.mjs       # 写出 docs/site-graph.json 与渲染器树 do
 
 `check-solvable.mjs` **针对逐字凭据**把人工走查中"凭据出处"那一半自动化了，因此
 人工那一轮只需评判语气与节奏。当线索被删除、密码被改动、线索被错放进某个页面自己的
-解锁后区块、或列表条目被删掉时，它以非零码退出——每次内容编辑后都要运行它，而不仅
+解锁后区块、或列表条目被删掉时，它以非零码退出。每次内容编辑后都要运行它，而不仅
 是在部署前。它从 components.md §3 读取门禁约定（`data-expect-hash`、
 `x-show="unlocked"` / `<template x-if="unlocked">`、`x-data="search"`）；重命名这些
 标记的项目要改 `tools/config.mjs`（§2），然后用 `node tools/check-solvable.mjs --self-test` 重新校验匹配器。
 
-**派生/组合**凭据（由部分拼装、从不整体印出）在 check-solvable 的逐字模型之外——
+**派生/组合**凭据（由部分拼装、从不整体印出）在 check-solvable 的逐字模型之外。
 它会把那道门禁报为 STUCK。不要为了让检查变绿而把它印出来（那会泄露给每个访客；
 静态站点没有服务端鉴权）。`check-credentials.mjs` 证明它能从公开页面的组成部分
 零明文拼出；`check-reachability.mjs` 证明一旦知晓它、图依然能解锁（§3 item 6）。
@@ -39,7 +39,7 @@ node tools/site-graph.mjs       # 写出 docs/site-graph.json 与渲染器树 do
 `walk-divergence` 问题的形式出现，而不是给出静默的 `unreachable` 判定。它报告
 检查器用于把关的同样缺陷（不可达页面、卡死门禁、失效目标、层泄漏），外加检查器
 不建模的设计面信号：M7 进度提取及其不一致、步骤 4 封闭清单对每条边的路线判定，
-以及非 chrome 边上的负进度增量（回跳）。有问题时它仍以 0 退出——把关仍归检查器。
+以及非 chrome 边上的负进度增量（回跳）。有问题时它仍以 0 退出，把关仍归检查器。
 
 ## 2. 共享配置（tools/config.mjs）
 
@@ -78,11 +78,11 @@ HTML 实体、CJK）。
 6. **派生 / 组合凭据** —— check-solvable 只在值*逐字*出现时才匹配，因此由部分拼出的账号会被判为 STUCK。修复办法**不是**把它印出来（R12）：声明它，并用 `check-credentials.mjs`（组成部分 + 规则 + 零明文）加 `check-reachability.mjs`（一份注入了这些值的演练副本）证明它。
 7. **按标签页的会话 vs 新标签页结果** —— check-solvable 把身份建模为一个全局集合，因此它看不见 `sessionStorage` 是按标签页的、而结果会以 `target="_blank"` 在新标签页里打开；浏览器显示文档锁定时它仍报绿。人工方法：步骤 8 的跨标签页测试；结构性修复：会话 cookie（components.md §2–§3，`references/structure/form-system.md` §6）。
 8. **元素级权限遮蔽** —— 检查器读的是页面*文本*，不是计算后的可见性；仅靠 `x-show` / CSS 类 / 元素级 `data-access` 藏起来的凭据，仍然在发给每个访客的 HTML 里，而客户端遮蔽不是隐私（R12）。把它当作公开信息处理：步骤 8 的 chrome 泄漏扫描与 `check-credentials` 的零明文断言能抓住它。
-9. **游戏设计文档声明了却从未落地的资产** —— 资产清单列出、却没有任何页面引用的徽章 / 印章 / 扫描件 / 照片 / 伪造文档，没有 `src` 可解析，两个检查器都不会报错。人工方法：步骤 8 的资产清单对账——每个声明的资产都存在于 `assets/` 下，且至少被一个页面引用。
-10. **路线判定与进度回跳** —— `site-graph.mjs` 用步骤 4 的封闭清单给每条边判定路线（机器可判定的标 `structural`，正文里被读成相关文档引用的链接标 `heuristic`），并标出进度增量为负的非 chrome 边。请对照 `docs/reachability.md` 核实每一个 `heuristic` 判定与每一次回跳——工具无法判断该组织是否真的会印出那条链接。
+9. **游戏设计文档声明了却从未落地的资产** —— 资产清单列出、却没有任何页面引用的徽章 / 印章 / 扫描件 / 照片 / 伪造文档，没有 `src` 可解析，两个检查器都不会报错。人工方法：步骤 8 的资产清单对账，每个声明的资产都存在于 `assets/` 下，且至少被一个页面引用。
+10. **路线判定与进度回跳** —— `site-graph.mjs` 用步骤 4 的封闭清单给每条边判定路线（机器可判定的标 `structural`，正文里被读成相关文档引用的链接标 `heuristic`），并标出进度增量为负的非 chrome 边。请对照 `docs/reachability.md` 核实每一个 `heuristic` 判定与每一次回跳。工具无法判断该组织是否真的会印出那条链接。
 11. **装置单页豁免（R1 例外）** —— 当装配记录写明"边框即装置"形态（`references/structure/form-device.md` §5）时，走图只看到一份文档：模板页没有文件供 check-links 解析，门禁/关键词的出处需要人工走查。五项条件在 `workflow/08-self-check.md` 中重新核验，并记录在 `docs/self-check.md` 中。
-12. **加密内容层（R3）** —— 由生活痕迹拼出的 AES-GCM 密钥在逐字/派生模型之外：`check-credentials.mjs` 证明各组成部分（公开页面、零明文）；解密本身由构建时对随附 `enc.json` 的一次演练解密来证明——绝不把密钥印进页面。
+12. **加密内容层（R3）** —— 由生活痕迹拼出的 AES-GCM 密钥在逐字/派生模型之外：`check-credentials.mjs` 证明各组成部分（公开页面、零明文）；解密本身由构建时对随附 `enc.json` 的一次演练解密来证明。绝不把密钥印进页面。
 
 匹配器读的是*页面文本*，不是 DOM，原因和玩家一样：它要证明某个字符串在门禁之前
 就是可读的。藏在 `placeholder`、`title` 或 JS 字符串里的线索，对玩家和检查器都
-不可见——步骤 8 的 chrome 泄漏扫描覆盖这一类问题（R4）。
+不可见。步骤 8 的 chrome 泄漏扫描覆盖这一类问题（R4）。

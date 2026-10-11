@@ -35,13 +35,13 @@
 - **公开页保持中立 (R5)。**每一页都写成那个组织的一份文档。一条名册条目要有姓名、职务、任职时间、职责。剧情不掺进来。
 - **链接取自触达表，且不越出所在区域 (R7)。**不在表里的链接不得写；跨越深度要靠触达模块——绝不用「相关文件 / 档案 / 页面」这类链接。
 - **选中 M3 时，系统页只对指名的账号开放 (R10)。**受保护页面带 `data-access`（`references/structure/form-system.md` §1）；管理员账号绝不继承同事的私密文档；只有初始账号会被印出来——其余每个登录串都从线索推出，绝不能从页面上抄。
-- **派生/组合凭据只能靠部件拼出，绝不能直接印出 (R3, R12)。**编写 `data/credentials.src.json`（每个门禁字段的 value + rule + 公开页部件 + kind），并运行 `node tools/check-credentials.mjs` + `node tools/check-reachability.mjs`。不要为了让 `check-solvable.mjs` 变绿而印出某个账号——那等于把它泄漏给每一个访客，谜题也就死了（`references/structure/components.md` §3; `references/structure/tooling.md` §3 item 6）。
+- **派生/组合凭据只能靠部件拼出，绝不能直接印出 (R3, R12)。**编写 `data/credentials.src.json`（每个门禁字段的 value + rule + 公开页部件 + kind），并运行 `node tools/check-credentials.mjs` + `node tools/check-reachability.mjs`。不要为了让 `check-solvable.mjs` 变绿而印出某个账号。那等于把它泄漏给每一个访客，谜题也就死了（`references/structure/components.md` §3; `references/structure/tooling.md` §3 item 6）。
 - **选中 M3 时，一个登录框、会话 cookie (R10)。**一个服务多个角色的登录框用 `data-grants`（账号→身份映射），而不是在页面上放两个表单；权限状态存在会话 cookie 里，这样用 `target="_blank"` 打开的结果页仍是解锁的（`references/structure/form-system.md` §2; `references/structure/components.md` §3）。
 - **文档要有格式 (R6)。**发文机关、文号、日期、抬头、正文、签字与印章、分发名单。
 - **输入框要写明字段 (R4)。**`placeholder="工号"`、`placeholder="站内搜索…"`。门禁页可以公示账号格式；密码的推导规则不得出现在上面。
 - **文案是陈述句 (R11)。**写任何句子之前先看 references/design-playbook.md §4.14。
 - **关键词要做哈希 (R3)。**任一 `data/keywords.<layer>.src.json` 改动之后都要跑 `node tools/build-keywords.mjs`。
-- **读态条目要带 `data-after` (M14, R13)。**只有读过某页之后才存在的条目，在 `data-after` 里写明那一页——这是检查器看得见的契约。只有运行时 `readState`，这个条目在图上是看不见的。通配门禁把它的输入标为 `data-expect-any`；门禁页上未声明的输入会触发 `check-solvable` 的 NOTE（`references/structure/form-device.md` §4）。
+- **读态条目要带 `data-after` (M14, R13)。**只有读过某页之后才存在的条目，在 `data-after` 里写明那一页。这是检查器看得见的契约。只有运行时 `readState`，这个条目在图上是看不见的。通配门禁把它的输入标为 `data-expect-any`；门禁页上未声明的输入会触发 `check-solvable` 的 NOTE（`references/structure/form-device.md` §4）。
 - **存储遵循状态契约 (R13)。**只在装配记录写明持久化的地方写 `localStorage`；登录状态留在会话 cookie 辅助函数里；任何页面都绝不向玩家解释自己的存储方式。
 - **共享实体保持一致。**出现在多个页面上的人名、证件号、账号、页面标题或日期，一律从 `docs/registry.md`（步骤 3 写出）复制，绝不重打；登记表是唯一事实源。
 

@@ -62,13 +62,13 @@
 表单、跨站链接；见 `references/structure/form-system.md` §4。
 
 **新标签页与会话状态（系统容器必读）。** `target="_blank"` 在全新标签页中打开每个
-结果，而新标签页拿到的是全新的 `sessionStorage`——因此以这种方式打开的
+结果，而新标签页拿到的是全新的 `sessionStorage`，因此以这种方式打开的
 `data-access` 保护文档会被读成锁定状态，尽管玩家在原标签页里已经"登录"。任何把
 账号登录与新标签页结果交叉在一起的容器（容器 D 的 `query → results → archive` 链）
 都必须把会话状态放在**会话 cookie**（跨标签页共享，浏览器关闭时清除）里，而不是
 每标签页一份的 `sessionStorage`；内核的 `session` store 正是这个（§3）。
 `check-solvable.mjs` 把身份建模为一个全局集合，看不见按标签页的隔离，所以真实
-浏览器已经失败时它仍报绿——只有步骤 8 的跨标签页人工测试能抓住这一点
+浏览器已经失败时它仍报绿。只有步骤 8 的跨标签页人工测试能抓住这一点
 （tooling.md §3 item 7）。
 
 ## 3. 密码门禁（`gate` 组件）
@@ -82,7 +82,7 @@
 - **形态 C** —— `assets/templates/html/login-multi.html`：会话登录 + 按账号访问（系统容器 B/C/D）：登录门禁上用 `data-grant`，受保护页面上用 `data-access`，没有权限阶梯（R10）。完整模式见 `references/structure/form-system.md` §2–§3；组件体先读 `data-grants`（账号→身份的 JSON 映射），再回退到扁平的 `data-grant` 列表。
 
 一个组件、三种形态，外加一种声明式通配：`data-expect-any` 标记一道按设计不校验
-答案的叙事门禁——任何非空值都能通过，因此走图绝不会为它寻找哈希
+答案的叙事门禁。任何非空值都能通过，因此走图绝不会为它寻找哈希
 （`references/structure/form-device.md` §4）。`data-expect-hash` 放在**每一个
 `<input>`** 上（逗号分隔的值 = 该字段接受的同义答案，这样一个中文名和它的拼音都
 能开同一把锁）；其余配置放在**组件根**（`<main>`）上，而不是 `<form>` 上。
@@ -91,9 +91,9 @@
 密码线索放在 B 页（需要推理：生肖年份 → 1977，童年照片日期 → 20201125），门禁
 在 C 页。哈希让源码中不会随意看到明文（R3）。
 
-凭据可以是**派生/组合**的——由若干部分拼出的账号（拼音首字母 + 执照年份），从不
+凭据可以是**派生/组合**的。由若干部分拼出的账号（拼音首字母 + 执照年份），从不
 整体印出。`check-solvable.mjs` 只匹配在可读页面中*逐字*出现的值，因此它无法证明
-派生凭据可解，会把门禁报为 STUCK。**绝不要为了让它变绿而把凭据印出来**——那会把
+派生凭据可解，会把门禁报为 STUCK。**绝不要为了让它变绿而把凭据印出来**。那会把
 它泄露给每个访客（静态站点没有服务端鉴权；客户端遮蔽不是隐私，R12），并让谜题
 塌掉。在 `data/credentials.src.json` 中声明该值、其组成规则与它在公开页面上的组成
 部分，用 `tools/check-credentials.mjs` 证明它（组成部分 + 规则 + 零明文）；用
@@ -103,7 +103,7 @@
 
 - **失败提示要迂回地指向线索来源，且到此为止（R4）。** `密码错误 🎂` 合格；点名某个页面、复述推导过程、或拼出字段内容都不合格；光秃秃的"error"被禁止。
 - **输入框只标明字段名（R4）。** `placeholder="Employee ID"` / `工号` 合格；`placeholder="e.g. 1977"` 属于泄露。推导规则不放在门禁页上；*账号格式*可以贴在那里。
-- **多字段门禁**由多个 `data-expect-hash` 输入框组成；必须全部匹配。门禁页自身的正文在门禁通过前不可读——藏在它自己的 `x-show="unlocked"` 区块里的线索在解锁前不算数，这正是检查所建模的边界。
+- **多字段门禁**由多个 `data-expect-hash` 输入框组成；必须全部匹配。门禁页自身的正文在门禁通过前不可读。藏在它自己的 `x-show="unlocked"` 区块里的线索在解锁前不算数，这正是检查所建模的边界。
 - **通配门禁必须显式声明，绝不能隐含。** 不索要任何可验证秘密的门禁（一次情感性的"输入即通过"仪式）要把它的输入标记为 `data-expect-any`；门禁页上未标记的输入会触发 `check-solvable.mjs` 的 NOTE，并始终属于泄漏类问题（workflow/05 Q4）。
 - **会话状态是技术实现，不是文案。** 账号存放在**会话 cookie**（跨标签页，浏览器关闭时清除；绝不用 `target="_blank"` 结果背后那每标签页一份的 `sessionStorage`），站点也不向玩家解释自己的存储方式（`references/structure/form-system.md` §6）。进度与读态存储遵循装配记录的状态契约（R13；`references/structure/form-device.md` §3）。
 
@@ -117,11 +117,11 @@
 
 共享布局与文档真实感类位于 **`assets/starter/assets/css/base.css`**（不变的内核
 CSS：sticky 不透明页头、`.sheet` 文档套件、门禁表单、入口外壳）。深层皮肤模板是
-**`assets/templates/css/secret.css`** ——它重新调校 base.css 读取的自定义属性
+**`assets/templates/css/secret.css`**。它重新调校 base.css 读取的自定义属性
 （`--ink` / `--paper` / `--rule` / `--accent` / `--stamp` / `--bar` …），使深层页
 引入它时（或 `session.skin()` 应用 `body.secret` 时）整页一起变调。其他文档引用的
 质感类：`.hidden-text`（黑上黑，选中才显现）、`.blurred`（把涂黑作为线索）、
-`.handwrite`、`.spacer`。客户端遮蔽不是隐私——用这种方式藏起来的一切都是公开的（R12）。
+`.handwrite`、`.spacer`。客户端遮蔽不是隐私，用这种方式藏起来的一切都是公开的（R12）。
 
 ## 6. 可选：收集进度（`progress` 组件）
 

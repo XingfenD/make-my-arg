@@ -4,7 +4,7 @@
 **账号登录 + 按账号访问**（R10）来区分，而不是靠页面链接。先读
 `references/structure/base.md`；本文件在其上叠加系统层（门禁 / 暂存 / 换皮组件：
 `references/structure/components.md`；工具：`references/structure/tooling.md`）。
-只有当虚构设定中确实存在身份与登录时才选择 M3 模块——触达服从容器。
+只有当虚构设定中确实存在身份与登录时才选择 M3 模块。触达服从容器。
 
 ## 1. 触达模型——是账号，不是等级（RBAC 式）
 
@@ -29,14 +29,14 @@
   账号格式拼出来。把同事的登录名印出来会让权限矩阵塌掉；
   `workflow/05-puzzle-audit.md` Q4 专门扫查这种问题。
 - **派生账号靠组成部分证明，绝不印出。** `check-solvable.mjs` 只匹配逐字出现的
-  字符串，所以拼出来的账号会被判为 STUCK——把它印出来让检查变绿，等于泄露给每个
+  字符串，所以拼出来的账号会被判为 STUCK。把它印出来让检查变绿，等于泄露给每个
   访客（静态站点没有服务端鉴权；客户端遮蔽不是隐私）。在
   `data/credentials.src.json` 中声明值 + 规则 + 组成部分；
   `check-credentials.mjs` 与 `check-reachability.mjs` 负责证明（`tooling.md` §3 item 6）。
 
 ### 搜索 / 查询结果服从权限矩阵
 
-检索系统是另一条触达路径，因此它经由同一个矩阵解析——关键词索引**不是**存放权限
+检索系统是另一条触达路径，因此它经由同一个矩阵解析。关键词索引**不是**存放权限
 的地方：
 
 - 全站一张索引（`data/keywords.json`）；系统形态没有分层 JSON 拆分。
@@ -52,11 +52,11 @@
 
 ## 2. 登录页（`gate` + `data-grant` / `data-grants`）
 
-一个登录框，一套凭据对应一个身份。`data-grant` 是该门禁可授予的身份扁平列表——
+一个登录框，一套凭据对应一个身份。`data-grant` 是该门禁可授予的身份扁平列表，
 `check-solvable.mjs` 走的就是它。`data-grants` 是根上的 JSON 映射，把*键入的账号*
 解析为它的身份、它自己的密码哈希，以及可选的换皮令牌；运行时按条目把账号与密码
 配对，所以 `intern + handler-pw` 会被拒绝。**不要把一次登录拆成两个表单来给检查器
-制造"一个表单 = 一个身份"**——第二个表单的标题会泄露设计意图，读起来像游戏 UI。
+制造"一个表单 = 一个身份"**。第二个表单的标题会泄露设计意图，读起来像游戏 UI。
 
 规范文件：**`assets/templates/html/login-multi.html`**（组件体：
 `assets/templates/js/modules/gate.js`）。
@@ -81,7 +81,7 @@ B 页放密码线索、C 页放门禁）。账号字符串就是其他页面比�
 
 - **B 桌面**：`desk.html`（图标网格 + Dock + 菜单栏）；每个应用一页（`chat.html`、
   `mailbox.html`、`cloud-drive.html`…）。Spotlight `FILE_DATABASE` 是明文 JS，对
-  `check-solvable` 不可见——把它的条目镜像到关键词表里，或人工验证（`tooling.md`
+  `check-solvable` 不可见。把它的条目镜像到关键词表里，或人工验证（`tooling.md`
   §3 item 2）。操作系统账号就是登录。
 - **C 模拟互联网**：每个站点一个顶层目录（`sites/forum/`、`sites/blog-2009/`…），
   跨站链接用绝对路径；内网登录就是账号系统。每个站点根目录跑一次工具
@@ -99,13 +99,13 @@ B 页放密码线索、C 页放门禁）。账号字符串就是其他页面比�
   扁平的 `data-grant` 列表。
 - 受保护页面/区块：`data-access` + `x-show="unlocked"`。在某个已认证账号被点名之前，
   该区块对走图保持不可读；`data-access` 点名了一个任何门禁都不授予的账号时，会被
-  报为不可达——这是线索图断裂，不是检查器出错。
+  报为不可达。这是线索图断裂，不是检查器出错。
 - 派生/组合账号在逐字匹配模型之外：在 `data/credentials.src.json` 中声明它，并运行
   `check-credentials.mjs` + `check-reachability.mjs`；绝不要为了让 `check-solvable`
   变绿而把它印出来（§1）。
 - 若页面根目录不是 `pages/`（如 `apps/`），在 `tools/config.mjs` 里设置 `pagesDir`
   （`tooling.md` §2）。只存于 JS 的状态，以及按标签页与跨标签页会话存储的差别，对
-  检查器不可见——用 `data-grant` / `data-access` 对它建模，或人工验证（`tooling.md`
+  检查器不可见。用 `data-grant` / `data-access` 对它建模，或人工验证（`tooling.md`
   §3 第 1 与第 7 项）。
 
 ## 6. 会话状态（登录）——其他状态族遵循 R13
@@ -114,7 +114,7 @@ B 页放密码线索、C 页放门禁）。账号字符串就是其他页面比�
 `localStorage`，绝不在 `target="_blank"` 结果背后那每标签页一份的
 `sessionStorage` 里。这是实现要求，不是面向玩家的文案。进度与世界回应状态是另一份
 契约：状态跟随设备归属（`references/guardrails.md` R13），细节见
-`references/structure/form-device.md` §3——玩家自有的设备（容器 B）可以持久化已读
+`references/structure/form-device.md` §3。玩家自有的设备（容器 B）可以持久化已读
 内容，并提供剧情内的存档 / 继续 / 清档；远程系统（A/C/D）只用会话级存储，除非
 装配记录写明剧情依据。
 

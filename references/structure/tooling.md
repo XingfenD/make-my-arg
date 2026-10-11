@@ -20,9 +20,8 @@ node tools/site-graph.mjs       # 写出 docs/site-graph.json 与渲染器树 do
 `check-solvable.mjs` **针对逐字凭据**把人工走查中"凭据出处"那一半自动化了，因此
 人工那一轮只需评判语气与节奏。当线索被删除、密码被改动、线索被错放进某个页面自己的
 解锁后区块、或列表条目被删掉时，它以非零码退出。每次内容编辑后都要运行它，而不仅
-是在部署前。它从 components.md §3 读取门禁约定（`data-expect-hash`、
-`x-show="unlocked"` / `<template x-if="unlocked">`、`x-data="search"`）；重命名这些
-标记的项目要改 `tools/config.mjs`（§2），然后用 `node tools/check-solvable.mjs --self-test` 重新校验匹配器。
+是在部署前。它从 components.md §3 读取门禁约定；重命名这些标记的项目要改
+`tools/config.mjs`（§2），然后用 `node tools/check-solvable.mjs --self-test` 重新校验匹配器。
 
 **派生/组合**凭据在 check-solvable 的逐字模型之外（会把门禁报为 STUCK）：不要
 为了让检查变绿而把它印出来，按 `references/structure/components.md` §3 声明并证明
@@ -34,14 +33,12 @@ node tools/site-graph.mjs       # 写出 docs/site-graph.json 与渲染器树 do
 起点项目、`tools/`、`viewer/` 与按 flag 选中的模块件镜像进项目根，对已存在文件一律
 跳过（flag 表：`assets/templates/README.md`；步骤 6）。
 
-`site-graph.mjs` 与 `check-solvable.mjs` 共享 `site-model.mjs`，因此图绝不会与
-走图不一致。它绘制的跳转关系与走图所跟随的完全相同——包括 `<form action>` 提交，
-走图一直都在跟随它们（`linksOf`），而只认锚点的边集会把它们漏掉，进而把经由表单
-到达的结果页判为不可达。倘若某个跳转表单仍然逃出了图，走图能到达的那个页面会以
-`walk-divergence` 问题的形式出现，而不是给出静默的 `unreachable` 判定。它报告
-检查器用于把关的同样缺陷（不可达页面、卡死门禁、失效目标、层泄漏），外加检查器
-不建模的设计面信号：M7 进度提取及其不一致、步骤 4 封闭清单对每条边的路线判定，
-以及非 chrome 边上的负进度增量（回跳）。有问题时它仍以 0 退出，把关仍归检查器。
+`site-graph.mjs` 与 `check-solvable.mjs` 共享 `site-model.mjs`，因此图绘制的跳转
+与走图跟随的完全相同——同一套静态 `href` / `<form action>` / `data-next` 上限
+（§3 item 1），图与走图绝不会不一致；建模不到的跳转以 `walk-divergence` 问题浮出，
+而不是静默判为不可达。它报告检查器把关的同类缺陷，外加检查器不建模的设计面信号：
+M7 进度提取及其不一致；路线判定与负进度回跳的人工方法见 §3 item 10。它只报告，
+把关仍归检查器（退出码见 §1 注释）。
 
 ## 2. 共享配置（tools/config.mjs）
 

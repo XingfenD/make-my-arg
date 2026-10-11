@@ -47,7 +47,7 @@
 - [ ] `grep -rn "placeholder=" --include=*.html .` ——每个取值都写明了字段。
 - [ ] `grep -rn "data-fail-hint\|gate-hint" --include=*.html .` ——失败提示含蓄地指向来源 (R4)。`密码错误 🎂` 通过；`想想陈师傅的本命年` 不通过。
 - [ ] `node tools/check-solvable.mjs` 把每个**原样照抄**的凭据解析到先前的页面文案，并点名来源页。这替代了手工溯源；但仍要自己把走查完整重放一次，判断语气与节奏。
-- [ ] `node tools/check-credentials.mjs` 把每个**派生/组合**凭据解析到它的公开页部件，并断言零明文：任何页面都不出现完整的账号字符串（客户端遮掩——`x-show`、某个 CSS 类、元素级的 `data-access`——在没有服务端鉴权的静态站上不构成隐私；HTML 会送达每一个访客）。
+- [ ] `node tools/check-credentials.mjs` 把每个**派生/组合**凭据解析到它的公开页部件，并断言零明文：任何页面都不出现完整的账号字符串（客户端遮掩不是隐私，`references/structure/components.md` §3）。
 - [ ] 任何单页都不得把一个凭据的两个部件放在一起（「零跳」解法）：如果工号和年份印在同一页，玩家不用推理就能两个都抄走。按 GDD 谜题分配表把它们拆开。
 - [ ] 通配门禁均已声明：每个挂载了门禁的页面上的输入都带 `data-expect-hash` 或 `data-expect-any`。`check-solvable.mjs` 的 NOTE 必须为空（接受任意输入的叙事门禁要在标记里写明；R4）。
 - [ ] 两张关键词表里的结果标题都是目录条目；没有一条在概述文档内容。

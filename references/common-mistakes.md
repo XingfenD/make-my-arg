@@ -52,7 +52,7 @@
 |---|---|
 | 答案写在 `placeholder` 或帮助文本里 | 只写字段名；反馈交给侧面的失败提示（R4） |
 | 因为已经写好了就保留一个门禁 | 步骤 5 的必要性问题；理由空着就意味着 删除 |
-| 把推导账号印在公开页上，只为让 `check-solvable` 变绿 | 它只匹配逐字字符串，所以推导凭据会显示 STUCK；用 `check-credentials.mjs` 证明它（部件 + 规则 + 零明文），绝不用打印的方式——静态站点没有服务端鉴权，客户端遮挡不算隐私 |
+| 把推导账号印在公开页上，只为让 `check-solvable` 变绿 | 它只匹配逐字字符串，推导凭据会显示 STUCK；按 `references/structure/components.md` §3 声明并用 `check-credentials.mjs` 证明，绝不用打印的方式 |
 
 ## 6. 脚手架
 
@@ -80,7 +80,7 @@
 | 把一次登录拆成两个表单，只为迎合检查器的「一个表单 = 一个身份」 | 一个输入框 + `data-grants`（账号→身份映射）；两个表单会在标题里泄露设计意图，读起来像游戏 UI（`references/structure/form-system.md` §2） |
 | 在 `target="_blank"` 结果后面把访问状态存在按标签页隔离的 `sessionStorage` 里 | 跨标签页共享的存储（会话 cookie 或 `localStorage`）；否则结果打开的新标签页会读成未登录（`references/structure/components.md` §2–§3） |
 | 读态条目被当成普通链接埋进去，文案却声称「读完 X 之后出现」 | `data-after="…/X.html"` 才是机制层面的声明；走图会证明它（`references/structure/form-device.md` §4, R13） |
-| 把凭据明文打印出来，只为满足静态检查器 | 零明文：`check-credentials.mjs` 断言没有任何账号完整出现；静态站点上客户端遮挡不算隐私 |
+| 把凭据明文打印出来，只为满足静态检查器 | 零明文：`check-credentials.mjs` 断言没有任何账号完整出现（`references/structure/components.md` §3） |
 
 ## 8. 自检
 

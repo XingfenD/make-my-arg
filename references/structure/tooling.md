@@ -24,10 +24,9 @@ node tools/site-graph.mjs       # 写出 docs/site-graph.json 与渲染器树 do
 `x-show="unlocked"` / `<template x-if="unlocked">`、`x-data="search"`）；重命名这些
 标记的项目要改 `tools/config.mjs`（§2），然后用 `node tools/check-solvable.mjs --self-test` 重新校验匹配器。
 
-**派生/组合**凭据（由部分拼装、从不整体印出）在 check-solvable 的逐字模型之外。
-它会把那道门禁报为 STUCK。不要为了让检查变绿而把它印出来（那会泄露给每个访客；
-静态站点没有服务端鉴权）。`check-credentials.mjs` 证明它能从公开页面的组成部分
-零明文拼出；`check-reachability.mjs` 证明一旦知晓它、图依然能解锁（§3 item 6）。
+**派生/组合**凭据在 check-solvable 的逐字模型之外（会把门禁报为 STUCK）：不要
+为了让检查变绿而把它印出来，按 `references/structure/components.md` §3 声明并证明
+（§3 item 6）。
 
 `hash.mjs` 是设计期辅助工具（步骤 3/5，计算门禁的 `data-expect-hash` 值时使用）；
 `vendor-alpine.mjs` 在脚手架阶段运行一次（步骤 6）。
@@ -78,7 +77,7 @@ HTML 实体、CJK）。
 3. **不可跳过性** —— check-solvable 只能证明门禁可解，永远证明不了它不可绕过；人工方法是受众作用域（M1）：按受众分表、逐页 `data-index`、check-links 的泄漏防护（R8）。
 4. **哈希归一化是四方契约** —— 页内辅助函数、`hash.mjs`、`build-keywords.mjs` 与 `check-credentials.mjs` 必须逐字节一致（`trim().toLowerCase()` → md5 → base64）。更换算法意味着在一次改动中把它们全部改掉，然后 grep 查找按旧规则生成的表（R3）。
 5. **多站点布局** —— 容器 C 给每个站点自己的根目录；每个根目录跑一次工具（绝对路径的跨站 url 按设计被跳过，因此跨站图始终是步骤 4 的产物）。
-6. **派生 / 组合凭据** —— check-solvable 只在值*逐字*出现时才匹配，因此由部分拼出的账号会被判为 STUCK。修复办法**不是**把它印出来（R12）：声明它，并用 `check-credentials.mjs`（组成部分 + 规则 + 零明文）加 `check-reachability.mjs`（一份注入了这些值的演练副本）证明它。
+6. **派生 / 组合凭据** —— check-solvable 只在值*逐字*出现时才匹配，因此由部分拼出的账号会被判为 STUCK。修复办法**不是**把它印出来（R12），而是按 `references/structure/components.md` §3 声明它，并用 `check-credentials.mjs`（组成部分 + 规则 + 零明文）加 `check-reachability.mjs`（一份注入了这些值的演练副本）证明它。
 7. **按标签页的会话 vs 新标签页结果** —— check-solvable 把身份建模为一个全局集合，因此它看不见 `sessionStorage` 是按标签页的、而结果会以 `target="_blank"` 在新标签页里打开；浏览器显示文档锁定时它仍报绿。人工方法：步骤 8 的跨标签页测试；结构性修复：会话 cookie（components.md §2–§3，`references/structure/form-system.md` §6）。
 8. **元素级权限遮蔽** —— 检查器读的是页面*文本*，不是计算后的可见性；仅靠 `x-show` / CSS 类 / 元素级 `data-access` 藏起来的凭据，仍然在发给每个访客的 HTML 里，而客户端遮蔽不是隐私（R12）。把它当作公开信息处理：步骤 8 的 chrome 泄漏扫描与 `check-credentials` 的零明文断言能抓住它。
 9. **游戏设计文档声明了却从未落地的资产** —— 资产清单列出、却没有任何页面引用的徽章 / 印章 / 扫描件 / 照片 / 伪造文档，没有 `src` 可解析，两个检查器都不会报错。人工方法：步骤 8 的资产清单对账，每个声明的资产都存在于 `assets/` 下，且至少被一个页面引用。

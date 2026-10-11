@@ -43,8 +43,8 @@
 6. 读取 `references/design-playbook.md` §3。→ 追加 `## 5 puzzle allocation` 块，从 13 种类型中
    选出的 5 到 10 个门禁与谜题；感官谜题要声明硬件要求。
 7. 读取 `references/guardrails.md` 的规范规则（R1–R13）表。→ 追加 `## 4 access inventory` 块。
-   对每个门禁或受保护页面：它的凭据三件套（页面 A 上的账号线索、页面 B 上的密码线索、
-   页面 C 上的门禁页，R3）或授权账号（`data-access`，由 `data-grant` 授予，R10）；标记
+   对每个门禁或受保护页面：它的凭据三件套（`references/design-playbook.md` §3 类型 B，R3）
+   或授权账号（`data-access`，由 `data-grant` 授予，R10）；标记
    `data-expect-any` 的通配门禁（`references/structure/form-device.md` §4）；承载每个关键词的
    索引（M1）；读不了的搜索命中解析成什么（它的门禁页或一条普通的锁定通知，绝不直接给出文档，
    R8/R9）；当装配记录选了世界回应契约时，带 `data-after` 来源页的读态条目（M14/R13）。然后就地

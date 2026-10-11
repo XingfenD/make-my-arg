@@ -35,7 +35,7 @@
 - **公开页保持中立 (R5)。**每一页都写成那个组织的一份文档。一条名册条目要有姓名、职务、任职时间、职责。剧情不掺进来。
 - **链接取自触达表，且不越出所在区域 (R7)。**不在表里的链接不得写；跨越深度要靠触达模块——绝不用「相关文件 / 档案 / 页面」这类链接。
 - **选中 M3 时，系统页只对指名的账号开放 (R10)。**受保护页面带 `data-access`（`references/structure/form-system.md` §1）；管理员账号绝不继承同事的私密文档；只有初始账号会被印出来——其余每个登录串都从线索推出，绝不能从页面上抄。
-- **派生/组合凭据只能靠部件拼出，绝不能直接印出 (R3, R12)。**编写 `data/credentials.src.json`（每个门禁字段的 value + rule + 公开页部件 + kind），并运行 `node tools/check-credentials.mjs` + `node tools/check-reachability.mjs`。不要为了让 `check-solvable.mjs` 变绿而印出某个账号。那等于把它泄漏给每一个访客，谜题也就死了（`references/structure/components.md` §3; `references/structure/tooling.md` §3 item 6）。
+- **派生/组合凭据只能靠部件拼出，绝不能直接印出 (R3, R12)。**按 `references/structure/components.md` §3 编写 `data/credentials.src.json`（每个门禁字段的 value + rule + 公开页部件 + kind），并运行 `node tools/check-credentials.mjs` + `node tools/check-reachability.mjs`；不要为了让 `check-solvable.mjs` 变绿而印出某个账号。
 - **选中 M3 时，一个登录框、会话 cookie (R10)。**一个服务多个角色的登录框用 `data-grants`（账号→身份映射），而不是在页面上放两个表单；权限状态存在会话 cookie 里，这样用 `target="_blank"` 打开的结果页仍是解锁的（`references/structure/form-system.md` §2; `references/structure/components.md` §3）。
 - **文档要有格式 (R6)。**发文机关、文号、日期、抬头、正文、签字与印章、分发名单。
 - **输入框要写明字段 (R4)。**`placeholder="工号"`、`placeholder="站内搜索…"`。门禁页可以公示账号格式；密码的推导规则不得出现在上面。

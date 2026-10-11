@@ -9,10 +9,9 @@
 ## 1. 触达模型——是账号，不是等级（RBAC 式）
 
 - **登录门禁**认证一个账号：组件根上放 `data-grant="chen"` +
-  `data-next="apps/mail.html"`。成功后把账号记入**会话 cookie**（跨标签页，浏览器
-  关闭时清除）——而不是每标签页一份的 `sessionStorage`，`target="_blank"` 的结果
-  会在全新标签页中打开、状态就此丢失（`references/structure/components.md`
-  §2–§3）。一个输入框可通过 `data-grants` 服务多个角色（§2）。
+  `data-next="apps/mail.html"`。成功后把账号记入跨标签页共享的会话存储——机制与
+  理由见 `references/structure/components.md` §2。一个输入框可通过 `data-grants`
+  服务多个角色（§2）。
 - **受保护页面或区块**指明获准读取它的账号：`data-access="chen"`（逗号分隔 = 任一，
   `*` = 任何已认证者）。它仍以 `x-show="unlocked"` 开头，好让
   `check-solvable.mjs` 建模这条边界。
@@ -28,10 +27,8 @@
   账号格式拼出来。把同事的登录名印出来会让权限矩阵塌掉；
   `workflow/05-puzzle-audit.md` Q4 专门扫查这种问题。
 - **派生账号靠组成部分证明，绝不印出。** `check-solvable.mjs` 只匹配逐字出现的
-  字符串，所以拼出来的账号会被判为 STUCK。把它印出来让检查变绿，等于泄露给每个
-  访客（静态站点没有服务端鉴权；客户端遮蔽不是隐私）。在
-  `data/credentials.src.json` 中声明值 + 规则 + 组成部分；
-  `check-credentials.mjs` 与 `check-reachability.mjs` 负责证明（`tooling.md` §3 item 6）。
+  字符串，拼出来的账号会被判为 STUCK；声明并证明它的规范方法见
+  `references/structure/components.md` §3（`tooling.md` §3 item 6）。
 
 ### 搜索 / 查询结果服从权限矩阵
 
@@ -61,17 +58,16 @@
 `assets/templates/js/modules/gate.js`）。
 
 `gate` 组件先读 `data-grants`，再回退到 `data-grant`
-（`references/structure/components.md` §3）。凭据三件套仍然适用（A 页放账号线索、
-B 页放密码线索、C 页放门禁）。账号字符串就是其他页面比对的身份；除了初始账号
-（§1）之外，它不印在任何地方。
+（`references/structure/components.md` §3）。凭据三件套仍然适用
+（`references/design-playbook.md` §3 类型 B）。账号字符串就是其他页面比对的身份；
+除了初始账号（§1）之外，它不印在任何地方。
 
 ## 3. 受保护页面（`access` 组件）
 
 规范文件：**`assets/templates/html/access-protected.html`**（挂载：
 `<main x-data="access" data-access="chen">`，锁定提示放在 `x-show="!unlocked"` 上，
 文档放在 `x-show="unlocked"` 内）与 **`assets/templates/js/modules/access.js`**
-（组件体——读取门禁设置的跨标签页会话 cookie，隐私模式下回退到 sessionStorage；
-在新标签页中打开的文档依然能解锁，而按标签页的存储做不到这一点）。
+（组件体——读取门禁设置的跨标签页会话存储，见 `references/structure/components.md` §2–§3）。
 
 一个页面可以既受保护*又*带门禁（金库）：门禁表单位于被锁定的部分内，因此走图先
 认证账号，再解门禁。
@@ -109,11 +105,11 @@ B 页放密码线索、C 页放门禁）。账号字符串就是其他页面比�
 
 ## 6. 会话状态（登录）——其他状态族遵循 R13
 
-**登录**状态放在跨标签页共享的存储里：内核默认是**会话 cookie**（浏览器关闭时清除），装配记录写明剧情依据时也可用 `localStorage` 持久化；绝不能放在 `target="_blank"` 结果背后那每标签页一份的 `sessionStorage` 里。这是实现要求，不是面向玩家的文案。进度与世界回应状态是另一份
+**登录**状态的存放规则见 `references/structure/components.md` §2–§3：跨标签页共享
+的存储（内核默认会话 cookie，浏览器关闭时清除；装配记录写明剧情依据时也可用
+`localStorage` 持久化），站点不向玩家解释自己的存储。进度与世界回应状态是另一份
 契约：状态跟随设备归属（`references/guardrails.md` R13），细节见
-`references/structure/form-device.md` §3。玩家自有的设备（容器 B）可以持久化已读
-内容，并提供剧情内的存档 / 继续 / 清档；远程系统（A/C/D）只用会话级存储，除非
-装配记录写明剧情依据。
+`references/structure/form-device.md` §3。
 
 ## 7. 反模式
 
@@ -122,8 +118,8 @@ B 页放密码线索、C 页放门禁）。账号字符串就是其他页面比�
 | 数字化权限阶梯，或一个能打开一切的管理员账号（R10） | 这不是按人分配的访问权限：私密文档会泄露给等级最高的账号，登录也不再是谜题；workflow/04 的访问检查把它判为缺陷 |
 | 浅层页面用"相关档案 / 文件"链接通向深区（R7） | 用链接跨越了深度；触达必须经过搜索、门禁或账号 |
 | `data-access` 点名了一个任何门禁都不授予的账号 | 私密页变成死页；check-solvable 报告它不可达 |
-| 登录状态放进 `target="_blank"` 结果背后那每标签页一份的 `sessionStorage` | 按标签页的 sessionStorage 会在结果打开的新标签页里显示为未登录——请用跨标签页共享的存储（会话 cookie 或 `localStorage`） |
+| 登录状态放进 `target="_blank"` 结果背后那每标签页一份的 `sessionStorage` | 新标签页里会读成未登录——用跨标签页共享的存储（`references/structure/components.md` §2） |
 | 从参考实现抄来的持久化，背后没有装配记录的对应行 | 状态契约（进度 / 世界回应）在步骤 2 由设备归属决定（R13）；未经授权的 `localStorage` 写入通不过步骤 8 的契约检查 |
-| 在公开页面印出派生账号，好让 `check-solvable` 变绿 | check-solvable 只匹配逐字字符串；印出凭据会把它泄露给每个访客（没有服务端鉴权），并让谜题塌掉。请改用 `check-credentials.mjs` 证明它 |
+| 在公开页面印出派生账号，好让 `check-solvable` 变绿 | 印出即泄露给每个访客；用 `check-credentials.mjs` 证明它（`references/structure/components.md` §3） |
 | 把一次登录拆成两个表单，让每个都是"一个身份" | 第二个表单的标题泄露设计意图，读起来像游戏 UI；一个输入框 + `data-grants` 就能承载矩阵（§2） |
 | 公开页面印出同事的登录名（花名册里的 `账号：chen.gd`） | 只有初始账号可以印出；其他登录名都要从线索推断（workflow/05 Q4 会扫查它） |

@@ -58,11 +58,10 @@
 - **访问检查（R10；M3）。**系统容器：每个受保护页面都点名能打开它的账号（`data-access`），
   每个登录门禁都点名它授予的账号（`data-grant`），且任何账号都不得继承另一个账号的页面。
   数字型权限阶梯，或一个能打开一切的管理员账号，都通不过这项检查
-  （`references/structure/form-system.md` §1）。**派生/组合**账号不出现在任何页面上，因此走图
-  无法把它当作逐字线索读到：把它的规则和公开页组成部分记录在 GDD 权限清单里，在
-  `data/credentials.src.json` 中声明，并用 `tools/check-reachability.mjs`（一份注入了取值的
-  预演副本）验证可达性——只跑 `tools/check-solvable.mjs` 会把这样的门禁报成 STUCK
-  （`references/structure/tooling.md` §3 item 6）。
+  （`references/structure/form-system.md` §1）。**派生/组合**账号不出现在任何页面上，走图
+  无法把它当作逐字线索读到：在 GDD 权限清单里记录它的规则与公开页组成部分，并按
+  `references/structure/components.md` §3 声明与证明（只跑 `tools/check-solvable.mjs`
+  会把这样的门禁报成 STUCK；`references/structure/tooling.md` §3 item 6）。
 - **关键词可解性（M1）。**明文关键词表里的每个键，都必须**在同一受众**的某个可达页面文案中
   逐字出现。任何地方都不出现的关键词会让它的谜题无解；只出现在受限页面上的公开索引键没有任何
   合法的传递途径。（派生*凭据*是「逐字出现」的例外：它的组成部分会出现，拼装出的字符串不会。

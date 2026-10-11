@@ -2,9 +2,9 @@
 
 > `references/structure/base.md`（树 + 骨架）的配套文档。规范的前端代码模板现在
 > 以**真实文件的形式放在 `assets/templates/`** 下（js/css/html——索引：
-> `assets/templates/README.md`）；步骤 6a 复制装配记录选中的那些，而不再誊抄代码。
-> 本文件保留模板所实现的*规则与约定*：关键词哈希构建（§1）、搜索 M1（§2）、门禁
-> M2（§3）、暂存 M12（§4）、换皮 M5（§5）、进度 M7（§6）。步骤 6 和 7 的必读材料。
+> `assets/templates/README.md`）；步骤 6a 用初始化脚本落地装配记录选中的那些，而不再
+> 誊抄代码。本文件保留模板所实现的*规则与约定*：关键词哈希构建（§1）、搜索 M1（§2）、
+> 门禁 M2（§3）、暂存 M12（§4）、换皮 M5（§5）、进度 M7（§6）。步骤 6 和 7 的必读材料。
 > 规则 ID `(Rn)` 引自 references/guardrails.md。
 
 ## 1. 关键词哈希构建（tools/build-keywords.mjs）
@@ -32,9 +32,9 @@
 }
 ```
 
-部署时**不要带上 `.src.json` 文件**（把 `data/*.src.json` 加进 .gitignore，或在
-构建后删除）（R3）。若一张名字表明它是公开索引的表（`data/keywords.surface*.json`）
-带有受限区 url（默认 `internal/`；R8），`tools/check-links.mjs` 也会判部署失败。
+部署时**不要带上 `.src.json` 文件**（R3）：起点 `.gitignore` 与 `.dockerignore`
+已内置这条规则（`references/structure/base.md` §1）。若一张名字表明它是公开索引的表
+（`data/keywords.surface*.json`）带有受限区 url（默认 `internal/`；R8），`tools/check-links.mjs` 也会判部署失败。
 
 ## 2. 搜索引擎（`search` 组件）——三态反馈
 
@@ -86,9 +86,9 @@
 `<input>`** 上（逗号分隔的值 = 该字段接受的同义答案，这样一个中文名和它的拼音都
 能开同一把锁）；其余配置放在**组件根**（`<main>`）上，而不是 `<form>` 上。
 
-`hash()` 是 §2 的共享辅助函数。设计门禁时，落实**凭据三件套**：账号藏在 A 页，
-密码线索放在 B 页（需要推理：生肖年份 → 1977，童年照片日期 → 20201125），门禁
-在 C 页。哈希让源码中不会随意看到明文（R3）。
+`hash()` 是 §2 的共享辅助函数。设计门禁时，落实**凭据三件套**（规范定义：
+`references/design-playbook.md` §3 类型 B——账号在 A 页、密码线索在 B 页、门禁在
+C 页；例子：生肖年份 → 1977）。哈希让源码中不会随意看到明文（R3）。
 
 凭据可以是**派生/组合**的。由若干部分拼出的账号（拼音首字母 + 执照年份），从不
 整体印出。`check-solvable.mjs` 只匹配在可读页面中*逐字*出现的值，因此它无法证明
@@ -104,7 +104,7 @@
 - **输入框只标明字段名（R4）。** `placeholder="Employee ID"` / `工号` 合格；`placeholder="e.g. 1977"` 属于泄露。推导规则不放在门禁页上；*账号格式*可以贴在那里。
 - **多字段门禁**由多个 `data-expect-hash` 输入框组成；必须全部匹配。门禁页自身的正文在门禁通过前不可读。藏在它自己的 `x-show="unlocked"` 区块里的线索在解锁前不算数，这正是检查所建模的边界。
 - **通配门禁必须显式声明，绝不能隐含。** 不索要任何可验证秘密的门禁（一次情感性的"输入即通过"仪式）要把它的输入标记为 `data-expect-any`；门禁页上未标记的输入会触发 `check-solvable.mjs` 的 NOTE，并始终属于泄漏类问题（workflow/05 Q4）。
-- **会话状态是技术实现，不是文案。** 账号存放在跨标签页共享的存储里（内核默认会话 cookie，浏览器关闭时清除；装配记录写明剧情依据时可用 `localStorage`；绝不用 `target="_blank"` 结果背后那每标签页一份的 `sessionStorage`），站点也不向玩家解释自己的存储方式（`references/structure/form-system.md` §6）。进度与读态存储遵循装配记录的状态契约（R13；`references/structure/form-device.md` §3）。
+- **会话状态是技术实现，不是文案。**账号存放在跨标签页共享的存储里（机制与理由见 §2），站点也不向玩家解释自己的存储方式（`references/structure/form-system.md` §6）。进度与读态存储遵循装配记录的状态契约（R13；`references/structure/form-device.md` §3）。
 
 ## 4. 暂存组件（生命周期托管）
 

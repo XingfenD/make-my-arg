@@ -40,14 +40,14 @@
 |---|---|---|
 | R1 | 交付物是一棵多页 HTML 文档树，每个文档都可独立打开；禁止单文件外壳、canvas 场景、谜题登记引擎以及打包成 dist 的步骤；游戏 UI 载体存在于虚构之内，绝不在虚构之外。唯一的例外是 chrome-as-apparatus 单页——单个文档，其绘制出的 chrome 即虚构本身——仅当五项条件记录在装配记录中才允许（R12 必须显式行使，绝不默许） | 本文件：约束 1 + 禁止形态；`references/structure/base.md` §1；`references/structure/form-device.md` §5 |
 | R2 | 双层叙事是故事逻辑：表层 + 秘密层，分阶段展开；任何换皮或视觉切换都是被选中的模块，绝不是硬性要求 | 约束 2；`references/design-playbook.md` §2 |
-| R3 | 每个凭据和关键词都派生自人物的生活痕迹；禁止随机字符串；关键词表与门禁哈希以哈希形式发布，明文 `.src.json` 绝不进入部署树。当虚构需要哈希层给不了的隐私（一条必须扛住对部署树 grep 的私密信息）时，启用选定的加密内容层：WebCrypto AES-GCM，密钥由生活痕迹拼装而成 | 约束 3；`references/structure/components.md` §1；`workflow/02-container.md` §3 |
+| R3 | 每个凭据和关键词都派生自人物的生活痕迹；禁止随机字符串；关键词表与门禁哈希以哈希形式发布，明文 `.src.json` 绝不进入部署树。当虚构需要哈希层给不了的隐私（一条必须扛住对部署树 grep 的私密信息）时，启用选定的加密内容层：WebCrypto AES-GCM，密钥由生活痕迹拼装而成 | 约束 3；`references/credential-design.md`；`references/structure/components.md` §1；`workflow/02-container.md` §3 |
 | R4 | 输入 UI 只标注字段（`placeholder` / 标签 / 帮助文本 / 空状态）；失败提示只侧面指向线索来源，到此为止；门禁页可以公布账号格式，绝不公布密码推导 | 约束 3；`references/design-playbook.md` §4；`references/structure/components.md` §3 |
 | R5 | 公开页只发布该组织会发布的内容；任何公开页都不提剧情；任何剧内页面都不对玩家喊话 | 约束 4；`references/design-playbook.md` §4 |
 | R6 | 正式文书采用现实格式：发文机关、文号、日期、主送、正文、签章、抄送列表 | 约束 4；`references/design-playbook.md` §4 |
 | R7 | 每个链接的存在都因为该组织会把它发布出来；深度只能通过触达模块跨越，绝不通过指向更深层区域的「相关文件 / 档案 / 页面」链接 | 约束 4；`workflow/04-reachability.md` |
 | R8 | 搜索（M1）：每个搜索面只返回其受众可见的内容；公开索引不携带受限区 URL；访问者无权打开的命中结果解析到它的门禁页或一条朴素的锁定提示，绝不给出文档。系统形态维护单一索引，通过权限矩阵解析 | 约束 4；`references/structure/form-website.md` §2 |
 | R9 | 搜索结果标题是目录条目——发文机关 + 文种 + 文号/日期——绝不做剧情摘要 | 约束 4；`references/structure/components.md` §1 |
-| R10 | 系统容器按账号分别授权：页面只对它点名的账号开放（`data-access`），且只能由登录门禁授予（`data-grant`）；没有数字等级，没有管理员全开；只有初始账号可以印出来，其他所有登录都从线索推断 | `references/structure/form-system.md` §1 |
+| R10 | 系统容器按账号分别授权：页面只对它点名的账号开放（`data-access`），且只能由登录门禁授予（`data-grant`）；没有数字等级，没有管理员全开；初始凭据（账号 + 密码）可以在入口处直接给出，其他所有登录都从线索推断 | `references/credential-design.md`；`references/structure/form-system.md` §1 |
 | R11 | 文案平实、陈述句：对照句式（是…不是… / 是…而是… / 不能…只能… / 并非…而是…）、比喻、拟人以及堆砌效果的形容词，一律不得进入站内文案与引导文案 | `references/design-playbook.md` §4 |
 | R12 | 真实感高于任何检查；冲突必须记录——页面、规则、真实感要求什么——并通过编排者上报给用户，绝不悄悄了结 | 本文件：优先级 |
 | R13 | 状态跟随设备归属：登录状态的存放跟随虚构与装配记录——内核默认是会话 cookie（浏览器关闭即清除），装配记录写明剧情依据时也可用 `localStorage` 持久化；进度与世界回应状态只持久化在玩家自有的设备上或剧情确实会存档的地方；每个读态条目都用 `data-after` 声明它的来源页，让走图能够证明顺序；网站绝不向玩家解释自己的存储机制 | `references/structure/form-device.md` §3；`workflow/04-reachability.md` 路线 10 |

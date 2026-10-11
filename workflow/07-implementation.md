@@ -13,7 +13,7 @@
 | 6 | 结局与破墙收尾（选中 M10 时） | 子代理 |
 | 7 | 入口页：角色分配、开始按钮、声明的需求 | 子代理 |
 
-阶段 7 最后落地，因为它的文案必须描述这个已经存在的游戏。资产工作是独立阶段，不是阶段 1–3 的细枝末节：没有阶段认领的徽标 / 印章 / 扫描件 / 照片，恰恰就是被漏掉的那一件，而且两个检查器都发现不了（从没写出来的 `<img>` 没有 `src` 可解析——references/structure/tooling.md §3 item 9）。
+阶段 7 最后落地，因为它的文案必须描述这个已经存在的游戏。资产工作是独立阶段：没有阶段认领的徽标 / 印章 / 扫描件 / 照片，就是被漏掉的那一件，而且两个检查器都发现不了（从没写出来的 `<img>` 没有 `src` 可解析——references/structure/tooling.md §3 item 9）。
 
 每个阶段的子代理只拿到它那一行点名的产物章节与参考文件——绝不拿到「列了章节的整份文件」——外加它负责的页面清单。它返回改动文件清单加未决问题。组件行为以项目自己的 `components.js` 为准（由 6a 写出）；`assets/templates/` 与 `references/structure/components.md` 是步骤 6a 的读物，不是步骤 7 的读物。
 
@@ -26,7 +26,7 @@
 | 4b 把资产接进页面 | gdd 首部（资产清单）；阶段 1–3 的页面集合 | `references/structure/tooling.md` §3 item 9（资产核对） |
 | 5 暂存模块（选中 M12 时） | gdd 第 5 节（感官行） | 项目的 `components.js` (staging) |
 | 6 结局与破墙收尾（选中 M10 时） | gdd 第 3、6 节 | `references/design-playbook.md` §4、`references/guardrails.md` (R11, R12) |
-| 7 入口页 | gdd 第 3、6 节；`docs/system-profile.md` | `references/design-playbook.md` §4、`references/guardrails.md` (R12) |
+| 7 入口页 | gdd 第 3、4、6 节；`docs/system-profile.md` | `references/design-playbook.md` §4、`references/guardrails.md` (R12) |
 
 ## 每个阶段的常设规则
 
@@ -34,7 +34,7 @@
 - **只写选中的模块。**只写 `docs/system-profile.md` 选中的模块；未选中的模块不留任何残件（没有闲置的搜索表、皮肤、门禁或账号页）。
 - **公开页保持中立 (R5)。**每一页都写成那个组织的一份文档。一条名册条目要有姓名、职务、任职时间、职责。剧情不掺进来。
 - **链接取自触达表，且不越出所在区域 (R7)。**不在表里的链接不得写；跨越深度要靠触达模块——绝不用「相关文件 / 档案 / 页面」这类链接。
-- **选中 M3 时，系统页只对指名的账号开放 (R10)。**受保护页面带 `data-access`（`references/structure/form-system.md` §1）；管理员账号绝不继承同事的私密文档；只有初始账号会被印出来——其余每个登录串都从线索推出，绝不能从页面上抄。
+- **选中 M3 时，系统页只对指名的账号开放 (R10)。**受保护页面带 `data-access`（`references/structure/form-system.md` §1）；管理员账号绝不继承同事的私密文档；只有初始凭据会被给出（`references/credential-design.md` 方式 0）——其余每个登录串都从线索推出，绝不能从页面上抄。
 - **派生/组合凭据只能靠部件拼出，绝不能直接印出 (R3, R12)。**按 `references/structure/components.md` §3 编写 `data/credentials.src.json`（每个门禁字段的 value + rule + 公开页部件 + kind），并运行 `node tools/check-credentials.mjs` + `node tools/check-reachability.mjs`；不要为了让 `check-solvable.mjs` 变绿而印出某个账号。
 - **选中 M3 时，一个登录框、会话 cookie (R10)。**一个服务多个角色的登录框用 `data-grants`（账号→身份映射），而不是在页面上放两个表单；权限状态存在会话 cookie 里，这样用 `target="_blank"` 打开的结果页仍是解锁的（`references/structure/form-system.md` §2; `references/structure/components.md` §3）。
 - **文档要有格式 (R6)。**发文机关、文号、日期、抬头、正文、签字与印章、分发名单。
@@ -48,8 +48,6 @@
 每个阶段结束时，对该阶段动过的文件重跑 workflow/05-puzzle-audit.md Q4 的泄漏扫描。
 
 ## 完成判据
-
-逐项核对；任何一项未过，本步就未完成。
 
 - [ ] 每个阶段都返回了改动文件清单加未决问题；未决问题经编排者转达给用户
 - [ ] GDD 资产清单声明的每件资产都已写出（4a），并已接进引用它的页面（4b）

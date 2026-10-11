@@ -45,8 +45,7 @@ M5 换皮不需要组件函数体：内核的 `session.reskin()` 已携带令牌
 
 `page-skeleton.html` 是每一页的统一骨架（规则：`references/structure/base.md` §2）。
 门禁 / 搜索 / 权限挂载是组件的宿主标记；标记属性（`x-show="unlocked"`、`data-expect-hash`、
-`data-index`）必须逐字保持原样。`tools/check-solvable.mjs` 和 `tools/check-links.mjs`
-读取的正是它们。
+`data-index`）必须逐字保持原样——`tools/check-solvable.mjs` 与 `tools/check-links.mjs` 读取它们。
 
 ## css/*.css —— 皮肤与外壳
 

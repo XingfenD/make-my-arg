@@ -10,8 +10,7 @@ const BUS_LANES = 14;         // lane cap: one per distinct target, wrapping pas
 // rank — a tight bump between neighbours, a wide sweep between distant cards — so the intra-rank
 // chains stop sharing one detour. Back edges (pointing at a higher rank) leave the card grid
 // entirely: out the source's right side, up a right-margin bus lane shared per target, into the
-// target's right side. The old +70px hug used to cross every intermediate rank's cards on its way
-// up, which is what made the orphan layer's 130 upward nav edges read as hair.
+// target's right side, clear of every intermediate rank's cards.
 const edgePath = (a, b, busX) => {
   const x1 = a.x + NW / 2, y1 = a.y + NH, x2 = b.x + NW / 2, y2 = b.y;
   if (b.y > a.y + 4) return `M${x1},${y1} C${x1},${y1 + 44} ${x2},${y2 - 44} ${x2},${y2}`;

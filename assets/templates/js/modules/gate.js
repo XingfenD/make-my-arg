@@ -25,7 +25,7 @@ Alpine.data('gate', () => ({
       ok = !!entry && (!pw || (entry.pw || []).includes(hash(pw.value || '')));   // account+password are paired
       if (ok) { grantIds = entry.id ? [entry.id] : []; session.reskin(entry.reskin); }
     } else {
-      // Legacy / multi-field gates: every data-expect-hash input must match; data-expect-any accepts any
+      // Single- and multi-field gates (no data-grants map): every data-expect-hash input must match; data-expect-any accepts any
       // non-empty value (a declared wildcard, references/structure/form-device.md §4); data-grant is unconditional.
       ok = inputs.length > 0 && inputs.every((inp) => {
         if (inp.dataset.expectAny) return (inp.value || '').trim() !== '';

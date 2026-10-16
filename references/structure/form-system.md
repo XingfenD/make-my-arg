@@ -58,7 +58,7 @@
 `assets/templates/js/modules/gate.js`）。
 
 `gate` 组件先读 `data-grants`，再回退到 `data-grant`
-（`references/structure/components.md` §3）。凭据三件套仍然适用
+（`references/structure/components.md` §3）。凭据三件套适用
 （`references/design-playbook.md` §3 类型 B）。账号字符串就是其他页面比对的身份；
 除了初始凭据（§1、`references/credential-design.md` 方式 0）之外，它不印在任何地方。
 

@@ -1,7 +1,7 @@
-// Shared site-parsing and walk core for the make-my-arg tools. Extracted verbatim from
-// check-solvable.mjs (behavior-preserving); consumed by check-solvable.mjs (reporter) and
-// site-graph.mjs (graph builder). Every function takes `root` explicitly — no process.cwd()
-// inside. Project conventions come from the shared config.mjs.
+// Shared site-parsing and walk core for the make-my-arg tools, consumed by check-solvable.mjs
+// (the solvability walk) and site-graph.mjs (the graph builder). Both read this one core, so
+// the walk and the graph can never disagree. Every function takes `root` explicitly — no
+// process.cwd() inside. Project conventions come from the shared config.mjs.
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { createHash } from 'node:crypto';

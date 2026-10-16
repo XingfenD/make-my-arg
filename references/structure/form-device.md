@@ -4,7 +4,7 @@
 > 或装置单页形态时（`workflow/02-container.md`），本文件为必读。规范规则文本在
 > `references/guardrails.md`（R1、R3、R12、R13）；本文件是细则，代码模板以文件
 > 形式放在 `assets/templates/` 下（索引：`assets/templates/README.md`）。桌面（B）
-> 外壳与 RBAC 矩阵仍在 `references/structure/form-system.md`。
+> 外壳与 RBAC 矩阵见 `references/structure/form-system.md`。
 
 ## 1. 设备类决定什么
 
@@ -60,7 +60,7 @@
 | 进度 | 我读过 / 到访过什么 | **仅当**装配记录写明 `persistent` 时用 localStorage；否则仅会话级或不存 | 玩家自有的设备保存状态（R13）；`NN/total` 页脚与未读徽标读取它 |
 | 世界回应 | 因为读了某页，站点发生了变化 | LS 读取键**加上 `data-after` 属性**，后者是检查器可见的契约 | `workflow/04-reachability.md` 中的路线 10；没有 `data-after` 的条目就是无条件链接，会失去它的剧情理由 |
 
-代码以文件而非散文发布：`readState` store 在起点内核里
+代码以文件发布：`readState` store 在起点内核里
 （`assets/starter/assets/js/components.js`）；源页面挂载是
 `assets/templates/js/modules/read-state.js`（`x-data="markRead('<page>')`）；
 条件条目标记是 `assets/templates/html/read-entry.html`。`href` 是目标，
@@ -104,7 +104,7 @@
 5. 装配记录写明检查器模型丢失了什么、由什么替代：走图只找到一份文档，因此门禁/关键词的出处要人工验证（`references/structure/tooling.md` §3 item 11），`check-links` 只能证明这一份文档可解析。
 
 图省事永远不配得到它（`references/guardrails.md` 合理化借口表）；任何条件
-不达标的装置式站点都要退回多页树。`register(type, panel)` 引擎依旧被禁止。
+不达标的装置式站点都要退回多页树。`register(type, panel)` 引擎属于禁止形态（R1）。
 
 ## 6. 反模式
 
@@ -114,4 +114,4 @@
 | 条目以普通链接的形式埋进去，文案却声称"只有在……之后才出现" | 声称必须由机制兑现：`data-after` 标明来源页（§4） |
 | 声明了手机设备类，交付的却是纯 Web 外壳 | 设备类是皮肤必须兑现的承诺：要么上 §2 的组件，要么改设备类 |
 | 在 `progress: none` 的装配记录上放存档/继续/清档界面 | 未选中的机械装置就是模块漂移（`references/common-mistakes.md` §6） |
-| 装置单页却没有记录那五项条件 | 例外必须经 R12 明确授权，绝不默认成立；R1 合理化借口表的第一行仍然适用 |
+| 装置单页却没有记录那五项条件 | 例外必须经 R12 明确授权，绝不默认成立；R1 合理化借口表的第一行适用 |

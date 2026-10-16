@@ -102,8 +102,7 @@ onAlpineInit(() => Alpine.data('canvas', () => ({
       g.appendChild(el('rect', { class: 'bar', x: 0, y: 0, width: BAR, height: NH, rx: 1 }));
       const { file, dir } = splitId(n.id);
       // the card's right edge carries stamps — 不可达/入口 at the top, the M7 docket at the bottom —
-      // so each line is clipped to the width actually left of them; a flat character cap used to run
-      // the second line under the docket. CJK glyphs count double.
+      // so each line is clipped to the width actually left of them. CJK glyphs count double.
       const stampW = !n.reachable || n.isEntry ? 36 : 0;
       const t1 = el('text', { x: BAR + 9, y: 21, class: 'file' }); t1.textContent = clip(file, BAR + 9, NW - 6 - stampW, 6.4); g.appendChild(t1);
       const bits = [];

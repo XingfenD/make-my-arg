@@ -6,6 +6,13 @@ All notable changes to this skill should be documented in this file.
 The format loosely follows Keep a Changelog and can be adapted to the team's habits.
 本文档参考了 Keep a Changelog 的思路，也可以根据团队习惯调整。
 
+## [0.4.2] - 2026-10-16
+
+### Changed / 变更
+
+- Strip the remaining references to superseded approaches from the current-state docs and code comments: the bolded "read everything first" line in `workflow/03-gdd.md` rule 2 that contradicted the interleaved read→write protocol; the migration echoes in the `references/structure/components.md` header and the `references/structure/form-device.md` locators (现在 · 而不再誊抄代码 · 仍在 · 依旧 · 仍然); the "old +70px hug" and "used to" notes in the viewer's layout and canvas comments; the "Legacy" label on the primary gate path in `assets/templates/js/modules/gate.js`, a template that ships into user projects; and the extraction note in `assets/tools/site-model.mjs`, whose header now states the shared-core invariant. Guardrails, anti-pattern tables, technical facts, war-story rationales and in-fiction fixture content are untouched; every path, `§N` citation, rule ID and marker stays byte-identical and all three self-checks stay green.
+  清除当前状态文档与代码注释里最后几处对已被取代做法的引用：`workflow/03-gdd.md` 规则 2 里与「读后即写」交织协议相悖的加粗句；`references/structure/components.md` 首段与 `references/structure/form-device.md` 各处定位句里的迁移回声（现在 · 而不再誊抄代码 · 仍在 · 依旧 · 仍然）；查看器 layout 与 canvas 注释里的「old +70px hug」「used to」；`assets/templates/js/modules/gate.js` 主路径上的「Legacy」标签（该模板会拷入用户项目）；`assets/tools/site-model.mjs` 的抽取说明——其头注释现在陈述共享核心不变量。护栏、反模式表、技术事实、实战教训与夹具虚构内容均未触碰；所有路径、`§N` 引用、规则编号与标记逐字保留，三项自检保持全绿。
+
 ## [0.4.1] - 2026-10-11
 
 ### Added / 新增

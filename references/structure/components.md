@@ -1,9 +1,9 @@
 # Alpine 组件规则与约定
 
-> `references/structure/base.md`（树 + 骨架）的配套文档。规范的前端代码模板现在
-> 以**真实文件的形式放在 `assets/templates/`** 下（js/css/html——索引：
-> `assets/templates/README.md`）；步骤 6a 用初始化脚本落地装配记录选中的那些，而不再
-> 誊抄代码。本文件保留模板所实现的*规则与约定*：关键词哈希构建（§1）、搜索 M1（§2）、
+> `references/structure/base.md`（树 + 骨架）的配套文档。规范的前端代码模板以
+> **真实文件的形式放在 `assets/templates/`** 下（js/css/html——索引：
+> `assets/templates/README.md`）；步骤 6a 用初始化脚本落地装配记录选中的那些。
+> 本文件给出这些模板实现的*规则与约定*：关键词哈希构建（§1）、搜索 M1（§2）、
 > 门禁 M2（§3）、暂存 M12（§4）、换皮 M5（§5）、进度 M7（§6）。步骤 6 和 7 的必读材料。
 > 规则 ID `(Rn)` 引自 references/guardrails.md。
 
